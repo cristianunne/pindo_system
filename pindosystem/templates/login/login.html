@@ -1,0 +1,104 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Inicio de Sesión</title>
+	<!-- CSS files -->
+
+      <link rel="stylesheet" href="{% static 'dist/css/tabler.min.css' %}">
+      <link rel="stylesheet" href="{% static '/dist/css/tabler-flags.min.css' %}">
+      <link rel="stylesheet" href="{% static 'dist/css/tabler-payments.min.css' %}">
+      <link rel="stylesheet" href="{% static 'dist/css/tabler-vendors.min.css' %}">
+      <link rel="stylesheet" href="{% static 'dist/css/demo.min.css' %}">
+
+  </head>
+ 
+  <body class=" d-flex flex-column bg-white">
+
+	<form method="POST">
+
+		{% csrf_token %}
+
+		<div class="row g-0 flex-fill">
+		<div class="col-12 col-lg-6 col-xl-4 border-top-wide border-primary d-flex flex-column justify-content-center">
+		  <div class="container container-tight my-5 px-lg-5">
+			<div class="text-center mb-4">
+			  <a href="." class="navbar-brand navbar-brand-autodark"><img src="{% static 'img/pindo_logo.png' %}" 
+				height="72" alt="logo"></a>
+			</div>
+			<h2 class="h3 text-center mb-3">
+			  Inicio de Sesión
+			</h2>
+			
+			  <div class="mb-3">
+				<label class="form-label">Correo Electrónico</label>
+				<input type="email" class="form-control" placeholder="correoelectronico@email.com" autocomplete="off" name="email" id="email">
+			  </div>
+			  <div class="mb-2">
+				<label class="form-label">
+				  Contraseña
+				  <span class="form-label-description">
+					<a href="./forgot-password.html">Olvide mi Contraseña</a>
+				  </span>
+				</label>
+				<div class="input-group input-group-flat">
+				  <input type="password" class="form-control"  placeholder="Contraseña"  autocomplete="off" name="password" id="password">
+				  <span class="input-group-text">
+					<a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+					  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" 
+					  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+					  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+					</svg>
+					</a>
+				  </span>
+				</div>
+			  </div>
+			
+			  <div class="form-footer">
+				<button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+			  </div>
+			
+			<div class="text-center text-muted mt-3">
+			 No tienes una cuenta todavía? <a href="{% url 'sign-up' %}" tabindex="-1">Registrarse</a>
+			</div>
+			 <br>
+            {% if messages %}
+                <div class="messages">
+                {% for message in messages %}
+                  <div class="alert alert-danger">
+                    <div>
+                      
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-exclamation-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                        <path d="M12 9v4"></path>
+                        <path d="M12 16v.01"></path>
+                     </svg>
+                     {{ message }}
+                    </div>
+                  
+                  </div>
+                {% endfor %}
+                </div>
+          	{% endif %}
+		  </div>
+		</div>
+		<div class="col-12 col-lg-6 col-xl-8 d-none d-lg-block">
+		  <!-- Photo -->
+		  <div class="bg-cover h-100 min-vh-100" style="background-image: url({% static 'img/covlog.svg' %})"></div>
+		</div>
+	  </div>
+
+	
+	</form>
+	<script src="{% static 'dist/js/tabler.min.js' %}"></script>
+	<script src="{% static 'dist/js/demo.min.js' %}"></script>
+  </body>
+</html>
+
+

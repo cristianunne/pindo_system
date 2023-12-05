@@ -1,0 +1,66 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+
+      <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+      <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+  </head>
+  <body>
+
+  <div class="content container">
+        <div class="row" style="justify-content: center;">
+            <div class="col-md-8" style="margin-top: 100px;">
+
+                 {% for message in messages %}
+                     <div class="alert alert-danger" role="alert">
+
+                         <p>{{ message }}</p>
+
+                     </div>
+                 {% endfor %}
+                <form action="" class="form-control" method="POST">
+
+                    {% csrf_token %}
+
+                      <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username"  name="username" aria-describedby="username" placeholder="Username">
+                      </div>
+                    <br>
+                     <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="email">
+                      </div>
+                    <br>
+                      <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password"  name="password" placeholder="Password">
+                      </div>
+                    <br>
+                     <div class="form-group">
+                        <label for="password2">Repite Password</label>
+                        <input type="password" class="form-control" id="password2" name="password2" placeholder="Password">
+                      </div>
+                    <br>
+                     <div class="form-group" style="    display: flex; justify-content: flex-end;">
+                         <button type="submit" class="btn btn-primary">Signup</button>
+                     </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+  </body>
+</html>
+
+

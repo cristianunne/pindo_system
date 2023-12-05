@@ -1,0 +1,172 @@
+<!doctype html>
+
+{% extends "../layout/base.html" %}
+
+{% load static %}
+
+
+
+{% block sidebar %}
+
+{% include "../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../element/pageheader.html" %}
+
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+            <div class="row row-cards mb-5">
+                <div class="col-md-3 col-lg-3">
+                    <div class="card bg-primary-lt">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 col-sm-4">
+                            
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" 
+                                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                         </svg>
+                            </div>
+                            <div class="col-md-8">
+                                <h3 class="card-title">Sección de Administración de Usuarios</h3>
+                                <p class="text-muted">En esta sección puede modificar el Logo.
+                                </p>
+                             
+                            </div>
+                        </div>
+
+                        
+                        </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="row row-cards mb-5">
+                
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Logo de la Empresa</h3>
+                            <input type="text" value="{{empresa_data.pk}}" style="display: none;" id="empresa_id"/>
+                        </div>
+                        <div class="card-body">
+
+                            <img src="data:image/*; base64,{{empresa_data.image}} " class="card-img-top">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Cambio de Foro de Perfil</h3>
+                            <form class="dropzone" id="dropzone-default" action="{% url 'upload-image' %}" autocomplete="off" novalidate>
+                                <div class="fallback">
+                                    <input name="file" type="file"  />
+                                </div>
+                                <div class="dz-message">
+                                    <h3 class="dropzone-msg-title">Cambio de Logo de la Empresa</h3>
+                                    <span class="dropzone-msg-desc">Arrastre aquí su imagen</span>
+                                </div>
+
+                                    
+                            </form>
+
+                            <div class="form-footer">
+                                <button  id="button-send"  type="submit" class="btn btn-primary w-100">Enviar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {% endblock main_content %}
+  </div>
+
+
+
+
+  <script src="{% static '/dist/libs/dropzone/dist/dropzone-min.js' %}"></script>
+  <script>
+   
+    // @formatter:off
+    document.addEventListener("DOMContentLoaded", function() {
+      myDropzone = new Dropzone("#dropzone-default", {
+        addRemoveLinks: true,
+        url: '../upload-image',
+        maxFiles: 1,
+        dictRemoveFileConfirmation: "Sei sicuro?",
+        autoProcessQueue: false,
+
+        init: function() {
+            this.on("addedfile", function() {
+              if (this.files[1]!=null){
+                this.removeFile(this.files[1]);
+              }
+            });
+
+            var myDropzone = this;
+
+            $("#button-send").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                myDropzone.processQueue();
+             
+            });
+
+            this.on("sendingEvent", function() {
+                //console.log(formData); // -> {}
+                formData.append('productid', 'pararar');
+                //console.log(formData); // -> {}
+              });
+
+          },
+        sending: function(file, xhr, formData) {
+
+            let empresa_id = document.getElementById('empresa_id').value;
+
+            console.log(formData); // -> {}
+            formData.append('empresa_id', empresa_id);
+            console.log(formData); // -> {}
+        }, 
+        success: function(file, response){
+            if(response.respuesta == true){
+
+                setTimeout(() => {
+                    location.reload();
+                }, 5000);
+               
+            }
+
+            console.log(response);
+        
+         //
+        }
+
+      })
+    })
+  </script>
+
+
+
+
+{% endblock %}

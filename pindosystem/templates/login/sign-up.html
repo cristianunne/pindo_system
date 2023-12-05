@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Sign up</title>
+    <!-- CSS files -->
+
+    <link rel="stylesheet" href="{% static 'dist/css/tabler.min.css' %}" />
+    <link rel="stylesheet" href="{% static '/dist/css/tabler-flags.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dist/css/tabler-payments.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dist/css/tabler-vendors.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dist/css/demo.min.css' %}" />
+  </head>
+
+  <body class="d-flex flex-column">
+    <div class="page page-center">
+      <div class="container container-tight py-4">
+        <div class="text-center mb-4">
+          <a href="." class="navbar-brand navbar-brand-autodark"><img src="{% static 'img/pindo_logo.png' %}" height="72" alt="logo" /></a>
+        </div>
+
+        <form method="POST" class="card card-md" autocomplete="on">
+          {% csrf_token %}
+          <div class="card-body">
+            <h2 class="card-title text-center mb-4">Registro de Usuario</h2>
+            <div class="mb-3">
+              <label class="form-label">Nombres:</label>
+              <input type="text" class="form-control" placeholder="Ingrese sus Nombres" name="firstname" id="firstname" value="{{ firstname }}"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Apellidos:</label>
+              <input type="text" class="form-control" placeholder="Ingrese sus Apellidos" name="lastname" id="lastname" value="{{ lastname }}"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Correo Electrónico:</label>
+              <input type="email" class="form-control" placeholder="Ingrese su Correo Electrónico" name="email" id="email" value="{{ email }}"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Contraseña:</label>
+              <div class="input-group input-group-flat">
+                <input type="password" class="form-control" placeholder="Ingrese su Contraseña" autocomplete="off" name="password" id="password"/>
+                <span class="input-group-text">
+                  <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip" onclick="showPassword(this)" attr="password" 
+                  attr2="1">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                    <svg id="eye-on" xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                      <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                    </svg>
+                     <svg id="eye-off" xmlns="http://www.w3.org/2000/svg" 
+                        class="icon icon-tabler icon-tabler-eye-off d-none" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                          <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+                          <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
+                          <path d="M3 3l18 18" />
+                        </svg>
+                  </a>
+                </span>
+              </div>
+            </div>
+            <div class="mb-3">
+              
+              <label class="form-label">Repita Contraseña:</label>
+              <div class="input-group input-group-flat">
+                <input type="password" class="form-control" placeholder="Repita su Contraseña" autocomplete="off" name="password2" id="password2" />
+                <span class="input-group-text">
+                  <a href="#" class="link-secondary" title="Mostrar Contraseña" data-bs-toggle="tooltip" 
+                  onclick="showPassword(this)" attr="password2"  attr2="2">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                        <svg id="eye-on2" xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                          <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                        </svg>
+
+                        <svg id="eye-off2" xmlns="http://www.w3.org/2000/svg" 
+                        class="icon icon-tabler icon-tabler-eye-off d-none" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                          <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+                          <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
+                          <path d="M3 3l18 18" />
+                        </svg>
+      
+                  </a>
+                </span>
+              </div>
+            </div>
+  
+            <div class="form-footer">
+              <button type="submit" class="btn btn-primary w-100">Crear cuenta</button>
+            </div>
+            <br>
+            {% if messages %}
+                <div class="messages">
+                {% for message in messages %}
+                  <div class="alert alert-danger">
+                    <div>
+                      
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-exclamation-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                        <path d="M12 9v4"></path>
+                        <path d="M12 16v.01"></path>
+                     </svg>
+                     {{ message }}
+                    </div>
+                  
+                  </div>
+                {% endfor %}
+                </div>
+          {% endif %}
+
+          </div>
+        </form>
+     
+
+        <div class="text-center text-muted mt-3">
+          Ya tienes una cuenta? <a href="{% url 'login' %}" tabindex="-1">Inicie Sesión</a>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'dist/js/tabler.min.js' %}"></script>
+    <script src="{% static 'dist/js/demo.min.js' %}"></script>
+    <script src="{% static 'staticlogin/js/login.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+
+{% extends "../layout/base.html" %}
+
+
+{% block sidebar %}
+
+{% include "../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+      {% include "../element/pageheader.html" %}
+
+      {% block main_content %}
+      
+      
+      
+      
+      {% endblock main_content %}
+
+    
+    {% endblock pageheader %}
+    
+  </div>
+
+
+
+{% endblock  %}
+
+

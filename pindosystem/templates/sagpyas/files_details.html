@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+{% extends '../layout/base.html' %}
+
+{% load static %}
+
+{% block sidebar %}
+  {% include '../element/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+  {% block header %}
+    {% include '../element/header.html' %}
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+      {% include '../element/pageheader.html' %}
+    {% endblock %}
+
+    {% block main_content %}
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-cards mb-5 justify-content-center">
+            <div class="col-xxl-5 col-lg-5 col-md-5 col-sm-12">
+              <div class="card mt-3">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <h2 class="card-title text-center h2 text-primary">Detalles</h2>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
+                      {% if sagpyas_file.type == 'pdf' %}
+                        <img src="https://coderthemes.com/highdmin/layouts/assets/images/file_icons/pdf.svg" alt="icon" />
+                      {% elif sagpyas_file.type == 'png' %}
+                        <img src="https://coderthemes.com/highdmin/layouts/assets/images/file_icons/png.svg" alt="icon" />
+
+                      {% elif sagpyas_file.type == 'jpg' or sagpyas_file.type == 'jpeg' %}
+                        <img src="https://coderthemes.com/highdmin/layouts/assets/images/file_icons/jpg.svg" alt="icon">
+
+                      {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1" 
+                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                          <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                        </svg>
+                      {% endif %}
+                    </div>
+                    <div class="col-lg-10 col-md-9 col-sm-9">
+                     
+                      <div class="mb-2">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-txt text-primary" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 8h4" /><path d="M5 8v8" /><path d="M17 8h4" /><path d="M19 8v8" /><path d="M10 8l4 8" /><path d="M10 16l4 -8" /></svg>
+                        <strong class="text-primary">Nombre:</strong> {{sagpyas_file.name}}
+                      </div>
+
+                      <div class="mb-2">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-digit text-primary" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                            <path d="M9 12m0 1a1 1 0 0 1 1 -1h1a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-1a1 1 0 0 1 -1 -1z" />
+                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M15 12v5" /></svg>
+                        <strong class="text-primary">Tamaño:</strong> {{sagpyas_file.size}} KB
+                      </div>
+
+                      <div class="mb-2 mt-3">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-description text-primary" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                            <path d="M9 17h6" /><path d="M9 13h6" /></svg>
+                        <strong class="text-primary">Descripción:</strong> <p class="text-justify">{{sagpyas_file.description}}</p>
+                      </div>
+
+
+            
+
+                     
+                    </div>
+
+                    <div class="mt-7 d-flex justify-content-between">
+
+                      <a href="#" onclick="deleteInformation(this)" attr="{{sagpyas_file.pk}}" class="btn btn-youtube btn-block" 
+                      controller="sagpyas_files">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M4 7l16 0"></path>
+                          <path d="M10 11l0 6"></path>
+                          <path d="M14 11l0 6"></path>
+                          <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                          <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                       </svg> Eliminar
+                      </a>
+                   
+
+                      <a href="{% url 'download-files-sagpyas' id=sagpyas_file.pk %}" target="_blank" class="btn btn-block btn-indigo" aria-label="Button">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-download" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                              <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                              <path d="M12 17v-6" /><path d="M9.5 14.5l2.5 2.5l2.5 -2.5" /></svg>
+                       </svg> Descargar</a>
+
+                     
+              
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+  </div>
+{% endblock %}
