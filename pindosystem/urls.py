@@ -13,4 +13,6 @@ urlpatterns = [
     path('', include('pindosystem.apps.procedencias.urls')),
     path('', include('pindosystem.apps.sagpyas.urls')),
     path('', include('pindosystem.apps.maquinas.urls')),
+    path('', include('pindosystem.apps.configuration.urls')),
+    path('', include('pindosystem.apps.rodales.urls')),
 ]

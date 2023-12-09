@@ -79,19 +79,22 @@
                   <thead>
                     <tr>
                       <th class="dt-center align-middle"></button></th>
+                      <th class="dt-center align-middle">Nombre</button></th>
                       <th class="dt-center align-middle">Marca</button></th>
                       <th class="dt-center align-middle">Modelo</button></th>
                       <th class="dt-center align-middle">Fecha de Registro</button></th>
+                      <th class="dt-center align-middle">Fecha de Registro</button></th>
+                      <th class="dt-center align-middle">Creado por</button></th>
                       <th class="dt-center align-middle">Acciones</button></th>
                     </tr>
                   </thead>
                   <tbody class="table-tbody">
-                    {% for sagpya in sagpyas %}
+                    {% for maquina in maquinas %}
                         <tr>
                           
                             <td class="dt-center align-middle"> 
                               <div class="mr-3">
-                                <a href="{% url 'sagpyas-view' id=sagpya.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{sagpya.pk}}">
+                                <a href="#" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{maquina.pk}}">
                                    
                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -101,17 +104,17 @@
                                 </a>
                             </div>
                             </td>
-                            <td class="dt-center align-middle"> {{ sagpya.operaciones }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.fecha }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.sup_aprobada }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.expediente }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.turno_minimo }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.created }}</td>
+                            <td class="dt-center align-middle"> {{ maquina.nombre }}</td>
+                            <td class="dt-center align-middle">{{ maquina.marca }}</td>
+                            <td class="dt-center align-middle">{{ maquina.modelo }}</td>
+                            <td class="dt-center align-middle">{{ maquina.created }}</td>
+                            <td class="dt-center align-middle">{{ maquina.modified }}</td>
+                            <td class="dt-center align-middle">{{ maquina.user }}</td>
                             <td>
                                 <div class="d-flex justify-content-center">
                   
                                     <div class="mr-3">
-                                        <a href="{% url 'sagpyas-edit' id=sagpya.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{sagpya.pk}}">
+                                        <a href="{% url 'maquinas-edit' id=maquina.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{maquina.pk}}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                 <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
@@ -122,7 +125,7 @@
                                     </div>
 
                                     <div>
-                                        <a href="#" onclick="deleteInformation(this)" attr="{{sagpya.pk}}" class="btn btn-youtube btn-icon" controller="sagpyas">
+                                        <a href="#" onclick="deleteInformation(this)" attr="{{maquina.pk}}" class="btn btn-youtube btn-icon" controller="maquinas">
                                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path d="M4 7l16 0"></path>

@@ -7,5 +7,8 @@ const URLS_DELETE = {
     PROCEDENCIAS_DELETE: 'procedencias-delete/',
     SAGPYAS_FILES_DELETE: '../../sagpyas-delete-files/',
     SAGPYAS_DELETE: 'sagpyas-delete/',
+    MAQUINAS_DELETE: 'maquinas-delete/',
+    USOS_RODALES_DELETE: 'usos-rodales-delete/'
+
 }
 

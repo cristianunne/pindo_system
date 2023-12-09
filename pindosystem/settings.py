@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'emsefor',
     'procedencias',
     'sagpyas',
-    'maquinas'
+    'maquinas',
+    'configuration',
+    'rodales',
 ]
 
 AUTH_USER_MODEL = 'login.Users'

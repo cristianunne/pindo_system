@@ -58,6 +58,19 @@ function deleteInformation(element){
     let message = 'Si acepta se borrará toda la información del Sagpya';
     
     dialogDeleteConfirm(element, title, message, URLS_DELETE.SAGPYAS_DELETE);
+  } else if(controller === 'maquinas') {
+
+    let title = '¿Desea Eliminar la Máquina?';
+    let message = 'Si acepta se borrará toda la información de la Máquina';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.MAQUINAS_DELETE);
+
+  } else if(controller === 'usos_rodales') {
+
+    let title = '¿Desea Eliminar el Uso?';
+    let message = 'Si acepta se borrará toda la información del Uso';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.USOS_RODALES_DELETE);
   }
 
 

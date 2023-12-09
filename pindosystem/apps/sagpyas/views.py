@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-import os
 from sagpyas.models import Sagpyas, SagpyasFiles
 from django.contrib import messages
 from django.http import FileResponse, Http404
@@ -51,7 +50,7 @@ def editSagpyas(request, id):
 
     try:
         sagpya = Sagpyas.objects.get(pk = id)
-        print(sagpya)
+        #print(sagpya)
         context.update({'sagpyas' : sagpya})
         if (request.method == 'POST'):
             proc_form = EditSagpyasForm(request.POST, instance=sagpya)
