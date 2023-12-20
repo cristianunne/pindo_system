@@ -1,0 +1,295 @@
+{% extends '../layout/base.html' %}
+
+{% load static %}
+
+{% block sidebar %}
+  {% include '../element/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+  {% block header %}
+    {% include '../element/header.html' %}
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+      {% include '../element/pageheader.html' %}
+    {% endblock %}
+
+    {% block main_content %}
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-cards mb-5">
+            <div class="col-md-3 col-lg-3">
+              <div class="card bg-primary-lt">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-md-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                        <path d="M12 4v16" />
+                        <path d="M4 15h8" />
+                        <path d="M12 12h8" />
+                        <path d="M16 12v8" />
+                        <path d="M16 16h4" />
+                      </svg>
+                    </div>
+                    <div class="col-md-8">
+                      <h3 class="card-title">Sección de Administración de Rodales</h3>
+                      <p class="text-muted">En esta sección puede crear un Rodal.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-9 col-lg-9">
+              <div class="card">
+                <div class="card-status-top bg-blue"></div>
+                <div class="card-header">
+                  <h3 class="card-title">Editar Plantación</h3>
+                </div>
+                <div class="card-body">
+                  <form action="{% url 'plantaciones-edit' id_plantacion=id_plantacion %}" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-md-6 col-lg-6 col-sm-6">
+                        <div class="mb-5">
+                          <label class="form-label required">Rodal:</label>
+                          <select type="text" class="form-select" name="select-rodal" id="select-rodal" value="">
+                            {% for index, value in rodales %}
+                              <option value="{{ index }}">{{ value }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label required">Fecha:</label>
+                          <div class="input-icon mb-3">
+                            <input class="form-control" placeholder="Seleccione una Fecha" id="fecha" name="fecha" value="{{ plantacion.fecha|date:'Y-m-d' }}" />
+                            <span class="input-icon-addon">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                <path d="M16 3v4"></path>
+                                <path d="M8 3v4"></path>
+                                <path d="M4 11h16"></path>
+                                <path d="M11 15h1"></path>
+                                <path d="M12 15v3"></path>
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="mb-4">
+                          <label class="form-label required">Densidad:</label>
+                          <input type="number" step="0.01" class="form-control" placeholder="Densidad" required name="densidad" id="densidad" value="{{ plantacion.densidad }}" />
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label required">Superficie:</label>
+                          <input type="number" step="0.01" class="form-control" placeholder="Superficie" required name="superficie" id="superficie" 
+                          value="{{ plantacion.superficie }}" onchange="calcNumArboles()"/>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label required">Distancia entre líneas:</label>
+                          <input type="number" step="0.01" class="form-control" placeholder="Distancia entre líneas" required name="dist_lineas" 
+                          id="dist_lineas" value="{{ plantacion.dist_lineas }}" onchange="calcNumArboles()"/>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label required">Distancia entre plantas:</label>
+                          <input type="number" step="0.01" class="form-control" placeholder="Distancia entre plantas" required name="dist_plantas" 
+                          id="dist_plantas" value="{{ plantacion.dist_plantas }}" onchange="calcNumArboles()"/>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label required">Árboles plantados:</label>
+                          <input type="number" step="1" class="form-control" placeholder="Campo" required name="arboles_plantados" id="arboles_plantados" value="{{ plantacion.arboles_plantados }}" />
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-sm-6">
+                     
+
+                        <div class="mb-5">
+                          <label class="form-label required">Procedencias:</label>
+                          <select type="text" class="form-select" name="select-procedencia" id="select-procedencia" required value="">
+                            <option value="">{{ 'Seleccione una Opcion' }}</option>
+
+                            {% for index, value in procedencias %}
+                              {% if plantacion.procedencias.pk == index %}
+                                <option selected value="{{ index }}">{{ value }}</option>
+                              {% else %}
+                                <option value="{{ index }}">{{ value }}</option>
+                              {% endif %}
+                            
+                            {% endfor %}
+                          </select>
+                        </div>
+
+                        <div class="mb-5">
+                          <label class="form-label required">Emsefor:</label>
+                          <select type="text" class="form-select" name="select-emsefor" id="select-emsefor" required value="">
+                            <option value="">{{ 'Seleccione una Opcion' }}</option>
+
+                            {% for index, value in emsefors %}
+      
+                              {% if plantacion.emsefors.pk == index %}
+                                <option selected value="{{ index }}">{{ value }}</option>
+                              {% else %}
+                                <option value="{{ index }}">{{ value }}</option>
+                              {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+
+                        <div class="form-footer">
+                          <a href="{% url 'rodales-index' %}" class="btn btn-dark" aria-label="Button">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-left-filled" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                              <path d="M9.586 4l-6.586 6.586a2 2 0 0 0 0 2.828l6.586 6.586a2 2 0 0 0 2.18 .434l.145 -.068a2 2 0 0 0 1.089 -1.78v-2.586h7a2 2 0 0 0 2 -2v-4l-.005 -.15a2 2 0 0 0 -1.995 -1.85l-7 -.001v-2.585a2 2 0 0 0 -3.414 -1.414z" stroke-width="0" fill="currentColor" />
+                            </svg>Volver
+                          </a>
+                          <button type="submit" class="btn btn-warning pull-right">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                              <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                              <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                              <path d="M16 5l3 3"></path>
+                           </svg>
+                           </svg> Editar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+
+                  <div class="col-md-6 col-lg-6 col-sm-6 mt-4">
+                    <div class="mb-4">
+                      {% if messages %}
+                        <div class="messages">
+                          {% for message in messages %}
+                            <div class="alert alert-danger">
+                              <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-exclamation-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                                  <path d="M12 9v4"></path>
+                                  <path d="M12 16v.01"></path>
+                                </svg>
+                                {{ message }}
+                              </div>
+                            </div>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="{% static 'dist/libs/nouislider/dist/nouislider.min.js' %}"></script>
+      <script src="{% static 'dist/libs/litepicker/dist/litepicker.js' %}"></script>
+      <script src="{% static 'dist/libs/tom-select/dist/js/tom-select.base.min.js' %}"></script>
+      <script src="{% static 'js/plantaciones/plantaciones.js' %}"></script>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          window.Litepicker &&
+            new Litepicker({
+              element: document.getElementById('fecha'),
+              lang: 'es-AR',
+              format: 'YYYY-MM-DD',
+              buttonText: {
+                previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`
+              }
+            })
+        })
+        // @formatter:on
+        
+        document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-rodal')), {
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+        // @formatter:off
+        
+        document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-procedencia')), {
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+        // @formatter:off
+        // @formatter:on
+        
+        document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-emsefor')), {
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+        
+        // @formatter:off
+      </script>
+    {% endblock %}
+  </div>
+{% endblock %}

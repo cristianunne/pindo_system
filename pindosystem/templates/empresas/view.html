@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+{% extends '../layout/base.html' %}
+
+{% load static %}
+
+{% block sidebar %}
+  {% include '../element/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+  {% block header %}
+    {% include '../element/header.html' %}
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+      {% include '../element/pageheader.html' %}
+    {% endblock %}
+
+    {% block main_content %}
+      <div class="page-body">
+        <div class="container-xl">
+          {% if messages %}
+
+          {% include "../element/alert-sucess.html" %}
+          {% endif %}
+          <div class="row row-cards col-lg-12 col-md-12 col-sm-12 mb-5">
+           
+            <div class="col-xxl-4 col-lg-4 col-md-4 col-sm-12">
+              <div class="card bg-primary-lt">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M3 21l18 0"></path>
+                        <path d="M9 8l1 0"></path>
+                        <path d="M9 12l1 0"></path>
+                        <path d="M9 16l1 0"></path>
+                        <path d="M14 8l1 0"></path>
+                        <path d="M14 12l1 0"></path>
+                        <path d="M14 16l1 0"></path>
+                        <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16"></path>
+                      </svg>
+                    </div>
+                    <div class="col-lg-10 col-md-9 col-sm-9"> 
+                      <div>
+                        <h2 class="card-title text-center h2">Empresa</h2>
+                      </div>
+                      <div class="mb-2">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-3d-cube-sphere" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M6 17.6l-2 -1.1v-2.5"></path>
+                            <path d="M4 10v-2.5l2 -1.1"></path>
+                            <path d="M10 4.1l2 -1.1l2 1.1"></path>
+                            <path d="M18 6.4l2 1.1v2.5"></path>
+                            <path d="M20 14v2.5l-2 1.12"></path>
+                            <path d="M14 19.9l-2 1.1l-2 -1.1"></path>
+                            <path d="M12 12l2 -1.1"></path>
+                            <path d="M18 8.6l2 -1.1"></path>
+                            <path d="M12 12l0 2.5"></path>
+                            <path d="M12 18.5l0 2.5"></path>
+                            <path d="M12 12l-2 -1.12"></path>
+                            <path d="M6 8.6l-2 -1.1"></path>
+                         </svg>
+                       <strong>Operariones: </strong> Plantacion
+                      </div>
+
+                      <div class="mb-2">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                            <path d="M16 3v4"></path>
+                            <path d="M8 3v4"></path>
+                            <path d="M4 11h16"></path>
+                            <path d="M11 15h1"></path>
+                            <path d="M12 15v3"></path>
+                         </svg>
+                       <strong>Fecha: </strong> Plantacion
+                      </div>
+
+                      <div class="mb-2">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13"></path>
+                            <path d="M9 4v13"></path>
+                            <path d="M15 7v13"></path>
+                         </svg>
+                       <strong>Superficie aprobada: </strong> Plantacion
+                      </div>
+
+
+                      <div class="mb-2">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                            <path d="M9 9l1 0"></path>
+                            <path d="M9 13l6 0"></path>
+                            <path d="M9 17l6 0"></path>
+                         </svg>
+                       <strong>Expediente: </strong> Plantacion
+                      </div>
+
+
+                      <div class="mb-2">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                            <path d="M12 7v5l3 3"></path>
+                         </svg>
+                       <strong>Turno mínimo: </strong> Plantacion
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
+             
+            </div>
+          </div>
+
+          <div class="row row-cards col-lg-12 col-md-12 col-sm-12 mb-5">
+
+          </div>
+
+        </div>
+      </div>
+    {% endblock %}
+  </div>
+
+{% endblock %}

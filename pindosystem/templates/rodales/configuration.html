@@ -4,9 +4,14 @@
 
 {% load static %}
 
+
+
+
 {% block sidebar %}
   {% include '../element/sidebar.html' %}
 {% endblock %}
+
+
 
 {% block content %}
   {% block header %}
@@ -28,27 +33,22 @@
           <div class="row row-cards col-lg-12 col-md-12 col-sm-12 mb-5">
 
 
-            <div class="col-xxl-4 col-lg-4 col-md-4 col-sm-12">
+            <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-12">
                 <div class="row gy-3">
                     <div class="card bg-primary-lt">
                         <div class="card-body">
                           <div class="row align-items-center">
                             <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M3 21l18 0"></path>
-                                <path d="M9 8l1 0"></path>
-                                <path d="M9 12l1 0"></path>
-                                <path d="M9 16l1 0"></path>
-                                <path d="M14 8l1 0"></path>
-                                <path d="M14 12l1 0"></path>
-                                <path d="M14 16l1 0"></path>
-                                <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16"></path>
-                              </svg>
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                                <path d="M12 4v16" /><path d="M4 15h8" />
+                                <path d="M12 12h8" /><path d="M16 12v8" />
+                                <path d="M16 16h4" /></svg>
                             </div>
                             <div class="col-lg-10 col-md-9 col-sm-9"> 
                               <div>
-                                <h2 class="card-title text-center h2">Sagpya</h2>
+                                <h2 class="card-title text-center h2">Rodal</h2>
                               </div>
                               <div class="mb-2">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/book -->
@@ -67,7 +67,7 @@
                                     <path d="M12 12l-2 -1.12"></path>
                                     <path d="M6 8.6l-2 -1.1"></path>
                                  </svg>
-                               <strong>Operariones: </strong> Plantacion
+                               <strong>Código SAP: </strong> {{rodal.cod_sap}}
                               </div>
         
                               <div class="mb-2">
@@ -81,20 +81,9 @@
                                     <path d="M11 15h1"></path>
                                     <path d="M12 15v3"></path>
                                  </svg>
-                               <strong>Fecha: </strong> Plantacion
+                               <strong>Campo: </strong> {{rodal.campo}}
                               </div>
-        
-                              <div class="mb-2">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/book -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13"></path>
-                                    <path d="M9 4v13"></path>
-                                    <path d="M15 7v13"></path>
-                                 </svg>
-                               <strong>Superficie aprobada: </strong> Plantacion
-                              </div>
-        
+      
         
                               <div class="mb-2">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/book -->
@@ -106,7 +95,7 @@
                                     <path d="M9 13l6 0"></path>
                                     <path d="M9 17l6 0"></path>
                                  </svg>
-                               <strong>Expediente: </strong> Plantacion
+                               <strong>Uso: </strong> {{rodal.usos_rodales.name}}
                               </div>
         
         
@@ -117,7 +106,33 @@
                                     <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
                                     <path d="M12 7v5l3 3"></path>
                                  </svg>
-                               <strong>Turno mínimo: </strong> Plantacion
+                               <strong>Certificado: </strong> Plantacion
+                              </div>
+
+                              <div class="mb-2">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                                    <path d="M12 7v5l3 3"></path>
+                                 </svg>
+                               <strong>Finalizado: </strong> {{ rodal.is_finish|yesno:"Si,No" }}
+                               
+                               
+                              
+                               
+                              </div>
+
+                              <div class="mb-2">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                                    <path d="M12 7v5l3 3"></path>
+                                 </svg>
+                               <strong>Empresa: </strong> 
+                               <a href="{% url 'empresas-view' id=rodal.empresa.pk %}">{{rodal.empresa.name}}</a>
+
                               </div>
         
                             </div>
@@ -125,45 +140,26 @@
                         </div>
                     </div>
 
-                    <div class="card bg-success-lt">
+                    <div class="card bg-white">
                         <div class="card-body">
                           <div class="row align-items-center">
                             <div>
-                                <h2 class="card-title text-center h2">Plantaciones</h2>
+                                <h2 class="card-title text-center h2 text-green">Plantaciones</h2>
                               </div>
-                            <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M3 21l18 0"></path>
-                                <path d="M9 8l1 0"></path>
-                                <path d="M9 12l1 0"></path>
-                                <path d="M9 16l1 0"></path>
-                                <path d="M14 8l1 0"></path>
-                                <path d="M14 12l1 0"></path>
-                                <path d="M14 16l1 0"></path>
-                                <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16"></path>
-                              </svg>
+                            <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start text-green">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 21c.5 -4.5 2.5 -8 7 -10" />
+                                <path d="M9 18c6.218 0 10.5 -3.288 11 -12v-2h-4.014c-9 0 -11.986 4 -12 9c0 1 0 3 2 5h3z" /></svg>
+
+
                             </div>
                             <div class="col-lg-7 col-md-7 col-sm-7"> 
 
 
                                 <div class="mb-2">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/book -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-3d-cube-sphere" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M6 17.6l-2 -1.1v-2.5"></path>
-                                        <path d="M4 10v-2.5l2 -1.1"></path>
-                                        <path d="M10 4.1l2 -1.1l2 1.1"></path>
-                                        <path d="M18 6.4l2 1.1v2.5"></path>
-                                        <path d="M20 14v2.5l-2 1.12"></path>
-                                        <path d="M14 19.9l-2 1.1l-2 -1.1"></path>
-                                        <path d="M12 12l2 -1.1"></path>
-                                        <path d="M18 8.6l2 -1.1"></path>
-                                        <path d="M12 12l0 2.5"></path>
-                                        <path d="M12 18.5l0 2.5"></path>
-                                        <path d="M12 12l-2 -1.12"></path>
-                                        <path d="M6 8.6l-2 -1.1"></path>
-                                    </svg>
+                                  
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-info-circle-filled text-green" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" stroke-width="0" fill="currentColor" /></svg>
                                 Asigne una Plantacion al Rodal
                                 </div>
             
@@ -171,28 +167,27 @@
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-3">
-                                
 
-                                <button type="submit" class="btn btn-success float-right"> 
+                              <a href="{% url 'plantaciones-index' id=rodal.pk %}" class="btn btn-success" aria-label="Button" attr="{{rodal.pk}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                                  <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
+                                Editar
+                            </a>
                                 
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
-                                            <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
-                                  Editar</button>
-     
                             </div>
                           </div>
                         </div>
                     </div>
 
-                    <div class="card bg-danger-lt">
+                    <div class="card bg-white">
                         <div class="card-body">
                           <div class="row align-items-center">
                             <div>
-                                <h2 class="card-title text-center h2">Intervenciones</h2>
+                                <h2 class="card-title text-center h2 text-red">Intervenciones</h2>
                               </div>
-                            <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
+                            <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start text-red">
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M3 21l18 0"></path>
@@ -232,15 +227,15 @@
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-3">
-                                
 
-                                <button type="submit" class="btn btn-danger float-right"> 
+                              <a href="{% url 'intervenciones-index' idrodal=rodal.pk %}" class="btn btn-danger" aria-label="Button" attr="{{rodal.pk}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                                  <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
+                                Editar
+                            </a>
                                 
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
-                                            <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
-                                  Editar</button>
      
                             </div>
                           </div>
@@ -250,63 +245,19 @@
               
             </div>
 
-            <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
+            <div class="col-xxl-9 col-lg-9 col-md-9 col-sm-12">
              
-                <div class="card min-vh-75 max-vh-75">
-                    <div class="card-body" style="overflow: auto;">
-                      <td class="dt-center align-middle"> 
-                      <div class="row">
-                        <div class="col-lg-6 col-xl-6">
-                            <h4 class="header-title m-b-30">Archivos Sagpyas</h4>
-                        </div>
-          
-                        <div class="row">
-                          {% for file_ in sagpyas_files %}
+                <div class="card min-vh-85 max-vh-85 d-flex flex-row">
+                    <div class="card-body" style="overflow: auto; padding: 1px;">
+                      <div style="display: flex; align-items: stretch; height: 100%;">
 
-                          <div class="col-lg-3 col-xl-2">
-                              <div class="file-man-box"><a href="" class="file-close"><i class="fa fa-times-circle"></i></a>
-                                  <div class="file-img-box">
-                                    <a href="{% url 'download-files-sagpyas' id=1 %} " target="_blank">
+                        <div id="map" style="width: 100%; height: 100%;"></div>
 
-                                      {% if file_.type == 'pdf' %}
-
-                                        <img src="https://coderthemes.com/highdmin/layouts/assets/images/file_icons/pdf.svg" alt="icon">
-                                      {% elif file_.type == 'png' %}
-                                      <img src="https://coderthemes.com/highdmin/layouts/assets/images/file_icons/png.svg" alt="icon">
-
-                                      {% elif file_.type == 'jpg' or file_.type == 'jpeg' %}
-                                      <img src="https://coderthemes.com/highdmin/layouts/assets/images/file_icons/jpg.svg" alt="icon">
-                            
-                                      {% else %}
-                                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /></svg>
-                                     
-                                      {% endif %}
-                                    
-                                    </a>
-                                  </div>
-                                  <p class="small text-overflow mb-0">{{ file_.name }}</p>
-                                    <i class="fa fa-download"></i></a>
-                                  <div class="file-man-title">
-                                      <p class="mb-0"><small>{{file_.size }} kb</small></p>
-                                  </div>
-
-                         
-                                  <div class="mt-2">
-                                      <a href="{% url 'view-details-file-sagpyas' id=file_.pk %}" class="btn btn-block btn-twitter w-100" aria-label="Button">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                          <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
-                                          <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
-                                       </svg>
-                                       </svg> Ver</a>
-                                 
-                                  </div>
+                       
                         
-                              </div>
-                          </div>
-                          {% endfor %}
-                        </div>
+                    
                       </div>
+                     
                     </div>
                 </div>
             </div>
@@ -317,4 +268,23 @@
     {% endblock %}
   </div>
 
+
+  <script src="{% static 'js/gis/rodales_config/plantaciones_rodales_config.js' %}"></script>
+  
+
+  <script>
+    var map = new L.map('map');
+    var rodal_gis = JSON.parse("{{rodales_gis|escapejs}}");
+    var plantaciones = JSON.parse("{{plantaciones_gis|escapejs}}");
+
+    initGis();
+    loadPlantaciones();
+    
+  </script>
+
+
+
+
 {% endblock %}
+
+

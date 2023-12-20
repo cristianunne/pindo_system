@@ -1,13 +1,20 @@
 from django.shortcuts import render, redirect
 from rodales.models import Rodales
 from login.models import Users
+from rodales_gis.models import Rodalesgis
 from configuration.models import Usosrodales
 from empresas.models import Empresas
+from plantaciones.models import Plantaciones
+from gis_pindo.models import Plantacionesgis
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.db import IntegrityError
 from django.urls import reverse
+
+from django.core.serializers import serialize
+
 
 # Create your views here.
 @login_required
@@ -129,9 +136,6 @@ def editRodal(request, id):
                 #return render(request, 'users/edit.html', context)
                 return HttpResponseRedirect(reverse("rodales-edit", args=[id])) 
 
-
-
-
         else:
             return render(request, 'rodales/edit.html', context)
 
@@ -141,8 +145,36 @@ def editRodal(request, id):
         messages.error(request, str(e))
         return redirect('rodales-index')
     
-
+@login_required
 def configurationRodal(request, id):
-    return render(request, 'rodales/configuration.html')
+
+    context = {
+            'category' : 'Rodales',
+            'action' : 'Configuración del Rodal'}
+
+    try:
+        rodal = Rodales.objects.get(pk = id)
+        rodales_gis = serialize('geojson', Rodalesgis.objects.filter(rodales=rodal), geometry_field='geom_4326')
+
+        context.update({'rodales_gis' : rodales_gis})
+        context.update({'rodal' : rodal})
+     
+
+        #traigo las plantaciones
+        #plantaciones = Plantaciones.objects.filter(rodales = rodal)
+        plantaciones_ids = list(Plantaciones.objects.filter(rodales=rodal).values_list('pk', flat=True))
+        #print(plantaciones_ids)
+
+        plantaciones_gis = serialize('geojson', Plantacionesgis.objects.all().filter(plantacion_id__in=plantaciones_ids), geometry_field='geom_4326')
+        context.update({'plantaciones_gis' : plantaciones_gis})
+        #print(plantaciones_gis)
+
+        
+    except Exception as e:
+                messages.error(request, str(e))
+                
+
+
+    return render(request, 'rodales/configuration.html', context)
 
 

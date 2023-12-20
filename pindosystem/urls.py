@@ -1,6 +1,8 @@
 
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 urlpatterns = [
@@ -15,4 +17,6 @@ urlpatterns = [
     path('', include('pindosystem.apps.maquinas.urls')),
     path('', include('pindosystem.apps.configuration.urls')),
     path('', include('pindosystem.apps.rodales.urls')),
-]
+    path('', include('pindosystem.apps.plantaciones.urls')),
+    path('', include('pindosystem.apps.intervenciones.urls')),
+]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

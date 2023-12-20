@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.gis",
     'login',
     'homepage',
     'empresas',
@@ -48,6 +49,11 @@ INSTALLED_APPS = [
     'maquinas',
     'configuration',
     'rodales',
+    'rodales_gis',
+    'gis_pindo',
+    'plantaciones',
+    'intervenciones'
+
 ]
 
 AUTH_USER_MODEL = 'login.Users'
@@ -76,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'pindosystem.context_processors.global_data'
             ],
         },
     },
@@ -84,12 +91,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pindosystem.wsgi.application'
 
 
-# Database
+# Database django.contrib.gis.db.backends.postgis
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': env('POSTGRESQL_NAME'),
         'USER': env('POSTGRESQL_USER'),
         'PASSWORD': env('POSTGRESQL_PASS'),

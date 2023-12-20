@@ -71,6 +71,24 @@ function deleteInformation(element){
     let message = 'Si acepta se borrará toda la información del Uso';
     
     dialogDeleteConfirm(element, title, message, URLS_DELETE.USOS_RODALES_DELETE);
+  } else if(controller === 'intervencion_type') {
+
+    let title = '¿Desea Eliminar el Tipo de Intervención?';
+    let message = 'Si acepta se borrará toda la información del Tipo de Intervención';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.INTERVENCIONES_TYPES_DELETE);
+  } else if(controller === 'plantaciones') {
+
+    let title = '¿Desea Eliminar la Plantación?';
+    let message = 'Si acepta se borrará toda la información de la Plantación';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.PLANTACION_DELETE);
+  } else if(controller === 'poda') {
+
+    let title = '¿Desea Eliminar la Poda?';
+    let message = 'Si acepta se borrará toda la información de la Intervención';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.PODA_DELETE);
   }
 
 

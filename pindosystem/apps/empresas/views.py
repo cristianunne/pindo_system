@@ -92,7 +92,8 @@ def editEmpresa(request, id):
         return redirect('empresas-index')
     
 
-
+@login_required
+@csrf_exempt
 def deleteEmpresa(request, id):
 
     try:
@@ -153,3 +154,15 @@ def uploadImage(request):
               return JsonResponse({'respuesta' : False})
         except Exception as e:
             return JsonResponse({'respuesta' : False})
+        
+
+@login_required
+def viewEmpresa(request, id):
+    
+    context = {
+               'category' : 'Empresas',
+                'action' : 'Administración de Empresas / Detalles'}
+    return render(request, 'empresas/view.html', context=context)
+
+
+

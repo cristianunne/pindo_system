@@ -1,4 +1,5 @@
-from django.db import models
+
+from django.contrib.gis.db import models
 from configuration.models import Usosrodales
 from login.models import Users
 from empresas.models import Empresas

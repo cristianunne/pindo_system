@@ -81,19 +81,31 @@
                 <table id="tabladata" class="table table-bordered table-hover dataTable">
                   <thead>
                     <tr>
-                      <th class="dt-center align-middle"></button></th>
-                      <th class="dt-center align-middle">Nombres</button></th>
-                      <th class="dt-center align-middle">Dirección</button></th>
-                      <th class="dt-center align-middle">Teléfono</button></th>
-                      <th class="dt-center align-middle">Email</button></th>
-                      <th class="dt-center align-middle">CUIT</button></th>
-                      <th class="dt-center align-middle">Fecha de Registro</button></th>
-                      <th class="dt-center align-middle">Acciones</button></th>
+                      <th class="dt-center align-middle"></th>
+                      <th class="dt-center align-middle"></th>
+                      <th class="dt-center align-middle">Nombres</th>
+                      <th class="dt-center align-middle">Dirección</th>
+                      <th class="dt-center align-middle">Teléfono</th>
+                      <th class="dt-center align-middle">Email</th>
+                      <th class="dt-center align-middle">CUIT</th>
+                      <th class="dt-center align-middle">Fecha de Registro</th>
+                      <th class="dt-center align-middle">Acciones</th>
                     </tr>
                   </thead>
                   <tbody class="table-tbody">
                     {% for empresa in empresas %}
                         <tr>
+                          <td class="dt-center align-middle"> 
+                            <div class="mr-3">
+                              <a href="{% url 'empresas-view'  id=empresa.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{empresa.pk}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                               </svg>
+                              </a>
+                            </div>
+                        </td>
                           <td class="dt-center align-middle"> 
                             <img src="data:image/*; base64,{{empresa.image}} " class="avatar">
                           </td>

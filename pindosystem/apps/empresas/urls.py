@@ -8,4 +8,5 @@ urlpatterns = [
     path('empresas/empresas-delete/<int:id>/', views.deleteEmpresa, name='empresas-delete'),
     path('empresas/modified-logo-empresa/<int:id>',views.modifiedLogoEmpresa, name='modified-logo-empresa'),
     path('empresas/upload-image', views.uploadImage, name='empresas-image'),
+    path('empresas/empresas-view/<int:id>/', views.viewEmpresa, name='empresas-view'),
 ]
