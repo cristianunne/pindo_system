@@ -237,11 +237,16 @@ def viewPlantacion(request, id_plantacion):
         #p =  plantaciones_gis = serialize('geojson', [Plantacionesgis.objects.filter(plantacion=plantacion).values()], geometry_field='geom_4326')
         #print(p)
      
+        #gis_ = Plantacionesgis.objects.only('plantacion__users_id').select_related('plantacion').filter(plantacion=plantacion)
+        #print(gis_.query)
     
         #traigo el rodal gis
-        plantaciones_gis = serialize('geojson', Plantacionesgis.objects.filter(plantacion=plantacion), geometry_field='geom_4326')
+        plantaciones_gis = serialize('geojson', Plantacionesgis.objects
+                                     .filter(plantacion=plantacion), 
+                                     geometry_field='geom_4326' )
         plantacion_count = len(Plantacionesgis.objects.filter(plantacion=plantacion)) 
 
+      
         #paso el msj 
         if plantacion_count == 0:
             messages.error(request, str('No se ha asignado el Polígono a la Plantación. Utilice un Software SIG para cargar la información.'))

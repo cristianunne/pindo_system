@@ -180,7 +180,7 @@
                         <div class="list-group-item">
                           <div class="row align-items-center">
                             <div class="col-auto">
-                              <a href="#">
+                              <a href="{% url 'intervenciones-sobrevivencia-add' idrodal=rodal.pk %}">
                                 <span class="avatar text-blue" >
                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-activity" width="24" height="24" viewBox="0 0 24 24" 
                                   stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -188,7 +188,7 @@
                               </a>
                             </div>
                             <div class="col text-truncate">
-                              <a href="#" class="text-reset d-block">Sobrevivencia</a>
+                              <a href="{% url 'intervenciones-sobrevivencia-add' idrodal=rodal.pk %}" class="text-reset d-block">Sobrevivencia</a>
                               <div class="d-block text-secondary text-truncate mt-n1">Administrar los relevamientos de Sobrevivencia</div>
                             </div>
                          
@@ -264,7 +264,13 @@
                                 <tr>
                                   <td class="dt-center align-middle"> 
                                     <div class="mr-3">
-                                      <a href="{% url 'intervenciones-poda-view'  idpoda=inter.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{inter.pk}}">
+                                      {% if inter.type == 'Sobrevivencia' %}
+                                        <a href="{% url 'intervenciones-sobrevivencia-view'  idsobrevivencia=inter.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{inter.pk}}">
+                                      {% elif inter.type == 'Poda' %}
+                                        <a href="{% url 'intervenciones-poda-view'  idpoda=inter.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{inter.pk}}">
+
+                                      {% endif %}
+                                        
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                           <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
@@ -284,7 +290,15 @@
                                         <div class="d-flex justify-content-center">
                                        
                                             <div class="mr-3">
-                                                <a href="{% url 'intervenciones-poda-edit' idpoda=inter.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{inter.pk}}">
+                                               
+                                                {% if inter.type == 'Sobrevivencia' %}
+                                                  <a href="{% url 'intervenciones-sobrevivencia-edit' idsobrevivencia=inter.pk %}"  class="btn btn-rss btn-icon" aria-label="Button" attr="{{inter.pk}}">
+                                           
+                                                {% elif inter.type == 'Poda' %}
+                                                  <a href="{% url 'intervenciones-poda-edit' idpoda=inter.pk %}"  class="btn btn-rss btn-icon" aria-label="Button" attr="{{inter.pk}}">
+                                                
+                                                {% endif %}
+                                               
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                         <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>

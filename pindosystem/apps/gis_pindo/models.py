@@ -14,7 +14,7 @@ class Plantacionesgis(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     plantacion = models.ForeignKey(Plantaciones, related_name='plantacion_plantaciongis', blank=False, null=True, on_delete=models.CASCADE)
-    user = models.OneToOneField(Users, related_name='user_created_plantaciones_gis', blank=False, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(Users, related_name='user_created_plantaciones_gis', blank=False, null=True, on_delete=models.SET_NULL)
     geom = models.MultiPolygonField(srid=5349, blank=True, null=True)
     geom_4326 = models.MultiPolygonField(blank=True, null=True)
 
@@ -29,9 +29,20 @@ class PodaIntervenciongis(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     intervencion_gis = models.ForeignKey(Intervenciones, related_name='poda_intervencion_gis', blank=False, null=True, on_delete=models.CASCADE)
-    user = models.OneToOneField(Users, related_name='user_created_poda_intervencion_gis', blank=False, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(Users, related_name='user_created_poda_intervencion_gis', blank=False, null=True, on_delete=models.SET_NULL)
     geom = models.MultiPolygonField(srid=5349, blank=True, null=True)
     geom_4326 = models.MultiPolygonField(blank=True, null=True)
+
+
+class SobrevivenciaIntervenciongis(models.Model):
+    superficie = models.FloatField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    intervencion_gis = models.ForeignKey(Intervenciones, related_name='sobrevivencia_intervencion_gis', blank=False, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, related_name='user_created_sobrevivencia_intervencion_gis', blank=False, null=True, on_delete=models.SET_NULL)
+    geom = models.MultiPolygonField(srid=5349, blank=True, null=True)
+    geom_4326 = models.MultiPolygonField(blank=True, null=True)
+    name = models.CharField('Nombre de Parcela', unique=False, max_length=100, null=True)
 
 
 

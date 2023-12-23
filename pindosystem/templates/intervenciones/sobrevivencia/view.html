@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+{% extends '../../layout/base.html' %}
+
+{% load static %}
+
+
+
+
+{% block sidebar %}
+  {% include '../../element/sidebar.html' %}
+{% endblock %}
+
+
+
+{% block content %}
+  {% block header %}
+    {% include '../../element/header.html' %}
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+      {% include '../../element/pageheader.html' %}
+    {% endblock %}
+
+    {% block main_content %}
+      <div class="page-body">
+        <div class="container-xl">
+          {% if messages %}
+
+          {% include "../../element/alert-sucess.html" %}
+          {% endif %}
+          <div class="row row-cards col-lg-12 col-md-12 col-sm-12 mb-5">
+            <div class="col-lg-3 col-md-3 col-sm-3">
+              <div class="row">
+
+                <div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12 mb-3" style="padding: unset;">
+                  <div class="card bg-teal-lt">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                              <path d="M12 4v16" /><path d="M4 15h8" />
+                              <path d="M12 12h8" /><path d="M16 12v8" />
+                              <path d="M16 16h4" /></svg>
+                            
+                          
+                          </div>
+                          <div class="col-md-8">
+                            <div>
+                              <h2 class="card-title text-center h2">Rodal</h2>
+                            </div>
+                            <div class="mb-2">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-3d-cube-sphere" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <path d="M6 17.6l-2 -1.1v-2.5"></path>
+                                  <path d="M4 10v-2.5l2 -1.1"></path>
+                                  <path d="M10 4.1l2 -1.1l2 1.1"></path>
+                                  <path d="M18 6.4l2 1.1v2.5"></path>
+                                  <path d="M20 14v2.5l-2 1.12"></path>
+                                  <path d="M14 19.9l-2 1.1l-2 -1.1"></path>
+                                  <path d="M12 12l2 -1.1"></path>
+                                  <path d="M18 8.6l2 -1.1"></path>
+                                  <path d="M12 12l0 2.5"></path>
+                                  <path d="M12 18.5l0 2.5"></path>
+                                  <path d="M12 12l-2 -1.12"></path>
+                                  <path d="M6 8.6l-2 -1.1"></path>
+                              </svg>
+                            <strong>Código SAP: </strong> {{poda.rodales.cod_sap}}
+                            </div>
+      
+                            <div class="mb-2">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-cottage" width="24" height="24" viewBox="0 0 24 24" 
+                              stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M4 21v-11l2.5 -4.5l5.5 -2.5l5.5 2.5l2.5 4.5v11" /><path d="M12 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                <path d="M9 21v-5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v5" /></svg>
+                            <strong>Campo: </strong> {{poda.rodales.campo}}
+                            </div>
+    
+      
+                            <div class="mb-2">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M11 6h9" /><path d="M11 12h9" />
+                                <path d="M11 18h9" /><path d="M4 10v-4.5a1.5 1.5 0 0 1 3 0v4.5" /><path d="M4 8h3" />
+                                <path d="M4 20h1.5a1.5 1.5 0 0 0 0 -3h-1.5h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6z" /></svg>
+                            <strong>Uso: </strong> {{poda.rodales.usos_rodales.name}}
+                            </div>
+      
+      
+                            <div class="mb-2">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-question-mark" 
+                              width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" 
+                              stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M8 8a3.5 3 0 0 1 3.5 -3h1a3.5 3 0 0 1 3.5 3a3 3 0 0 1 -2 3a3 4 0 0 0 -2 4" /><path d="M12 19l0 .01" /></svg>
+                            <strong>Certificado: </strong> Plantacion
+                            </div>
+    
+                            <div class="mb-2">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-question-mark" 
+                              width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" 
+                              stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M8 8a3.5 3 0 0 1 3.5 -3h1a3.5 3 0 0 1 3.5 3a3 3 0 0 1 -2 3a3 4 0 0 0 -2 4" /><path d="M12 19l0 .01" /></svg>
+                            <strong>Finalizado: </strong> {{ poda.rodales.is_finish|yesno:"Si,No" }}
+                            
+
+                            </div>
+    
+                            <div class="mb-2">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                      
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler" viewBox="0 0 24 24"  
+                              stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <path d="M8 9l5 5v7h-5v-4m0 4h-5v-7l5 -5m1 1v-6a1 1 0 0 1 1 -1h10a1 1 0 0 1 1 1v17h-8"></path>
+                                  <path d="M13 7l0 .01"></path>
+                                  <path d="M17 7l0 .01"></path>
+                                  <path d="M17 11l0 .01"></path>
+                                  <path d="M17 15l0 .01"></path>
+                               </svg>
+                            <strong>Empresa: </strong> 
+                            <a href="{% url 'empresas-view' id=sobrevivencia.rodales.empresa.pk %}">{{sobrevivencia.rodales.empresa.name}}</a>
+    
+                            </div>
+                          
+                          </div>
+                      </div>
+    
+                      
+                      </div>
+                  </div>
+                </div>
+
+                <div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="row gy-3">
+                        <div class="card bg-primary-lt">
+                            <div class="card-body">
+                              <div class="row align-items-center">
+                                <div>
+                                  <h2 class="card-title text-center h2">Sobrevivencia</h2>
+                                </div>
+                                <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
+                                  <div class="text-center align-items-center">
+                  
+                                    <span class="avatar text-blue" >
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-activity" width="24" height="24" viewBox="0 0 24 24" 
+                                      stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M3 12h4l3 8l4 -16l3 8h4" /></svg></span>
+                                  </div>
+                                </div>
+                                <div class="col-lg-10 col-md-9 col-sm-9"> 
+                                 
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>ID: </strong> {{sobrevivencia.pk}}
+                                  </div>
+
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+    
+                                
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                      <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                      <path d="M16 3v4"></path>
+                                      <path d="M8 3v4"></path>
+                                      <path d="M4 11h16"></path>
+                                      <path d="M11 15h1"></path>
+                                      <path d="M12 15v3"></path>
+                                   </svg>
+                                  <strong>Fecha: </strong> {{sobrevivencia.fecha}}
+                                  </div>
+          
+            
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+    
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-letters" width="24" height="24" viewBox="0 0 24 24" 
+                                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 6h9" /><path d="M11 12h9" /><path d="M11 18h9" />
+                                    <path d="M4 10v-4.5a1.5 1.5 0 0 1 3 0v4.5" /><path d="M4 8h3" />
+                                      <path d="M4 20h1.5a1.5 1.5 0 0 0 0 -3h-1.5h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6z" /></svg>
+                                  
+                                  <strong>Tipo de Intervención: </strong> {{sobrevivencia.type}}
+                                  </div>
+
+
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+    
+                                
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shape" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" 
+                                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M5 5m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19 5m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M5 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M5 7l0 10" /><path d="M7 5l10 0" /><path d="M7 19l10 0" /><path d="M19 7l0 10" /></svg>
+                                  
+                                  <strong>Superficie: </strong> {{sobrevivencia.superficie}}
+                                  </div>
+          
+            
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lasso-polygon" width="24" height="24" viewBox="0 0 24 24" 
+                                    stroke-width="1.5" fill="none" stroke="currentColor"  stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M4.028 13.252l-1.028 -3.252l2 -7l7 5l8 -3l1 9l-9 3l-5.144 -1.255" />
+                                      <path d="M5 15m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M5 17c0 1.42 .316 2.805 1 4" />
+                                    </svg>
+                                  <strong>Tamaño de parcela: </strong> {{sobrevivencia.sobrevivencia_intervencion.parcela_size}}
+                                  </div>
+            
+            
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-check" width="24" height="24" 
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 18l-2 -1l-6 3v-13l6 -3l6 3l6 -3v9" />
+                                      <path d="M9 4v13" /><path d="M15 7v8" /><path d="M15 19l2 2l4 -4" /></svg>
+                                  <strong>Parcelas relevadas: </strong> {{sobrevivencia.sobrevivencia_intervencion.parcela_relevadas}}
+                                  </div>
+    
+    
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-christmas-tree" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M12 3l4 4l-2 1l4 4l-3 1l4 4h-14l4 -4l-3 -1l4 -4l-2 -1z" /><path d="M14 17v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-3" /></svg>
+                                  <strong>Plantas vivas: </strong> {{sobrevivencia.sobrevivencia_intervencion.plantas_vivas}}
+                                  </div>
+    
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-christmas-tree-off" width="24" height="24" 
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.5 5.5l2.5 -2.5l4 4l-2 1l4 4l-1.5 .5m.5 4.5h-12l4 -4l-3 -1l3 -3" />
+                                      <path d="M14 17v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-3" /><path d="M3 3l18 18" /></svg>
+                                  <strong>Plantas muertas: </strong> {{sobrevivencia.sobrevivencia_intervencion.plantas_muertas}}
+                                  </div>
+
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-radioactive-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.118 14.127c-.182 .181 -.39 .341 -.618 .473l3 5.19a9 9 0 0 0 1.856 -1.423m1.68 -2.32a8.993 8.993 0 0 0 .964 -4.047h-5" />
+                                      <path d="M13.5 9.4l3 -5.19a9 9 0 0 0 -8.536 -.25" /><path d="M10.5 14.6l-3 5.19a9 9 0 0 1 -4.5 -7.79h6a3 3 0 0 0 1.5 2.6" /><path d="M3 3l18 18" /></svg>
+                                  <strong>Daño por herbicida: </strong> {{sobrevivencia.sobrevivencia_intervencion.damage_herbicida}}
+                                  </div>
+
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-radioactive-off" width="24" height="24" 
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.118 14.127c-.182 .181 -.39 .341 -.618 .473l3 5.19a9 9 0 0 0 1.856 -1.423m1.68 -2.32a8.993 8.993 0 0 0 .964 -4.047h-5" /><path d="M13.5 9.4l3 -5.19a9 9 0 0 0 -8.536 -.25" />
+                                      <path d="M10.5 14.6l-3 5.19a9 9 0 0 1 -4.5 -7.79h6a3 3 0 0 0 1.5 2.6" /><path d="M3 3l18 18" /></svg>
+                                  <strong>Daño mecánico: </strong> {{sobrevivencia.sobrevivencia_intervencion.damage_mecanico}}
+                                  </div>
+
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-activity" width="24" height="24" 
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12h4l3 8l4 -16l3 8h4" /></svg>
+                                  <strong>Sobrevicencia: </strong> {{sobrevivencia.sobrevivencia_intervencion.sobrevivencia}}
+                                  </div>
+
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" 
+                                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                                      <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+                                  <strong>Responsable: </strong> {{sobrevivencia.sobrevivencia_intervencion.responsable}}
+                                  </div>
+
+
+                                 
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+    
+                    </div>
+                  
+                </div>
+    
+              
+              </div>
+            </div>
+
+          
+
+            <div class="col-xxl-9 col-lg-9 col-md-9 col-sm-12">
+             
+                <div class="card min-vh-80 max-vh-80 d-flex flex-row">
+                    <div class="card-body" style="overflow: auto; padding: 1px;">
+                      <div style="display: flex; align-items: stretch; height: 100%;">
+
+                        <div id="map" style="width: 100%; height: 100%;"></div>
+
+                       
+                        
+                    
+                      </div>
+                     
+                    </div>
+                </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    {% endblock %}
+  </div>
+
+  <script src="{% static 'js/gis/gis_view_overlays.js' %}"></script>
+
+
+
+  <script>
+    let overlay = "{{sobrevivencia_gis|escapejs}}";
+    let rodal = "{{rodales_gis|escapejs}}";
+    var overlays = JSON.parse(overlay != '' ? overlay : null);
+    var rodal_gis = JSON.parse(rodal != '' ? rodal : null); 
+    
+    
+    initGis("Sobrevivencia");
+   
+
+  </script>
+
+
+
+
+{% endblock %}
+
+

@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from intervenciones.models import Intervenciones, PodaIntervencion
+from intervenciones.models import Intervenciones, PodaIntervencion, SobrevivenciaIntervencion
 from rodales.models import Rodales
 from emsefor.models import Emsefor
 from login.models import Users
-from gis_pindo.models import PodaIntervenciongis
+from gis_pindo.models import PodaIntervenciongis, SobrevivenciaIntervenciongis
 from rodales_gis.models import Rodalesgis
 
 from django.contrib import messages
@@ -222,6 +222,7 @@ def viewIntervencionPoda(request, idpoda):
         #traigo el rodal gis
         poda_gis = serialize('geojson', PodaIntervenciongis.objects.filter(intervencion_gis=poda), geometry_field='geom_4326')
         poda_count = len(PodaIntervenciongis.objects.filter(intervencion_gis=poda)) 
+        print(poda_gis)
 
           #paso el msj 
         if poda_count == 0:
@@ -267,3 +268,145 @@ def deleteIntervencionPoda(request, idpoda):
         raise Http404("error")
     except Exception as e:
         raise Http404(str(e))
+    
+
+@login_required
+def addIntervencionSobrevivencia(request, idrodal):
+    
+    context = {'category' : 'Intervenciones',
+                'action' : 'Administración de Intervenciones / Nueva Sobrevivencia'}
+    context.update({'idrodal' : idrodal})
+
+    try:
+        
+        rodales = Rodales.objects.values_list("rodales_id", "cod_sap").filter(rodales_id = idrodal)
+        context.update({'rodales' : rodales})
+        emsefors = Emsefor.objects.values_list("emsefor_id", "name")
+        context.update({'emsefors' : emsefors})
+
+        if request.method == 'POST':
+            type_intervencion = INTERVENCIONES_DICT['Sobrevivencia']
+            fecha = request.POST.get('fecha')
+            superficie = request.POST.get('superficie')
+            parcela_size = request.POST.get('parcela_size')
+            parcela_relevadas = request.POST.get('parcela_relevadas')
+            plantas_vivas = request.POST.get('plantas_vivas')
+            plantas_muertas = request.POST.get('plantas_muertas')
+            damage_herbicida = request.POST.get('damage_herbicida')
+            damage_mecanico = request.POST.get('damage_mecanico')
+            sobrevivencia = request.POST.get('sobrevivencia')
+            responsable = request.POST.get('responsable')
+
+            emsefor = request.POST.get('select-emsefor')
+
+            #traigo las entidades
+            rodal_ent = Rodales.objects.get(pk = idrodal)
+            user_entity = Users.objects.get(pk=request.user.pk)
+            emsefor_ent = Emsefor.objects.get(pk = emsefor)
+
+            try:
+                with transaction.atomic():
+                    intervencion = Intervenciones.objects.create(rodales=rodal_ent, fecha=fecha, type=type_intervencion, superficie=superficie,
+                                                                 users=user_entity, emsefors=emsefor_ent)
+                    
+                    sobrevivencia_res = SobrevivenciaIntervencion.objects.create(intervenciones=intervencion, parcela_size = parcela_size, parcela_relevadas = parcela_relevadas,
+                                                                                 plantas_vivas = plantas_vivas, plantas_muertas = plantas_muertas, 
+                                                                                 damage_herbicida = damage_herbicida, damage_mecanico = damage_mecanico, 
+                                                                                 sobrevivencia = sobrevivencia, responsable=responsable)
+                    
+                    messages.success(request, "La Sobrevivencia se ha creado con éxito!.")
+                    return HttpResponseRedirect(reverse("intervenciones-index", args=[idrodal]))
+
+            except Exception as e:
+                messages.error(request, str(e))
+                return HttpResponseRedirect(reverse("intervenciones-index", args=[idrodal]))
+           
+
+        return render(request, 'intervenciones/sobrevivencia/add.html', context)
+
+
+    except Rodales.DoesNotExist:
+        messages.error(request, str('No se puede obtener los datos del Rodal. Intente nuevamente!'))
+        return HttpResponseRedirect(reverse("intervenciones-index", args=[idrodal]))
+    
+    except Emsefor.DoesNotExist:
+        messages.error(request, str('No se puede obtener los datos de la Emsefor. Intente nuevamente!'))
+       
+        return HttpResponseRedirect(reverse("intervenciones-index", args=[idrodal]))
+   
+    except Exception as e:
+       
+        messages.error(request, str(e))
+        return HttpResponseRedirect(reverse("intervenciones-index", args=[idrodal]))
+
+
+@login_required
+def editIntervencionSobrevivencia(request, idsobrevivencia):
+    
+    context = {'category' : 'Intervenciones',
+                    'action' : 'Editar Sobrevivencia'}
+    try:
+
+        sobrevivencia = Intervenciones.objects.get(pk=idsobrevivencia)
+        idrodal = sobrevivencia.rodales.pk
+
+        rodales = Rodales.objects.values_list("rodales_id", "cod_sap").filter(rodales_id = idrodal)
+        context.update({'rodales' : rodales})
+        emsefors = Emsefor.objects.values_list("emsefor_id", "name")
+        context.update({'emsefors' : emsefors})
+        context.update({'sobrevivencia' : sobrevivencia})
+
+
+        
+
+        return render(request, 'intervenciones/sobrevivencia/edit.html', context)
+
+    except Intervenciones.DoesNotExist:
+        messages.error(request, str('Error al traer los datos de la Intervención'))
+        return HttpResponseRedirect(reverse('intervenciones-index', args=[idrodal]))
+    
+    except Exception as e:
+        messages.error(request, str(e))
+        return HttpResponseRedirect(reverse('intervenciones-index', args=[idrodal]))
+
+@login_required
+def viewIntervencionSobrevivencia(request, idsobrevivencia):
+    context = {'category' : 'Intervenciones',
+                    'action' : 'Ver Sobrevivencia'}
+
+    try:
+        sobrevivencia = Intervenciones.objects.get(pk=idsobrevivencia)
+        idrodal = sobrevivencia.rodales.pk
+
+       
+        context.update({'sobrevivencia' : sobrevivencia})
+
+        #traigo el rodal gis
+        sobrevivencia_gis = serialize('geojson', SobrevivenciaIntervenciongis.objects.filter(intervencion_gis=sobrevivencia).all(), geometry_field='geom_4326')
+        sobrevivencia_count = len(SobrevivenciaIntervenciongis.objects.filter(intervencion_gis=sobrevivencia)) 
+
+        print(sobrevivencia_gis)
+
+          #paso el msj 
+        if sobrevivencia_count == 0:
+            messages.error(request, str('No se ha asignado el Polígono a la Intervención. Utilice un Software SIG para cargar la información.'))
+           
+
+        else:
+            context.update({'sobrevivencia_gis' : sobrevivencia_gis})
+        
+        rodales_gis = serialize('geojson', Rodalesgis.objects.filter(rodales=sobrevivencia.rodales), geometry_field='geom_4326')
+
+        context.update({'rodales_gis' : rodales_gis})
+       
+
+        return render(request, 'intervenciones/sobrevivencia/view.html', context)
+
+    
+    except Intervenciones.DoesNotExist:
+        messages.error(request, str('Error al traer los datos de la Intervención'))
+        return HttpResponseRedirect(reverse('intervenciones-index', args=[idrodal]))
+    
+    except Exception as e:
+        messages.error(request, str(e))
+        return HttpResponseRedirect(reverse('intervenciones-index', args=[idrodal]))
