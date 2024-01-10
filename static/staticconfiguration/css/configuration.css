@@ -1,0 +1,26 @@
+
+.hover-pindo{
+    display: flex;
+    flex: 1;
+    height: 100%;
+}
+
+
+.hover-pindo:hover h4, .hover-pindo:hover p{
+
+    text-decoration-color: red;
+    color: darkblue !important;
+    transition: all 0.1s ease-in;
+}
+
+.hover-pindo > div > p{
+    margin-bottom: unset;
+}
+
+.text-description{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

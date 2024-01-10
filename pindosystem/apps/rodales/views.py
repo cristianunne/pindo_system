@@ -2,10 +2,19 @@ from django.shortcuts import render, redirect
 from rodales.models import Rodales
 from login.models import Users
 from rodales_gis.models import Rodalesgis
-from configuration.models import Usosrodales
+from configuration.models import Usosrodales,IntervencionesTypes, CapasBases
 from empresas.models import Empresas
 from plantaciones.models import Plantaciones
-from gis_pindo.models import Plantacionesgis
+from gis_pindo.models import Plantacionesgis, SobrevivenciaIntervenciongis, PodaIntervenciongis, RaleoIntervenciongis
+from planificacion.models import PlanificacionIntervenciones
+
+
+from rodales.utility import *
+
+from configuration.serializers import CapasBasesSerializer
+
+
+
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, Http404, HttpResponseRedirect
@@ -14,6 +23,7 @@ from django.db import IntegrityError
 from django.urls import reverse
 
 from django.core.serializers import serialize
+import json
 
 
 # Create your views here.
@@ -169,12 +179,95 @@ def configurationRodal(request, id):
         context.update({'plantaciones_gis' : plantaciones_gis})
         #print(plantaciones_gis)
 
+       
+
+
         
     except Exception as e:
                 messages.error(request, str(e))
                 
-
-
     return render(request, 'rodales/configuration.html', context)
+
+@login_required
+def viewRodales(request, idrodal):
+
+    context = {
+            'category' : 'Rodales',
+            'action' : 'Ver Rodal'}
+
+    try:
+        rodal = Rodales.objects.get(pk = idrodal)
+        rodaldata_ = Rodales.objects.filter(pk = idrodal)
+        rodales_gis = serialize('geojson', Rodalesgis.objects.filter(rodales=rodal), geometry_field='geom_4326')
+
+        context.update({'rodales_gis' : rodales_gis})
+        context.update({'rodal' : rodal})
+
+
+        #traigo las plantaciones
+        #plantaciones = Plantaciones.objects.filter(rodales = rodal)
+        plantaciones_ids = list(Plantaciones.objects.filter(rodales=rodal).values_list('pk', flat=True))
+        #print(plantaciones_ids)
+
+        plantaciones_gis = serialize('geojson', Plantacionesgis.objects.all().filter(plantacion_id__in=plantaciones_ids), geometry_field='geom_4326')
+        context.update({'plantaciones_gis' : plantaciones_gis})
+        #print(plantaciones_gis)
+
+        rodaldata = serialize('json', rodaldata_)
+        context.update({'rodaldata' : rodaldata})
+
+        #recorro las intervenciones
+       
+        intervenciones = rodal.rodales_intervenciones.all()
+
+        for inter in intervenciones:
+            intervencion_gis = None
+            if (inter.type == 'Sobrevivencia'):
+                 
+                intervencion_gis = serialize('geojson', SobrevivenciaIntervenciongis.objects.filter(intervencion_gis=inter.pk), geometry_field='geom_4326')
+                context.update({'sobrevivencia_gis' : intervencion_gis})
+
+            elif (inter.type == 'Poda'):
+                 
+                intervencion_gis = serialize('geojson', PodaIntervenciongis.objects.filter(intervencion_gis=inter.pk), geometry_field='geom_4326')
+                context.update({'poda_gis' : intervencion_gis})
+            
+            elif (inter.type == 'Raleo'):
+                 
+                intervencion_gis = serialize('geojson', RaleoIntervenciongis.objects.filter(intervencion_gis=inter.pk), geometry_field='geom_4326')
+                context.update({'raleo_gis' : intervencion_gis})
+        
+        
+        #traigo los eventos
+        planificacion = PlanificacionIntervenciones.objects.filter(rodales_id = idrodal)
+
+        eventos_planificacion = serialize('json', planificacion, fields = ['title', 'date_start', 'date_end','status'])
+        context.update({'eventos_planificacion' : eventos_planificacion})
+        context.update({'name_rodal': rodal.cod_sap})
+
+        #traigo las categorias presentes
+        ids_inter_types = []
+
+        for p in planificacion.all():
+            ids_inter_types.append(p.intervenciones_types.pk)
+
+    
+        categorias_intervencion = serialize('json', IntervencionesTypes.objects.filter(pk__in = ids_inter_types), fields = ['name', 'color'])
+
+        context.update({'categorias_intervencion' : categorias_intervencion})
+
+        #taigo plantaciones
+        resumen_intervenciones = get_stock_by_rodal(rodal)
+        context.update({'res_intervenciones' : resumen_intervenciones})
+       
+
+        context.update({'resumen_intervenciones' :  json.dumps(resumen_intervenciones)})
+        
+
+        
+    except Exception as e:
+                messages.error(request, str(e))
+                
+    return render(request, 'rodales/view.html', context)
 
 

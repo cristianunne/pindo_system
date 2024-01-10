@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     "django.contrib.gis",
     'login',
     'homepage',
@@ -52,7 +53,8 @@ INSTALLED_APPS = [
     'rodales_gis',
     'gis_pindo',
     'plantaciones',
-    'intervenciones'
+    'intervenciones',
+    'planificacion'
 
 ]
 
@@ -132,10 +134,14 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
-
+USE_L10N = True
 USE_I18N = True
 
-USE_TZ = True
+USE_DECIMAL_SEPARATOR = True
+DECIMAL_SEPARATOR = ","
+THOUSAND_SEPARATOR = "."
+USE_THOUSAND_SEPARATOR = True
+
 
 
 # Static files (CSS, JavaScript, Images)

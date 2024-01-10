@@ -78,12 +78,13 @@
                         <table id="tabladata" class="table table-bordered table-hover dataTable">
                           <thead>
                             <tr>
-                              <th class="dt-center align-middle"></button></th>
-                              <th class="dt-center align-middle">Nombre</button></th>
-                              <th class="dt-center align-middle">Fecha de Registro</button></th>
-                              <th class="dt-center align-middle">Fecha de Modificación</button></th>
-                              <th class="dt-center align-middle">Creado por</button></th>
-                              <th class="dt-center align-middle">Acciones</button></th>
+                              <th class="dt-center align-middle"></th>
+                              <th class="dt-center align-middle">Nombre</th>
+                              <th class="dt-center align-middle">Color</th>
+                              <th class="dt-center align-middle">Fecha de Registro</th>
+                              <th class="dt-center align-middle">Fecha de Modificación</th>
+                              <th class="dt-center align-middle">Creado por</th>
+                              <th class="dt-center align-middle">Acciones</th>
                             </tr>
                           </thead>
                           <tbody class="table-tbody">
@@ -103,6 +104,10 @@
                                     </div>
                                     </td>
                                     <td class="dt-center align-middle"> {{ interv.name }}</td>
+                                    <td class="dt-center align-middle">
+                                      <div class="avatar" data-demo-color="" style="background-color: {{interv.color}};">
+                                      </div>
+                                    </td>
                                     <td class="dt-center align-middle">{{ interv.created }}</td>
                                     <td class="dt-center align-middle">{{ interv.modified }}</td>
                                     <td class="dt-center align-middle">{{ interv.user }}</td>

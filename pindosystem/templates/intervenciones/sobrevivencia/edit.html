@@ -63,6 +63,13 @@
                             </div>
 
                             <div class="mb-4">
+                              <label class="form-label" for="username">Nombre:</label>
+                              <input type="text" class="form-control" id="name"  name="name" aria-describedby="name" placeholder="Nombre" 
+                              value={{sobrevivencia.name}}>
+                            </div>
+
+
+                            <div class="mb-4">
                               <label class="form-label required">Fecha:</label>
                               <div class="input-icon mb-3">
                                 <input class="form-control " placeholder="Seleccione una Fecha" id="fecha" name="fecha" required value="{{ sobrevivencia.fecha|date:'Y-m-d' }}">

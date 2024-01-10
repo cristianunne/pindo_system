@@ -1,0 +1,204 @@
+{% extends '../../layout/base.html' %}
+
+{% load static %}
+
+{% block sidebar %}
+  {% include '../../element/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+  {% block header %}
+    {% include '../../element/header.html' %}
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+      {% include '../../element/pageheader.html' %}
+    {% endblock %}
+
+    {% block main_content %}
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-cards mb-5">
+            <div class="col-md-3 col-lg-3">
+              <div class="card bg-primary-lt">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-md-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13" /><path d="M9 4v13" /><path d="M15 7v13" /></svg>
+                      
+                    </div>
+                    <div class="col-md-8">
+                      <h3 class="card-title">Sección de Administración de las Configuraciones del Mapa</h3>
+                      <p class="text-muted">En esta sección puede editar las Configuraciones del Mapa</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-9 col-lg-9">
+              <div class="card">
+                <div class="card-status-top bg-blue"></div>
+                <div class="card-header">
+                  <h3 class="card-title">Editar Configuración</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row justify-content-center flex-column align-items-center">
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                      <form action="{% url 'map-edit-config' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                          <label class="form-label">CRS:</label>
+                          <input type="text" class="form-control" placeholder="CRS" name="crs" id="crs" value="{{configuration.crs}}"/>
+                        </div>
+                        <div class="mb-4">
+                          <label class="form-label required">Latitud Central:</label>
+                          <input type="number" step="0.1" class="form-control" placeholder="Latitud Central" required name="center_x" id="center_x" 
+                          value="{{configuration.center_x}}"/>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label required">Longitud Central:</label>
+                          <input type="number" step="0.1" class="form-control" placeholder="Longitud Central" required name="center_y" id="center_y" 
+                          value="{{configuration.center_y}}"/>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label required">Zoom Inicial:</label>
+                          <input type="number" step="0.01" class="form-control" placeholder="Zoom Inicial" required name="zoom" id="zoom" 
+                          value="{{configuration.zoom}}"/>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label">Zoom Mínimo:</label>
+                          <input type="number" step="1" class="form-control" placeholder="Zoom Inicial" name="min_zoom" id="min_zoom" 
+                          value="{{configuration.min_zoom}}"/>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label">Zoom Máximo:</label>
+                          <input type="number" step="1" class="form-control" placeholder="Zoom Inicial" name="max_zoom" id="max_zoom" 
+                          value="{{rodaconfigurationl.max_zoom}}"/>
+                        </div>
+
+                        <div class="mb-5">
+                          <label class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox"  
+                            {% if configuration.renderer == True %}
+                              checked value="SI"
+                            {% else %}
+                                unchecked value="NO"
+                            {% endif %}
+                             name="renderer" id="renderer" onclick="setCheckedControl(this)" />
+                            <span class="form-check-label">Cambiar Renderización a Canvas?</span>
+                          </label>
+                        </div>
+
+                
+                        <div class="form-footer">
+                          <a href="{% url 'map-view-config' %}" class="btn btn-dark" aria-label="Button">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-left-filled" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M9.586 4l-6.586 6.586a2 2 0 0 0 0 2.828l6.586 6.586a2 2 0 0 0 2.18 .434l.145 -.068a2 2 0 0 0 1.089 -1.78v-2.586h7a2 2 0 0 0 2 -2v-4l-.005 -.15a2 2 0 0 0 -1.995 -1.85l-7 -.001v-2.585a2 2 0 0 0 -3.414 -1.414z" stroke-width="0" fill="currentColor" />
+                            </svg> Volver</a>
+                            <button type="submit" class="btn btn-warning pull-right"> 
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                <path d="M16 5l3 3"></path>
+                             </svg>
+                             Editar</button>
+                        </div>
+                      </form>
+                    </div>
+
+                    <div class="col-md-6 col-lg-6 col-sm-6 mt-4">
+                      <div class="mb-4">
+                        {% if messages %}
+                          <div class="messages">
+                            {% for message in messages %}
+                              <div class="alert alert-danger">
+                                <div>
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-exclamation-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                                    <path d="M12 9v4"></path>
+                                    <path d="M12 16v.01"></path>
+                                  </svg>
+                                  {{ message }}
+                                </div>
+                              </div>
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="{% static 'dist/libs/nouislider/dist/nouislider.min.js' %}"></script>
+      <script src="{% static 'dist/libs/litepicker/dist/litepicker.js' %}"></script>
+      <script src="{% static 'dist/libs/tom-select/dist/js/tom-select.base.min.js' %}"></script>
+
+      <script>
+        // @formatter:off
+        document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-uso')), {
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+
+        document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-empresa')), {
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+        // @formatter:on
+      </script>
+    {% endblock %}
+  </div>
+{% endblock %}

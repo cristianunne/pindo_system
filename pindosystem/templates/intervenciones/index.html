@@ -149,9 +149,7 @@
                                  </svg>
                                <strong>Finalizado: </strong> {{ rodal.is_finish|yesno:"Si,No" }}
                                
-                               
                               
-                               
                               </div>
   
                               <div class="mb-2">
@@ -211,12 +209,12 @@
                         <div class="list-group-item">
                           <div class="row align-items-center">
                             <div class="col-auto">
-                              <a href="#">
+                              <a href="{% url 'intervenciones-raleo-add' idrodal=rodal.pk %}">
                                 <span class="avatar" style="background-image: url({% static 'img/icons/raleo.png' %})"></span>
                               </a>
                             </div>
                             <div class="col text-truncate">
-                              <a href="#" class="text-reset d-block">Raleo</a>
+                              <a href="{% url 'intervenciones-raleo-add' idrodal=rodal.pk %}" class="text-reset d-block">Raleo</a>
                               <div class="d-block text-secondary text-truncate mt-n1">Administrar las intervenciones de Raleos</div>
                             </div>
                          
@@ -225,12 +223,12 @@
                         <div class="list-group-item">
                           <div class="row align-items-center">
                             <div class="col-auto">
-                              <a href="#">
+                              <a href="{% url 'intervenciones-talaraza-add' idrodal=rodal.pk %}">
                                 <span class="avatar" style="background-image: url({% static 'img/icons/talarasa.png' %})"></span>
                               </a>
                             </div>
                             <div class="col text-truncate">
-                              <a href="#" class="text-reset d-block">Tala Rasa</a>
+                              <a href="{% url 'intervenciones-talaraza-add' idrodal=rodal.pk %}" class="text-reset d-block">Tala Rasa</a>
                               <div class="d-block text-secondary text-truncate mt-n1">Administrar las intervenciones de Tala Rasa</div>
                             </div>
                          
@@ -251,6 +249,7 @@
                             <tr>
                               <th class="dt-center align-middle"></th>
                               <th class="dt-center align-middle">Id</th>
+                              <th class="dt-center align-middle">Nombre</th>
                               <th class="dt-center align-middle">Tipo</th>
                               <th class="dt-center align-middle">Fecha</th>
                               <th class="dt-center align-middle">Emsefor</th>
@@ -269,6 +268,12 @@
                                       {% elif inter.type == 'Poda' %}
                                         <a href="{% url 'intervenciones-poda-view'  idpoda=inter.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{inter.pk}}">
 
+                                      {% elif inter.type == 'Raleo' %}
+                                        <a href="{% url 'intervenciones-raleo-view'  idraleo=inter.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{inter.pk}}">
+  
+                                      {% elif inter.type == 'Talaraza' %}
+                                        <a href="{% url 'intervenciones-talaraza-view'  idtalaraza=inter.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{inter.pk}}">
+    
                                       {% endif %}
                                         
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -281,6 +286,7 @@
                                 </td>
                              
                                     <td class="dt-center align-middle"> {{ inter.pk }}</td>
+                                    <td class="dt-center align-middle">{{ inter.name }}</td>
                                     <td class="dt-center align-middle">{{ inter.type }}</td>
                                     <td class="dt-center align-middle">{{ inter.fecha }}</td>
                                     <td class="dt-center align-middle">{{ inter.emsefors.name }}</td>
@@ -297,6 +303,12 @@
                                                 {% elif inter.type == 'Poda' %}
                                                   <a href="{% url 'intervenciones-poda-edit' idpoda=inter.pk %}"  class="btn btn-rss btn-icon" aria-label="Button" attr="{{inter.pk}}">
                                                 
+                                                {% elif inter.type == 'Raleo' %}
+                                                    <a href="{% url 'intervenciones-raleo-edit' idraleo=inter.pk %}"  class="btn btn-rss btn-icon" aria-label="Button" attr="{{inter.pk}}">
+                                               
+                                                {% elif inter.type == 'Talaraza' %}
+                                                      <a href="{% url 'intervenciones-talaraza-edit' idtalaraza=inter.pk %}"  class="btn btn-rss btn-icon" aria-label="Button" attr="{{inter.pk}}">
+
                                                 {% endif %}
                                                
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -309,7 +321,21 @@
                                             </div>
         
                                             <div>
-                                                <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="poda">
+
+                                              {% if inter.type == 'Sobrevivencia' %}
+                                              <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="sobrevivencia">
+                                       
+                                            {% elif inter.type == 'Poda' %}
+                                            <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="poda">
+                                            
+                                            {% elif inter.type == 'Raleo' %}
+                                            <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="raleo">
+                                           
+                                            {% elif inter.type == 'Talaraza' %}
+                                            <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="talaraza">
+
+                                            {% endif %}
+                                                
                                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                     <path d="M4 7l16 0"></path>

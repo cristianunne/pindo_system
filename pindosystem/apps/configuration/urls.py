@@ -17,5 +17,16 @@ urlpatterns = [
     path('configuration/inventarios-types/edit/<int:id>/', views.editInventarioTypes, name='inventarios-types-edit'),
     path('configuration/inventarios-types/delete/<int:id>/', views.deleteInventarioTypes, name='inventarios-types-delete'),
 
+    path('configuration/map-config/index', views.indexMapConfiguration, name='map-config-index'),
+    path('configuration/map-config/view-config', views.viewMapConfig, name='map-view-config'),
+    path('configuration/map-config/edit-config', views.editMapConfig, name='map-edit-config'),
+
+    path('configuration/basemaps/index-basemaps', views.indexBaseMaps, name='index-basemaps'),
+    path('configuration/basemaps/add-basemaps', views.addBaseMaps, name='add-basemaps'),
+    path('configuration/basemaps/edit/<int:idcapabase>/', views.editBaseMaps, name='edit-basemaps'),
+    path('configuration/basemaps/delete-basemaps/<int:id>/', views.deleteBaseMap, name='delete-basemaps'),
+
+    path('configuration/basemaps-default/edit-basemaps-default', views.editBaseMapDefault, name='edit-basemaps-default'),
+
    
 ]

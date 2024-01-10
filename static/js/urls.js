@@ -13,11 +13,16 @@ const URLS_DELETE = {
     INVENTARIOS_TYPES_DELETE: 'delete/',
     PLANTACION_DELETE: '../../plantaciones-delete/',
     PODA_DELETE: '../../intervenciones-poda-delete/',
+    SOBREVIVENCIA_DELETE: '../../intervenciones-sobrevivencia-delete/',
+    RALEO_DELETE: '../../intervenciones-raleo-delete/',
+    TALARAZA_DELETE: '../../intervenciones-talaraza-delete/',
+    BASEMAPS_DELETE: 'delete-basemaps/',
 
 
 }
 
 const URL_GO_TO = {
-    RODALES_PLANTACIONES_VIEW : '../../../plantaciones/plantaciones-view/'
+    RODALES_PLANTACIONES_VIEW : '../../../plantaciones/plantaciones-view/',
+    RODALES_INDEX : 'rodales/rodales-index'
 }
 

@@ -1,0 +1,152 @@
+<!doctype html>
+
+{% extends "../../layout/base.html" %}
+
+{% load static %}
+
+
+
+{% block sidebar %}
+
+{% include "../../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../../element/pageheader.html" %}
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+
+    <link rel="stylesheet" href="{% static '/staticconfiguration/css/configuration.css' %}">
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+          
+            {% if messages %}
+
+            {% include "../../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row row-cards mb-5">
+
+                <div class="col-md-3 col-lg-3">
+                    <div class="card bg-primary-lt">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 col-sm-2">
+                         
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13" /><path d="M9 4v13" /><path d="M15 7v13" /></svg>
+                                          
+                            </div>
+                            <div class="col-md-8">
+                                <h3 class="card-title">Sección de Administración de las Configuraciones del Mapa</h3>
+                                <p class="text-muted">En esta sección puede configurar las opciones del Mapa Principal</p>
+                             
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9">
+
+                    <div class="card">
+                        <div class="card-header justify-content-between">
+                          <h3 class="card-title">Configuraciones del Mapa</h3>
+
+                          <div class="d-flex justify-content-end mb-3">
+                            <a href="{% url 'map-edit-config' %}" class="btn btn-warning" aria-label="Button">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                    <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                    <path d="M16 5l3 3"></path>
+                                 </svg>
+                           Editar</a>
+                            </div>
+                        </div>
+
+                        
+                        <div class="card-body">
+
+                            <div class="datagrid">
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">CRS</div>
+                                <div class="datagrid-content">{{ configuration.crs|default:"_" }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Latitud Central (y)</div>
+                                <div class="datagrid-content">{{ configuration.center_y|default:"_" }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Longitud Central (x)</div>
+                                <div class="datagrid-content">{{ configuration.center_x|default:"_" }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Zoom Inicial</div>
+                                <div class="datagrid-content">{{ configuration.zoom|default:"_" }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Zoom Mínimo</div>
+                                <div class="datagrid-content">
+                                    {{ configuration.min_zoom|default:"_" }}
+                                </div>
+                                </div>
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Zoom Máximo</div>
+                                <div class="datagrid-content">{{ configuration.max_zoom|default:"_" }}</div>
+                                </div>
+                           
+                               
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Tipo de Renderización</div>
+                                <div class="datagrid-content">
+                                    {{ configuration.renderer|default:"_" }}
+                                </div>
+                                </div>
+                            </div>
+                
+                        </div>
+
+                        <div class="card-footer">
+                            <a href="{% url 'map-config-index' %}" class="btn btn-dark" aria-label="Button">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-left-filled" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M9.586 4l-6.586 6.586a2 2 0 0 0 0 2.828l6.586 6.586a2 2 0 0 0 2.18 .434l.145 -.068a2 2 0 0 0 1.089 -1.78v-2.586h7a2 2 0 0 0 2 -2v-4l-.005 -.15a2 2 0 0 0 -1.995 -1.85l-7 -.001v-2.585a2 2 0 0 0 -3.414 -1.414z" stroke-width="0" fill="currentColor" />
+                                </svg> Volver</a>
+                        </div>
+                
+                
+                    </div>
+            
+                </div>
+
+         
+            </div>
+      </div>
+    
+    </div>
+
+      
+    {% endblock main_content %}
+
+    
+  </div>
+
+{% endblock  %}
