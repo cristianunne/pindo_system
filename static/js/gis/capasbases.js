@@ -36,7 +36,7 @@ function createBaseMaps(basemap)
                    options
                 );
     
-                return capa;
+    return capa;
 
 
 }

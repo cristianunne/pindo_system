@@ -1,5 +1,6 @@
 from django.db import models
 from login.models import Users
+from django.utils import timezone
 
 # Create your models here.
 
@@ -36,15 +37,24 @@ class MapConfigGis(models.Model):
     min_zoom = models.IntegerField(blank=True, null=True)
     max_zoom = models.IntegerField(blank=True, null=True)
     renderer = models.BooleanField('Tipo de Renderizacion', default=False, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(Users, related_name='map_config_users', blank=True, null=True, on_delete=models.SET_NULL)
 
 
 class ServiciosIDEConfig(models.Model):
     name = models.CharField('Nombre', null=True, blank=True, max_length=100)
     url = models.CharField('URL del Servicio', null=True, blank=True, max_length=1000)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(Users, related_name='servicio_ide_users', blank=True, null=True, on_delete=models.SET_NULL)
+
 
 class CategoriasCapas(models.Model):
     name = models.CharField('Categoria', null=True, blank=True, max_length=50)
-
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(Users, related_name='categoriascapas_users', blank=True, null=True, on_delete=models.SET_NULL)
 
 
 class CapasBases(models.Model):
@@ -60,7 +70,38 @@ class CapasBases(models.Model):
     tilematrixset =  models.CharField('tilematrixset', null=True, blank=True, max_length=100)
     opacity = models.FloatField(blank=True, null=True)
     active = models.BooleanField('active', null=False, blank=False, default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(Users, related_name='capabase_users', blank=True, null=True, on_delete=models.SET_NULL)
+    name =  models.CharField('nombfgfre', null=False, blank=False, max_length=100)
+   
 
 class CapasBasesDefault(models.Model):
-    capabase = models.OneToOneField(CapasBases, related_name='capasbase_default_cb', blank=False, null=False, on_delete=models.CASCADE);
+    capabase = models.OneToOneField(CapasBases, related_name='capasbase_default_cb', blank=False, null=False, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(Users, related_name='capabasedefault_users', blank=True, null=True, on_delete=models.SET_NULL)
+
+
+class TileLayerWMS(models.Model):
+    idlayer = models.AutoField(primary_key=True)
+    name =  models.CharField('nombre', null=False, blank=False, max_length=100)
+    layer_name = models.CharField('Layer', null=False, blank=False, max_length=200, default='')
+    styles =  models.CharField('styles', null=True, blank=True, max_length=255)
+    format = models.CharField('Formato', null=False, blank=False, max_length=50, default='image/jpeg')
+    transparent = models.BooleanField('transparent', null=False, blank=False, default=True)
+    version =  models.CharField('version', null=True, blank=True, max_length=30)
+    crs =  models.CharField('crs', null=True, blank=True, max_length=50)
+    uppercase = models.BooleanField('uppercase', null=True, blank=True)
+    min_zoom = models.IntegerField(blank=True, null=True)
+    max_zoom = models.IntegerField(blank=True, null=True)
+    opacity = models.FloatField(blank=True, null=True)
+    attribution = models.CharField('Atribuciones', null=True, blank=True, max_length=500)
+    active = models.BooleanField('active', null=False, blank=False, default=False)
+    tiles_size = models.IntegerField(blank=True, null=True)
+    servicio = models.ForeignKey(ServiciosIDEConfig, related_name='layer_servicio_ide', blank=True, null=True, on_delete=models.SET_NULL)
+    categoria = models.ForeignKey(CategoriasCapas, related_name='layer_categorias', blank=True, null=True, on_delete=models.SET_NULL)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(Users, related_name='tilelayer_wms_users', blank=True, null=True, on_delete=models.SET_NULL)
     

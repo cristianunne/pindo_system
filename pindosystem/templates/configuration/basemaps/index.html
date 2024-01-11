@@ -65,7 +65,7 @@
                     </div>
                   </div>
 
-                  <div class="col-md-4 col-lg-4">
+                  <div class="col-md-5 col-lg-5">
 
                     <div class="card">
                       <div class="card-header justify-content-between">
@@ -88,9 +88,9 @@
                           <div class="d-flex">
                               <div class="datagrid-item" style="flex: 0.25;">
                                 <div class="datagrid-title">Capa Base</div>
-                                <div class="datagrid-content">{{ configuration.crs|default:"_" }}</div>
+                                <div class="datagrid-content" style="font-size: small;">{{ capabasedefault.capabase.name|default:"_" }}</div>
                               </div>
-                              <div id="map" style="flex: 0.75; height: 200px;">
+                              <div id="map" style="flex: 0.75; height: 300px;">
                               </div>
                               
                           </div>
@@ -213,7 +213,7 @@
         </div>
       </div>
 
-      
+      <script src="{% static 'js/gis/capasbases.js' %}"></script>
     {% endblock main_content %}
 
     <script>
@@ -245,9 +245,23 @@
         center: [-26.8, -54.7]
       });
 
-      let osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+      //traigo la capa default
+      let basemaps_json = JSON.parse("{{capabasedefault_serializer|escapejs}}");
+
+      if (basemaps_json != null){
+
+        //console.log(basemaps_json[0]);
+
+        let basemap = createBaseMaps(basemaps_json[0]);
+        basemap.addTo(map);
+
+      }
+
+
+      /*let osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        }).addTo(map);*/
 
 
     </script>

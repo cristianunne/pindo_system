@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from configuration.models import Usosrodales, IntervencionesTypes, InventariosTypes, MapConfigGis, CapasBases, CapasBasesDefault
+from configuration.models import Usosrodales, IntervencionesTypes, InventariosTypes, MapConfigGis, CapasBases, \
+    CapasBasesDefault, CategoriasCapas
 from login.models import Users
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -7,7 +8,9 @@ from django.http import JsonResponse, Http404, HttpResponseRedirect
 from django.db import IntegrityError
 from django.urls import reverse
 
-from configuration.forms import CapasBasesForm
+from configuration.forms import CapasBasesForm, CategoriasCapasForm
+from configuration.serializers import CapasBasesByDefaultSerializer
+import json
 
 # Create your views here.
 @login_required
@@ -386,6 +389,16 @@ def indexBaseMaps(request):
     
     capasbases = CapasBases.objects.all()
     context.update({'capasbases' : capasbases})
+
+    #traigo
+    capabasedefault_instance = CapasBasesDefault.objects.first()
+
+    capabasedefault = CapasBasesByDefaultSerializer(capabasedefault_instance)
+    context.update({'capabasedefault_serializer' :  json.dumps(capabasedefault)})
+    context.update({'capabasedefault' :  capabasedefault_instance})
+ 
+
+    
     return render(request, 'configuration/basemaps/index.html', context)
 
 
@@ -501,19 +514,36 @@ def editBaseMapDefault(request):
         except Exception as e:
             messages.error(request, str(e))
             return HttpResponseRedirect(reverse("index-basemaps"))
-
-
-       
-
-
-
-
-    
-
-
-
     return render(request, 'configuration/basemapsdefault/edit.html', context)
 
+def indexCategoriasCapas(request):
+    context = {
+               'category' : 'Configuración del Mapa',
+                'action' : 'Ver las Categorías de Capas'}
+     
+    categorias_capas = CategoriasCapas.objects.all()
+    context.update({'categorias_capas' : categorias_capas});
+
+    return render(request, 'configuration/categorias_capas/index.html', context)
+
+def addCategoriasCapas(request):
+    context = {
+               'category' : 'Configuración del Mapa',
+                'action' : 'Agregar una nueva Categoría de Capa'}
+    
+    if request.method == 'POST':
+        form_process = CategoriasCapasForm(request.POST)
+        if form_process.is_valid():
+            form_process.save()
+            messages.success(request, "La Categoría ha sido agregada correctamente")
+            return redirect('index-categoriascapas')
+        else:
+             messages.error(request, str(form_process.errors))
+             return render(request, 'configuration/categorias_capas/add.html', context)
+
+    
+     
+    return render(request, 'configuration/categorias_capas/add.html', context)
 
     
 

@@ -28,5 +28,8 @@ urlpatterns = [
 
     path('configuration/basemaps-default/edit-basemaps-default', views.editBaseMapDefault, name='edit-basemaps-default'),
 
+    path('configuration/categorias-capas/index-categoriascapas', views.indexCategoriasCapas, name='index-categoriascapas'),
+    path('configuration/categorias-capas/add-categoriascapas', views.addCategoriasCapas, name='add-categoriascapas'),
+
    
 ]
