@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'gis_pindo',
     'plantaciones',
     'intervenciones',
-    'planificacion'
+    'planificacion',
+    'api'
 
 ]
 

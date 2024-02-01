@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from configuration.models import Usosrodales, IntervencionesTypes, InventariosTypes, MapConfigGis, CapasBases, \
-    CapasBasesDefault, CategoriasCapas
+    CapasBasesDefault, CategoriasCapas, ServiciosIDEConfig, TileLayerWMS
 from login.models import Users
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -8,9 +8,11 @@ from django.http import JsonResponse, Http404, HttpResponseRedirect
 from django.db import IntegrityError
 from django.urls import reverse
 
-from configuration.forms import CapasBasesForm, CategoriasCapasForm
+from configuration.forms import CapasBasesForm, CategoriasCapasForm, ServicioIDEForm, LayersForm
 from configuration.serializers import CapasBasesByDefaultSerializer
 import json
+
+from django.core import serializers
 
 # Create your views here.
 @login_required
@@ -396,9 +398,11 @@ def indexBaseMaps(request):
     capabasedefault = CapasBasesByDefaultSerializer(capabasedefault_instance)
     context.update({'capabasedefault_serializer' :  json.dumps(capabasedefault)})
     context.update({'capabasedefault' :  capabasedefault_instance})
- 
 
-    
+    if capabasedefault_instance == None:
+        messages.error(request, str('No se ha seleccionado una Capa Base por Defecto aún, por favor realice la operación.'))
+
+ 
     return render(request, 'configuration/basemaps/index.html', context)
 
 
@@ -413,6 +417,7 @@ def addBaseMaps(request):
         proc_form = CapasBasesForm(request.POST)
 
         if proc_form.is_valid():
+            proc_form.instance.user = proc_form.cleaned_data['user'] = Users.objects.get(pk=request.user.pk)
             proc_form.save()
             messages.success(request, "La Capa Base ha sido agregada correctamente")
             return redirect('index-basemaps')
@@ -430,12 +435,17 @@ def editBaseMaps(request, idcapabase):
     try:
      
         capabase = CapasBases.objects.get(pk=idcapabase)
+        #capabase.user = Users.objects.get(pk=request.user.pk)
         context.update({'capabase' : capabase})
 
         if request.method == 'POST':
             proc_form = CapasBasesForm(request.POST, instance=capabase)
-
+          
+        
             if proc_form.is_valid():
+                #proceso los cambios del atributo
+                proc_form.instance.user = proc_form.cleaned_data['user'] = Users.objects.get(pk=request.user.pk)
+              
                 proc_form.save()
                 messages.success(request, "La Capa Base ha sido editada correctamente")
                 return redirect('index-basemaps')
@@ -522,33 +532,319 @@ def indexCategoriasCapas(request):
                 'action' : 'Ver las Categorías de Capas'}
      
     categorias_capas = CategoriasCapas.objects.all()
-    context.update({'categorias_capas' : categorias_capas});
+    context.update({'categorias_capas' : categorias_capas})
 
     return render(request, 'configuration/categorias_capas/index.html', context)
 
+@login_required
 def addCategoriasCapas(request):
     context = {
                'category' : 'Configuración del Mapa',
                 'action' : 'Agregar una nueva Categoría de Capa'}
     
     if request.method == 'POST':
-        form_process = CategoriasCapasForm(request.POST)
-        if form_process.is_valid():
-            form_process.save()
-            messages.success(request, "La Categoría ha sido agregada correctamente")
-            return redirect('index-categoriascapas')
-        else:
-             messages.error(request, str(form_process.errors))
-             return render(request, 'configuration/categorias_capas/add.html', context)
 
+        try:
+        
+            name = request.POST.get('name')
+            user_entity = Users.objects.get(pk=request.user.pk)
+
+            categoria = CategoriasCapas.objects.create(name=name, user=user_entity)
+            messages.success(request, "La Categoría ha sido agregado con éxito!.")
+            return redirect('index-categoriascapas')
     
-     
+        except IntegrityError as e:
+            messages.error(request, str('Ya existe una Categoría con el nombre sugerido. Considere elegir un nombre alternativo!'))
+            return render(request, 'configuration/categorias_capas/add.html', context)
+        except Exception as e:
+            messages.error(request, str(e))
+
     return render(request, 'configuration/categorias_capas/add.html', context)
 
+
+@login_required
+def editCategoriasCapas(request, idcategoria):
+
+    context = {
+               'category' : 'Configuración del Mapa',
+                'action' : 'Editar una Categoría de Capa'}
+    
+    try:
+        categoria = CategoriasCapas.objects.get(pk=idcategoria)
+        context.update({'categoria' : categoria})
+
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            user_entity = Users.objects.get(pk=request.user.pk)
+
+            categoria.name = name.upper()
+            categoria.user = user_entity
+
+            try:
+                categoria.save()
+                messages.success(request, "La categoría se ha editado con éxito")
+                return redirect('index-categoriascapas')
+
+            except IntegrityError as e:
+                messages.error(request, str('Ya existe una Categoría con el nombre sugerido. Considere elegir un nombre alternativo!'))
+                return HttpResponseRedirect(reverse("edit-categoriascapas", args=[idcategoria])) 
+            except Exception as e:
+                messages.error(request, str(e))
+
+                return HttpResponseRedirect(reverse("edit-categoriascapas", args=[idcategoria]))          
+          
+        return render(request, 'configuration/categorias_capas/edit.html', context)
+
+    except CategoriasCapas.DoesNotExist as e:
+            messages.error(request, str('Error al traer la Categoría. Intente nuevamente!'))
+            return HttpResponseRedirect(reverse("index-categoriascapas"))
+    
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index-categoriascapas"))
     
 
 
-  
+@login_required
+def deleteCategoriasCapas(request, id):
+    try:
+        obj = CategoriasCapas.objects.get(pk=id)
+        obj.delete()
+       
+        messages.success(request, "La Categoría ha sido eliminado.")
+        return redirect('index-categoriascapas')
 
+    except CategoriasCapas.DoesNotExist:
+        raise Http404("error")
+    except Exception as e:
+        raise Http404(str(e))
+    
+
+@login_required
+def indexServiciosIDE(request):
+
+    context = {
+               'category' : 'Configuración del Mapa',
+                'action' : 'Ver los Servicios IDE disponibles'}
+    
+    servicios = ServiciosIDEConfig.objects.all()
+    context.update({'servicios' : servicios})
+    return render(request, 'configuration/servicios_ide/index.html', context)
+
+
+@login_required
+def addServicioIDE(request):
+    context = {
+               'category' : 'Configuración del Mapa',
+                'action' : 'Agregar un nuevo Servicio IDE'}
+    
+    try:
+        if request.method == 'POST':
+            proc_form = ServicioIDEForm(request.POST)
+          
+            if proc_form.is_valid():
+                #proceso los cambios del atributo
+                proc_form.instance.user = proc_form.cleaned_data['user'] = Users.objects.get(pk=request.user.pk)
+              
+                proc_form.save()
+                messages.success(request, "El Servicio IDE se ha creado correctamente")
+                return redirect('index-servicios-ide')
+    
+    
+    except Users.DoesNotExist as e:
+            messages.error(request, str('Error al traer el Usuario. Intente nuevamente!'))
+            return HttpResponseRedirect(reverse("index-servicios-ide"))
+    
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index-servicios-ide"))
+
+    return render(request, 'configuration/servicios_ide/add.html', context)
+
+
+@login_required
+def editServiciosIDE(request, idservicio):
+    
+    context = {
+               'category' : 'Configuración del Mapa',
+                'action' : 'Editar Servicios IDE'}
+
+    try:
+
+        servicio = ServiciosIDEConfig.objects.get(pk=idservicio)
+        context.update({'servicio' : servicio})
+       
+
+        if request.method == 'POST':
+            proc_form = ServicioIDEForm(request.POST, instance=servicio)
+          
+            if proc_form.is_valid():
+                #proceso los cambios del atributo
+                proc_form.instance.user = proc_form.cleaned_data['user'] = Users.objects.get(pk=request.user.pk)
+              
+                proc_form.save()
+                messages.success(request, "El Servicio IDE se ha editado correctamente")
+                return redirect('index-servicios-ide')
+            
+        return render(request, 'configuration/servicios_ide/edit.html', context)
+    
+    except ServiciosIDEConfig.DoesNotExist as e:
+            messages.error(request, str('Error al traer el Servicio. Intente nuevamente!'))
+            return HttpResponseRedirect(reverse("index-servicios-ide"))
+    
+    except Users.DoesNotExist as e:
+            messages.error(request, str('Error al traer el Usuario. Intente nuevamente!'))
+            return HttpResponseRedirect(reverse("index-servicios-ide"))
+    
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index-servicios-ide"))
+    
+
+@login_required
+def deleteServicioIDE(request, id):
+    try:
+        obj = ServiciosIDEConfig.objects.get(pk=id)
+        obj.delete()
+       
+        messages.success(request, "El Servicio ha sido eliminado.")
+        return redirect('index-servicios-ide')
+
+    except ServiciosIDEConfig.DoesNotExist:
+        raise Http404("error")
+    except Exception as e:
+        raise Http404(str(e))
+    
+
+@login_required
+def indexLayers(request):
+
+    context = {
+               'category' : 'Configuración del Mapa',
+                'action' : 'Ver las Capas disponibles'}
+    
+    layers = TileLayerWMS.objects.all()
+    context.update({'layers' : layers})
+  
+    return render(request, 'configuration/layers/index.html', context)
  
    
+@login_required
+def addLayers(request):
+    context = {
+               'category' : 'Configuración del Mapa',
+                'action' : 'Agregar una Capa'}
+    
+    try:
+
+        servicios = ServiciosIDEConfig.objects.values_list('pk', 'name')
+        categorias_capas =  CategoriasCapas.objects.values_list('pk', 'name')
+
+        context.update({'servicios' : servicios})
+        context.update({'categorias_capas' : categorias_capas})
+
+        if request.method == 'POST':
+            proc_form = LayersForm(request.POST)
+          
+            if proc_form.is_valid():
+                #proceso los cambios del atributo
+                proc_form.instance.user = proc_form.cleaned_data['user'] = Users.objects.get(pk=request.user.pk)
+              
+                proc_form.save()
+                messages.success(request, "La Capa se ha creado correctamente")
+                return redirect('index-layers')
+    
+    
+    except Users.DoesNotExist as e:
+            messages.error(request, str('Error al traer el Usuario. Intente nuevamente!'))
+            return HttpResponseRedirect(reverse("index-layers"))
+    
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index-layers"))
+
+    return render(request, 'configuration/layers/add.html', context)
+
+
+@login_required
+def editLayers(request, idlayer):
+    context = {
+               'category' : 'Configuración del Mapa',
+                'action' : 'Editar una Capa'}
+
+        
+    try:
+
+        servicios = ServiciosIDEConfig.objects.values_list('pk', 'name')
+        categorias_capas =  CategoriasCapas.objects.values_list('pk', 'name')
+
+        layer = TileLayerWMS.objects.get(pk=idlayer)
+
+        context.update({'layer' : layer})
+        context.update({'servicios' : servicios})
+        context.update({'categorias_capas' : categorias_capas})
+
+        if request.method == 'POST':
+            proc_form = LayersForm(request.POST, instance=layer)
+          
+            if proc_form.is_valid():
+                #proceso los cambios del atributo
+                proc_form.instance.user = proc_form.cleaned_data['user'] = Users.objects.get(pk=request.user.pk)
+              
+                proc_form.save()
+                messages.success(request, "La Capa se ha editado correctamente")
+                return redirect('index-layers')
+    
+    
+    except Users.DoesNotExist as e:
+            messages.error(request, str('Error al traer el Usuario. Intente nuevamente!'))
+            return HttpResponseRedirect(reverse("index-layers"))
+    
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index-layers"))
+
+    return render(request, 'configuration/layers/edit.html', context)
+
+
+
+@login_required
+def deleteLayers(request, id):
+    try:
+        obj = TileLayerWMS.objects.get(pk=id)
+        obj.delete()
+       
+        messages.success(request, "La Capa ha sido eliminada.")
+        return redirect('index-layers')
+
+    except ServiciosIDEConfig.DoesNotExist:
+        raise Http404("error")
+    except Exception as e:
+        raise Http404(str(e))
+    
+@login_required
+def viewLayers(request, idlayer):
+    
+    context = {
+               'category' : 'Configuración del Mapa',
+                'action' : 'Ver Capas WMS cargadas en el Sistema'}
+    
+    try:
+        layer = TileLayerWMS.objects.get(pk=idlayer)
+        context.update({'layer' : layer})
+
+        #lo exporto como json
+        layer_object = TileLayerWMS.objects.filter(pk=idlayer)
+        qs_json = serializers.serialize('json', layer_object)
+        context.update({'layer_serializer' : qs_json})
+
+      
+    except TileLayerWMS.DoesNotExist as e:
+            messages.error(request, str('Error al traer la Capa. Intente nuevamente!'))
+            return HttpResponseRedirect(reverse("index-layers"))
+    
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index-layers"))
+    
+    return render(request, 'configuration/layers/view.html', context)

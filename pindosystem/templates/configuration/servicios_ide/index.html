@@ -1,0 +1,188 @@
+<!doctype html>
+
+{% extends "../../layout/base.html" %}
+
+{% load static %}
+
+
+{% block sidebar %}
+
+{% include "../../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../../element/pageheader.html" %}
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+          
+            {% if messages %}
+
+            {% include "../../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row row-cards mb-5">
+
+                <div class="col-md-3 col-lg-3">
+                    <div class="card bg-primary-lt">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-xxl-4 col-lg-4 col-md-4 col-sm-2 text-center">
+                         
+                              <span class="avatar" style="background-image: url({% static 'img/icons/geoservicio.png' %}); width: 75px; height: 75px;"></span>
+                             
+                    
+                            </div>
+                            <div class="col-md-8">
+                                <h3 class="card-title">Sección de Administración de los Servicios IDE</h3>
+                                <p class="text-muted">En esta sección puede realizar las ediciones de la información de los Servicios IDE</p>
+                             
+                            </div>
+                        </div>
+
+                        
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9 col-lg-9">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-end mb-3">
+                          <a href="{% url 'add-servicios-ide' %}" class="btn btn-success" aria-label="Button">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 5l0 14"></path>
+                            <path d="M5 12l14 0"></path>
+                         </svg> Nuevo</a>
+                      </div>
+                      <div id="" class="table-responsive">
+                        <table id="tabladata" class="table table-bordered table-hover dataTable">
+                          <thead>
+                            <tr>
+                              <th class="dt-center align-middle"></th>
+                              <th class="dt-center align-middle">Nombre</th>
+                              <th class="dt-center align-middle">URL</th>
+                              <th class="dt-center align-middle">Fecha de Registro</th>
+                              <th class="dt-center align-middle">Fecha de Modificación</th>
+                              <th class="dt-center align-middle">Creado por</th>
+                              <th class="dt-center align-middle">Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody class="table-tbody">
+                            {% for servicio in servicios %}
+                                <tr>
+                                  
+                                    <td class="dt-center align-middle"> 
+                                      <div class="mr-3">
+                                        <a href="#" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{servicio.pk}}">
+                                           
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                            <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                         </svg>
+                                        </a>
+                                    </div>
+                                    </td>
+                                    <td class="dt-center align-middle"> {{ servicio.name }}</td>
+                                    <td class="dt-center align-middle"> {{ servicio.url }}</td>
+                                    <td class="dt-center align-middle">{{ servicio.created }}</td>
+                                    <td class="dt-center align-middle">{{ servicio.modified }}</td>
+                                    <td class="dt-center align-middle">{{ servicio.user }}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+                          
+                                            <div class="mr-3">
+                                                <a href="{% url 'edit-servicios-ide' idservicio=servicio.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{servicio.pk}}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                                        <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                                        <path d="M16 5l3 3"></path>
+                                                     </svg>
+                                                </a>
+                                            </div>
+        
+                                            <div>
+                                                <a href="#" onclick="deleteInformation(this)" attr="{{servicio.pk}}" class="btn btn-youtube btn-icon"
+                                                controller="servicios_ide">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M4 7l16 0"></path>
+                                                    <path d="M10 11l0 6"></path>
+                                                    <path d="M14 11l0 6"></path>
+                                                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                                 </svg>
+                                                </a>
+        
+                                            </div>
+                                          </div>
+                                        
+                                    </td>
+                                </tr>
+                            
+                            {% endfor %}
+        
+        
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <a href="{% url 'map-config-index' %}" class="btn btn-dark" aria-label="Button">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-left-filled" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                          <path d="M9.586 4l-6.586 6.586a2 2 0 0 0 0 2.828l6.586 6.586a2 2 0 0 0 2.18 .434l.145 -.068a2 2 0 0 0 1.089 -1.78v-2.586h7a2 2 0 0 0 2 -2v-4l-.005 -.15a2 2 0 0 0 -1.995 -1.85l-7 -.001v-2.585a2 2 0 0 0 -3.414 -1.414z" stroke-width="0" fill="currentColor" />
+                        </svg> Volver</a>
+                    </div>
+                  </div>
+                </div>
+            
+            </div>
+
+         
+        </div>
+      </div>
+
+      
+    {% endblock main_content %}
+
+    <script>
+        $(function () {
+            $('#tabladata').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": false,
+                "pageLength": 10,
+                order: [[2, 'desc']],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                }
+            });
+    
+        })
+    </script>
+    
+  </div>
+
+{% endblock  %}

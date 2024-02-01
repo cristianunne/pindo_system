@@ -17,6 +17,9 @@ const URLS_DELETE = {
     RALEO_DELETE: '../../intervenciones-raleo-delete/',
     TALARAZA_DELETE: '../../intervenciones-talaraza-delete/',
     BASEMAPS_DELETE: 'delete-basemaps/',
+    CATEGORIAS_CAPAS_DELETE: 'delete-categoriascapas/',
+    SERVICIOS_IDE_DELETE: 'delete-servicios-ide/',
+    LAYERS_DELETE: 'delete-layers/',
 
 
 }

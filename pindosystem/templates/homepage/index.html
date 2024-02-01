@@ -11,6 +11,7 @@
 
   {% endblock %}
 
+  <link rel="stylesheet" href="{% static 'css/toastify/toastify.css' %}" />
   <link rel="stylesheet" href="{% static 'css/gis/gis.css' %}" />
 
   <div class="page-wrapper">
@@ -67,7 +68,9 @@
 
                       {% for rodal in rodales %}
 
-                        <a class="list-group-item list-group-item-action item-layer" aria-current="true" attr="{{rodal.cod_sap}}">
+                        <a class="list-group-item list-group-item-action item-layer" aria-current="true" attr="{{rodal.cod_sap}}"
+                         rodal_id="{{rodal.pk}}" 
+                        onclick="activeRodal(this)">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chart-treemap" width="24" height="24" 
                           viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                           <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
@@ -86,33 +89,54 @@
                 </div>
               </div>
 
+              <!-- Creo la seccion de capas adicionales -->
 
-              <div class="hr mt-4 mb-4"></div>
-              <div class="accordion-item">
-                <h2 class="accordion-header bg-dark-lt" id="heading-2">
+              {% for categoria in categorias_capas %}
 
-                  <a class="dropdown-item" href="#collapse-2" data-bs-toggle="collapse" data-bs-target="#collapse-2" aria-expanded="true">
-                    <div class="text-item-content p-1">OTRAS CAPAS</div>
-                    <div class="number-item-content bg-vk p-1">
-                      12
-                    </div>
-                    
-                  </a>
-                </h2>
-                <div id="collapse-2" class="accordion-collapse collapse show" data-bs-parent="#accordion-example" style="">
-                  <div class="">
-                    <div class="list-group list-group-flush">
-                      <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                        The current link item
-                      </a>
-                      <a href="#" class="list-group-item list-group-item-action">A second link item</a>
-                      <a href="#" class="list-group-item list-group-item-action">A third link item</a>
-                      <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
-                  
+                <div class="hr mt-4 mb-4"></div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header bg-dark-lt" id="heading-2">
+
+                    <a class="dropdown-item" href="#collapse-2" data-bs-toggle="collapse" data-bs-target="#collapse-2" aria-expanded="true">
+                      <div class="text-item-content p-1">{{ categoria.name }}</div>
+                      <div class="number-item-content bg-vk p-1">
+                        12
+                      </div>
+                      
+                    </a>
+                  </h2>
+                  <div id="collapse-2" class="accordion-collapse collapse show" data-bs-parent="#accordion-example" style="">
+                    <div class="">
+                      <div class="list-group list-group-flush">
+
+                        {% for capa_overlay in capas_overlays %}
+
+                        {% if capa_overlay.categoria.pk == categoria.pk %}
+
+                                <a class="list-group-item list-group-item-action item-layer" aria-current="true" 
+                                attr="{{capa_overlay.name}}"
+                                overlay-id="{{capa_overlay.pk}}" servicio-url="{{capa_overlay.servicio.url}}"
+                              onclick="activeLayerWMS(this)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chart-treemap" width="24" height="24" 
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                                <path d="M12 4v16" />
+                                  <path d="M4 15h8" /><path d="M12 12h8" /><path d="M16 12v8" /><path d="M16 16h4" /></svg>
+                                {{capa_overlay.name}}
+                              </a>
+                          {% endif %}
+
+                        {% endfor %}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+
+
+              {% endfor %}
+
+
+            
 
 
             </div>
@@ -121,8 +145,8 @@
 
         <div id="map-report-container" style="display: flex; margin-left: 350px; height: 100%;">
           <div class="bg-dark-lt" id="tab-icon-container">
-            <div style="display: flex; flex: 0.22; flex-direction: row; justify-content: space-between; align-items: center;">
-              <ul class="nav nav-tabs card-header-tabs bg-azure-lt" data-bs-toggle="tabs" style="justify-content: space-between; align-items: center;">
+            <div style="display: flex; flex: 0.22; flex-direction: column; align-items: flex-start; flex-grow: 0.4; gap: 10px;">
+              <ul class="nav nav-tabs card-header-tabs bg-azure-lt" data-bs-toggle="tabs" style="justify-content: space-between; align-items: center; gap: 10px;">
                 <li class="nav-item">
                 <a href="#tabs-map" class="btn btn-vk active" data-bs-toggle="tab">
                   <!-- Download SVG icon from http://tabler-icons.io/i/brand-vk -->
@@ -132,6 +156,7 @@
                     <path d="M9 4v13" /><path d="M15 7v13" /></svg>
                      Mapa
                 </a>
+               
                 </li>
                 <li class="nav-item">
                 <a href="#tabs-costos" class="btn btn-vk" data-bs-toggle="tab">
@@ -152,18 +177,79 @@
   
 
             </div>
+
+            <div style="display: flex; flex: 0.22; flex-direction: row; justify-content: flex-end; flex-grow: 0.5; margin-right: 4px;">
+              <div class="row g-2 align-items-center">
+                
+                <div class="col-6 col-sm-4 col-md-2 col-xl-auto py-3">
+                  <button type="button" class="btn w-100 btn-icon bg-muted text-muted-fg" 
+                  data-bs-toggle="tooltip" data-bs-html="true" 
+                  title='<p style="margin-bottom: unset !important;">Tabla de contenidos de Rodales Seleecionados</p>' 
+                  onclick="openSidebarLeft(this)"
+                  >
+
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" 
+                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" 
+                  fill="none"></path><path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"></path>
+                  <path d="M9 15h-2"></path><path d="M13 12h-6"></path><path d="M11 9h-4"></path></svg>
+             
+                </button>
+                 
+                </div>
+
+             
+              </div>
+  
+
+            </div>
           </div>
 
  
             <div id="tab-container" style="display: flex; flex: 1;">
               
+            
                 
               <div class="tab-content" style="flex: 1;">
                 <div class="tab-pane active show" id="tabs-map" style="background-color: red; height: 100%;">
 
                 
 
-                      <div id="map" style="width: 100%; height: 100%;"></div>
+                      <div id="map"></div>
+
+       
+
+                      <div class="sidebar-right p-2" id="sidebar-right" >
+
+                        <div id="sidebar-right-items" attr="0">
+
+                          <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
+          
+                            <div class="input-icon">
+                              <span class="input-icon-addon">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path d="M21 21l-6 -6"></path></svg>
+                              </span>
+                              <input type="text" value="" id="input-buscar-rodal" onkeyup="filterRodalesSidebarRight(this)" class="form-control" placeholder="Filtrar..." aria-label="Buscar Rodal">
+                            </div>
+                            <div class="hr-text" style="margin-top: 7px; margin-bottom: 7px;"></div>
+
+                            <div id="sr-items-container" class="accordion">
+                            </div>
+                     
+                
+                        </div>
+
+                         
+
+                          
+
+                      
+
+                        </div>
+
+
+                       
+                      </div>
       
                 </div>
               
@@ -191,10 +277,29 @@
 
             </div>
         </div>
+
+        
+
+     
+
+
       </div>
 
-      <script src="{% static 'js/gis/homepage/gis_configuration.js' %}"></script>
-      <script src="{% static 'js/gis/homepage/gis.js' %}"></script>
+      <script src="{% static 'js/toastify/toastify.js' %}"></script>
+
+      <script src="{% static 'js/gis/utility.js' %}"></script>
+      <script src="{% static 'js/gis/querys/urls.js' %}"></script>
+      <script src="{% static 'js/gis/querys/querys.js' %}"></script>
+      <script src="{% static 'js/gis/sidebars.js' %}"></script>
+      <script src="{% static 'js/gis/controls.js' %}"></script>
+      <script src="{% static 'js/gis/map.js' %}"></script>
+      <script src="{% static 'js/gis/capasbases.js' %}"></script>
+      <script src="{% static 'js/gis/layerswms.js' %}"></script>
+      <script src="{% static 'js/gis/geojson_manager.js' %}"></script>
+      <script src="{% static 'js/gis/toc.js' %}"></script>
+      <script src="{% static 'js/gis/gis_configuration.js' %}"></script>
+      
+   
 
       <script src="{% static 'js/gantt/timelines-chart.min.js' %}"></script>
       <script src="{% static 'js/d3/d3.js' %}"></script>
@@ -210,16 +315,21 @@
         let map_config_json = "{{map_config|escapejs}}";
         let map_config = JSON.parse(map_config_json != '' ? map_config_json : null);
 
+        let capasbases_json = "{{capasbase_serializer|escapejs}}";
+        var capasbase_serializer = JSON.parse(capasbases_json != '' ? capasbases_json : null);
+       
+
         initGis(map_config);
+
       
       </script>
 
       <script>
 
         let rodales_serializer = "{{rodales_serializer|escapejs}}";
-        let rodales_serializer_json = JSON.parse(rodales_serializer != '' ? rodales_serializer : null);
+        var rodales_serializer_json = JSON.parse(rodales_serializer != '' ? rodales_serializer : null);
 
-        console.log(rodales_serializer_json)
+        //console.log(rodales_serializer_json)
 
        
       

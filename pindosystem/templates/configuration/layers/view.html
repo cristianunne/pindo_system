@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+{% extends '../../layout/base.html' %}
+
+{% load static %}
+
+
+
+
+{% block sidebar %}
+  {% include '../../element/sidebar.html' %}
+{% endblock %}
+
+
+
+{% block content %}
+  {% block header %}
+    {% include '../../element/header.html' %}
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+      {% include '../../element/pageheader.html' %}
+    {% endblock %}
+
+    {% block main_content %}
+      <div class="page-body">
+        <div class="container-xl">
+          {% if messages %}
+
+          {% include "../../element/alert-sucess.html" %}
+          {% endif %}
+          <div class="row row-cards col-lg-12 col-md-12 col-sm-12 mb-5">
+            <div class="col-lg-3 col-md-3 col-sm-3">
+              <div class="row">
+                  <div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+                    <div class="row gy-3">
+                        <div class="card bg-primary-lt">
+                            <div class="card-body">
+                              <div class="row align-items-center flex-column">
+                                <div class="col-lg-3 col-md-3 col-sm-3 d-flex align-items-start">
+                                  <span class="avatar" style="background-image: url({% static 'img/icons/overlays_layers.png' %}); width: 75px; height: 75px;"></span>
+
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12"> 
+                                  <div>
+                                    <h2 class="card-title text-center h2">Capa</h2>
+                                  </div>
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>ID: </strong> {{layer.pk}}
+                                  </div>
+
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+    
+                                
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>Nombre: </strong> {{layer.name}}
+                                  </div>
+          
+            
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                          
+                                  
+                                  <strong>Layer Name (Workspace/capa): </strong> {{layer.layer_name}}
+                                  </div>
+          
+            
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>Formato: </strong> {{layer.format}}
+                                  </div>
+            
+            
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>Transparente: </strong> {{layer.transparent}}
+                                  </div>
+    
+    
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>Versión: </strong> {{layer.version}}
+                                  </div>
+    
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>Zoom Mínimo: </strong> {{layer.min_zoom}}
+                                  </div>
+    
+                                
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>Zoom Máximo: </strong> 
+                                  <a href="">{{layer.max_zoom}}</a>
+    
+                                  </div>
+    
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+    
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>Opacidad: </strong> 
+                                  <a href="">{{layer.opacity}}</a>
+                                  </div>
+
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+    
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>Tiles: </strong> 
+                                  <a href="">{{layer.tiles_size}}</a>
+                                  </div>
+
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+    
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>Servicio: </strong> 
+                                  <a href="">{{layer.servicio.name}}</a>
+                                  </div>
+
+
+                                  <div class="mb-2">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+    
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                      <path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+                                  <strong>Categoría: </strong> 
+                                  <a href="">{{layer.categoria.name}}</a>
+                                  </div>
+            
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+    
+                    </div>
+                  
+                </div>
+    
+
+              </div>
+            </div>
+
+          
+
+            <div class="col-xxl-9 col-lg-9 col-md-9 col-sm-12">
+             
+                <div class="card min-vh-80 max-vh-80 d-flex flex-row">
+                    <div class="card-body" style="overflow: auto; padding: 1px;">
+                      <div style="display: flex; align-items: stretch; height: 100%;">
+
+                        <div id="map" style="width: 100%; height: 100%;"></div>
+
+                       
+                        
+                    
+                      </div>
+                     
+                    </div>
+                </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    {% endblock %}
+  </div>
+
+  <script src="{% static 'js/gis/layers_view/layers_view.js' %}"></script>
+  <script src="{% static 'js/gis/layerswms.js' %}"></script>
+
+
+
+  <script>
+    let layer_serializer = JSON.parse("{{layer_serializer|escapejs}}");
+    //console.log(layer_serializer);
+   
+    if(layer_serializer !=  undefined && layer_serializer != null){
+
+      //compruebo que el layer sea diferente de null
+      if(layer_serializer.length > 0){
+        
+        initGis(layer_serializer[0]);
+
+      } else {
+       
+      }
+    
+    } else {
+     
+    }
+
+
+  </script>
+
+
+
+
+{% endblock %}
+
+

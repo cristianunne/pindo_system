@@ -40,3 +40,27 @@ function createBaseMaps(basemap)
 
 
 }
+
+function loadBaseMaps(basemap_serializer)
+{
+
+    let basemaps_object = {};
+    basemap_serializer.forEach(element => {
+
+        //creo la capa
+        let capa_b = createBaseMaps(element);
+
+        //agrego la capa base default al mapa
+        if (element.default == true) {
+
+            capa_b.addTo(map);
+
+        }
+        basemaps_object[`${element.name}`] = capa_b;
+        
+    });
+    
+
+    L.control.layers(basemaps_object, null).addTo(map);
+
+}

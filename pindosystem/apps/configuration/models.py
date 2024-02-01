@@ -51,7 +51,7 @@ class ServiciosIDEConfig(models.Model):
 
 
 class CategoriasCapas(models.Model):
-    name = models.CharField('Categoria', null=True, blank=True, max_length=50)
+    name = models.CharField('Categoria', null=True, blank=True, max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(Users, related_name='categoriascapas_users', blank=True, null=True, on_delete=models.SET_NULL)
@@ -73,11 +73,11 @@ class CapasBases(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(Users, related_name='capabase_users', blank=True, null=True, on_delete=models.SET_NULL)
-    name =  models.CharField('nombfgfre', null=False, blank=False, max_length=100)
+    name =  models.CharField('nombre', null=False, blank=False, max_length=100)
    
 
 class CapasBasesDefault(models.Model):
-    capabase = models.OneToOneField(CapasBases, related_name='capasbase_default_cb', blank=False, null=False, on_delete=models.CASCADE)
+    capabase = models.OneToOneField(CapasBases, blank=False, null=False, on_delete=models.CASCADE, related_name='capasbasedefaultcb')
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(Users, related_name='capabasedefault_users', blank=True, null=True, on_delete=models.SET_NULL)
@@ -86,7 +86,7 @@ class CapasBasesDefault(models.Model):
 class TileLayerWMS(models.Model):
     idlayer = models.AutoField(primary_key=True)
     name =  models.CharField('nombre', null=False, blank=False, max_length=100)
-    layer_name = models.CharField('Layer', null=False, blank=False, max_length=200, default='')
+    layer_name = models.CharField('workspace:Layer', null=False, blank=False, max_length=200, default='')
     styles =  models.CharField('styles', null=True, blank=True, max_length=255)
     format = models.CharField('Formato', null=False, blank=False, max_length=50, default='image/jpeg')
     transparent = models.BooleanField('transparent', null=False, blank=False, default=True)
@@ -104,4 +104,8 @@ class TileLayerWMS(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(Users, related_name='tilelayer_wms_users', blank=True, null=True, on_delete=models.SET_NULL)
+    min_x = models.FloatField(blank=False, null=False, default=0)
+    min_y = models.FloatField(blank=False, null=False,  default=0)
+    max_x = models.FloatField(blank=False, null=False,  default=0)
+    max_y = models.FloatField(blank=False, null=False,  default=0)
     

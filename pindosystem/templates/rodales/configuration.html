@@ -333,11 +333,11 @@
 
   <script>
     var map = new L.map('map');
-    var rodal_gis = JSON.parse("{{rodales_gis|escapejs}}");
-    var plantaciones = JSON.parse("{{plantaciones_gis|escapejs}}");
+    let rodal_gis = JSON.parse("{{rodales_gis|escapejs}}");
+    let plantaciones = JSON.parse("{{plantaciones_gis|escapejs}}");
 
-    initGis();
-    loadPlantaciones();
+    initGis(rodal_gis, plantaciones);
+    //loadPlantaciones();
     
   </script>
 

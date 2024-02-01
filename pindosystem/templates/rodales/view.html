@@ -402,20 +402,26 @@
       var layerControl = null;
       
       //controlo que no sean null
-      let rodal_gis = JSON.parse("{{rodales_gis|escapejs}}");
-      let plantaciones_ = JSON.parse("{{plantaciones_gis|escapejs}}");
-      let sobrevivencia_gis = JSON.parse("{{sobrevivencia_gis|escapejs}}");
-      let poda_gis = JSON.parse("{{poda_gis|escapejs}}");
-      let raleo_gis = JSON.parse("{{raleo_gis|escapejs}}");
+      let rodal_gis ="{{rodales_gis|escapejs}}";
+      let plantaciones_ = "{{plantaciones_gis|escapejs}}";
+      let sobrevivencia_gis = "{{sobrevivencia_gis|escapejs}}";
+      let poda_gis = "{{poda_gis|escapejs}}";
+      let raleo_gis = "{{raleo_gis|escapejs}}";
 
-      var rodaldata = JSON.parse("{{rodaldata|escapejs}}");
+      var rodaldata = "{{rodaldata|escapejs}}";
+
+      var rodal_gis_serializer_json = JSON.parse(rodal_gis != '' ? rodal_gis : null);
+      var plantaciones_serializer_json = JSON.parse(plantaciones_ != '' ? plantaciones_ : null);
+      var rodaldata_serializer_json = JSON.parse(rodaldata != '' ? rodaldata : null);
+
+      console.log(rodal_gis_serializer_json);
      
-      initGis(rodal_gis, plantaciones_);
-      cerateInfoRodal(rodaldata);
+      initGis(rodal_gis_serializer_json, plantaciones_serializer_json);
+      createInfoRodal(rodaldata_serializer_json);
 
-      loadIntervenciones(sobrevivencia_gis, 'Sobrevivencia');
-      loadIntervenciones(poda_gis, 'Poda');
-      loadIntervenciones(raleo_gis, 'Raleo');
+      //loadIntervenciones(sobrevivencia_gis, 'Sobrevivencia');
+      //loadIntervenciones(poda_gis, 'Poda');
+      //loadIntervenciones(raleo_gis, 'Raleo');
       
     </script>
 

@@ -100,7 +100,7 @@ function initGis(type_controller) {
     }
    
 
-    //console.log(geoJSON.getBounds());
+    console.log(geoJSON.getBounds());
     map.fitBounds(rodal_gis_geoJSON.getBounds());
   
 

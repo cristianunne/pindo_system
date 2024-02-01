@@ -20,7 +20,8 @@ def RodalesSerializer(rodales):
                 'is_certificado' : rod.is_certificado,
                 'is_finish' : rod.is_finish,
                 'has_gis' : True if len(Rodalesgis.objects.filter(rodales=rod)) > 0 else False,
-                'gis' : serialize('geojson', Rodalesgis.objects.filter(rodales=rod), geometry_field='geom_4326')
+                'gis' : serialize('geojson', Rodalesgis.objects.filter(rodales=rod), geometry_field='geom_4326'),
+                'uso' : rod.usos_rodales.name
             })
 
 

@@ -86,6 +86,7 @@ function loadPlantaciones(plantaciones) {
 
         return style;
     }
+    
     function highlightFeature(e) {
         var layer = e.target;
 
@@ -292,7 +293,7 @@ function loadRodal(rodal_gis)
 
 }
 
-function cerateInfoRodal(rodal_data)
+function createInfoRodal(rodal_data)
 {
 
     let info = L.control({'position' : 'topleft'});

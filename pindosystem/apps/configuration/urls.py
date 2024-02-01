@@ -30,6 +30,19 @@ urlpatterns = [
 
     path('configuration/categorias-capas/index-categoriascapas', views.indexCategoriasCapas, name='index-categoriascapas'),
     path('configuration/categorias-capas/add-categoriascapas', views.addCategoriasCapas, name='add-categoriascapas'),
+    path('configuration/categorias-capas/edit-categoriascapas/<int:idcategoria>/', views.editCategoriasCapas, name='edit-categoriascapas'),
+    path('configuration/categorias-capas/delete-categoriascapas/<int:id>/', views.deleteCategoriasCapas, name='delete-categoriascapas'),
+
+    path('configuration/servicios-ide/index-servicios-ide', views.indexServiciosIDE, name='index-servicios-ide'),
+    path('configuration/servicios-ide/add-servicios-ide', views.addServicioIDE, name='add-servicios-ide'),
+    path('configuration/servicios-ide/edit-servicios-ide/<int:idservicio>/', views.editServiciosIDE, name='edit-servicios-ide'),
+    path('configuration/servicios-ide/delete-servicios-ide/<int:id>/', views.deleteServicioIDE, name='delete-servicios-ide'),
+
+    path('configuration/layers/index-layers', views.indexLayers, name='index-layers'),
+    path('configuration/layers/add-layers', views.addLayers, name='add-layers'),
+    path('configuration/layers/edit-layers/<int:idlayer>/', views.editLayers, name='edit-layers'),
+    path('configuration/layers/delete-layers/<int:id>/', views.deleteLayers, name='delete-layers'),
+    path('configuration/layers/view-layers/<int:idlayer>/', views.viewLayers, name='view-layers'),
 
    
 ]

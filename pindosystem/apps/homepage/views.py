@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from configuration.models import MapConfigGis
+from configuration.models import MapConfigGis, CapasBases, CapasBasesDefault, TileLayerWMS, CategoriasCapas
 from rodales.utility import get_rodales_with_gis
 from planificacion.models import PlanificacionIntervenciones
 from rodales.models import Rodales
@@ -19,6 +19,9 @@ import json
 from django.forms.models import model_to_dict
 from homepage.serializers import rodales_with_data_serializer
 from rodales.serializers import RodalesSerializer
+from configuration.serializers import CapasBasesWithDefaultSerializer
+from intervenciones.serializers import IntervencionesByRodalSerializer
+from configuration.utility import get_idx_categorias_capas
 
 # Create your views here.
 
@@ -28,6 +31,7 @@ def IndexView(request):
     context = {
             'category' : 'Homepage',
             'action' : 'Ver GIS App'}
+
     
     try:
 
@@ -60,10 +64,28 @@ def IndexView(request):
         #rodale serializer
         rodales_serializer = RodalesSerializer(rodales)
         context.update({'rodales_serializer' :  json.dumps(rodales_serializer)})
-       
 
-    
-       
+        #voy a ver que trae cuando agrego el otro detalle a basemap
+        capasbase_serializer = CapasBasesWithDefaultSerializer()
+        context.update({'capasbase_serializer' :  json.dumps(capasbase_serializer)})
+
+        #traigo las capas extra y contruyo el sidebar
+        capas_overlays = TileLayerWMS.objects.filter(active = True)
+        context.update({'capas_overlays' :  capas_overlays})
+
+        layers_wms_idxs = get_idx_categorias_capas(capas_overlays)
+
+        #traigo las categorias
+        categorias_capas = CategoriasCapas.objects.filter(pk__in = layers_wms_idxs)
+        context.update({'categorias_capas' :  categorias_capas})
+
+        print(categorias_capas)
+
+
+
+
+
+
 
     except Exception as e:
                 print('error')
@@ -71,5 +93,6 @@ def IndexView(request):
                 messages.error(request, str(e))
 
 
+   
 
     return render(request, 'homepage/index.html', context=context)

@@ -6,6 +6,7 @@ from login.models import Users
 from gis_pindo.models import PodaIntervenciongis, SobrevivenciaIntervenciongis, RaleoIntervenciongis, TalarazaIntervenciongis
 from rodales_gis.models import Rodalesgis
 from configuration.serializers import CapasBasesSerializer
+from configuration.models import IntervencionesTypes
 
 from django.contrib import messages
 from django.http import JsonResponse, Http404, HttpResponseRedirect
@@ -63,6 +64,11 @@ def addIntervencionPoda(request, idrodal):
 
         emsefors = Emsefor.objects.values_list("emsefor_id", "name")
         context.update({'emsefors' : emsefors})
+
+        inter_types = IntervencionesTypes.objects.values_list("intervencionestypes_id", "name")
+        context.update({'inter_types' : inter_types})
+        
+        print(inter_types)
 
         if request.method == 'POST':
             fecha = request.POST.get('fecha')
@@ -140,6 +146,9 @@ def editIntervencionPoda(request, idpoda):
         emsefors = Emsefor.objects.values_list("emsefor_id", "name")
         context.update({'emsefors' : emsefors})
 
+        inter_types = IntervencionesTypes.objects.values_list("intervencionestypes_id", "name")
+        context.update({'inter_types' : inter_types})
+
         if request.method == 'POST':
             fecha = request.POST.get('fecha')
             superficie = request.POST.get('superficie')
@@ -155,10 +164,13 @@ def editIntervencionPoda(request, idpoda):
 
             emsefor = request.POST.get('select-emsefor')
             name = request.POST.get('name')
+            type_intervencion = request.POST.get('select-type-inter')
 
             #traigo las entidades
             emsefor_ent = Emsefor.objects.get(pk = emsefor)
             user_entity = Users.objects.get(pk=request.user.pk)
+            type_inter_entity = IntervencionesTypes.objects.get(pk=type_intervencion)
+           
 
 
             try:
@@ -178,6 +190,7 @@ def editIntervencionPoda(request, idpoda):
                     poda.poda_intervencion.area_basal = area_basal
                     poda.poda_intervencion.porc_removido = porc_removido
                     poda.name = name
+                    poda.intervenciones_types = type_inter_entity
                    
                     poda.save()
                     poda.poda_intervencion.save()
@@ -365,6 +378,9 @@ def editIntervencionSobrevivencia(request, idsobrevivencia):
         emsefors = Emsefor.objects.values_list("emsefor_id", "name")
         context.update({'emsefors' : emsefors})
         context.update({'sobrevivencia' : sobre})
+
+        inter_types = IntervencionesTypes.objects.values_list("intervencionestypes_id", "name")
+        context.update({'inter_types' : inter_types})
 
 
 

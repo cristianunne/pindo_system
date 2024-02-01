@@ -20,7 +20,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.db import IntegrityError
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 
 from django.core.serializers import serialize
 import json
@@ -179,14 +179,17 @@ def configurationRodal(request, id):
         context.update({'plantaciones_gis' : plantaciones_gis})
         #print(plantaciones_gis)
 
-       
+        return render(request, 'rodales/configuration.html', context)
+    
+    except NoReverseMatch as e:
+                messages.error(request, str(e))
+                return redirect('rodales-index')
 
-
-        
     except Exception as e:
                 messages.error(request, str(e))
+                return redirect('rodales-index')
                 
-    return render(request, 'rodales/configuration.html', context)
+    
 
 @login_required
 def viewRodales(request, idrodal):

@@ -113,7 +113,27 @@ function deleteInformation(element){
     let message = 'Si acepta se borrará toda la información de la Capa Base';
     
     dialogDeleteConfirm(element, title, message, URLS_DELETE.BASEMAPS_DELETE);
+  } else if(controller === 'categorias_capas') {
+
+    let title = '¿Desea Eliminar la Categoría?';
+    let message = 'Si acepta se borrará toda la información de la Categoría';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.CATEGORIAS_CAPAS_DELETE);
+  } else if(controller === 'servicios_ide') {
+
+    let title = '¿Desea Eliminar el Servicio?';
+    let message = 'Si acepta se borrará toda la información del Servicio';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.SERVICIOS_IDE_DELETE);
+  } else if(controller === 'layers') {
+
+    let title = '¿Desea Eliminar la Capa?';
+    let message = 'Si acepta se borrará toda la información de la Capa';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.LAYERS_DELETE);
   }
+
+
 
 
 

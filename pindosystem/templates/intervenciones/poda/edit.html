@@ -165,6 +165,16 @@
                               </select>
                             </div>
 
+                            <div class="mb-5">
+                              <label class="form-label required">Tipo de Intervención:</label>
+                              <select type="text" class="form-select" name="select-type-inter" id="select-type-inter" required value="">
+                                <option value="">{{ 'Seleccione una Opcion' }}</option>
+                                {% for index, value in inter_types %}
+                                  <option value="{{ index }}">{{ value }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+
                           
 
                             <div class="form-footer">
@@ -295,6 +305,35 @@
               }
             })
         })
+
+
+         // @formatter:on
+
+         document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-type-inter')), {
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+
+         // @formatter:off
 
          // @formatter:off
       </script>
