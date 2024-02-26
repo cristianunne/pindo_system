@@ -54,12 +54,19 @@
                 <div class="card-body">
                   <div class="row justify-content-center flex-column align-items-center">
                     <div class="col-md-6 col-lg-6 col-sm-6">
+                    
                       <form action="{% url 'emsefor-add' %}" method="POST">
                         {% csrf_token %}
+                        
                         <div class="mb-4">
                           <label class="form-label required">Nombre:</label>
-                          <input type="text" class="form-control" placeholder="Nombre" name="name" id="name">
+                          <select type="text" class="form-select" name="select-emsefor" id="select-emsefor" required value="">
+                            {% for index, value in emsefor_sap %}
+                              <option value="{{ index }}">{{ value }}</option>
+                            {% endfor %}
+                          </select>
                         </div>
+
                         <div class="mb-4">
                           <label class="form-label required">Dirección:</label>
                           <input type="text" class="form-control" placeholder="Dirección" name="address" id="address"/>
@@ -130,6 +137,42 @@
       </div>
       <script src="{% static 'dist/libs/nouislider/dist/nouislider.min.js' %}"></script>
       <script src="{% static 'dist/libs/litepicker/dist/litepicker.js' %}"></script>
+      <script src="{% static 'dist/libs/tom-select/dist/js/tom-select.base.min.js' %}"></script>
+
+      <script>
+        // @formatter:off
+       
+
+        document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-emsefor')), {
+
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              maxOptions: null,
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+
+    
+
+        // @formatter:on
+      </script>
      
 
     {% endblock %}

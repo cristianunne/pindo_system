@@ -1,6 +1,7 @@
 
 
 const URLS_DELETE = {
+    RODALES_DELETE: 'rodales-delete/',
     EMPRESA_DELETE: 'empresas-delete/',
     USUARIOS_DELETE: 'delete-user/',
     EMSEFOR_DELETE: 'emsefor-delete/',

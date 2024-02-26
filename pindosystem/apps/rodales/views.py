@@ -8,12 +8,9 @@ from plantaciones.models import Plantaciones
 from gis_pindo.models import Plantacionesgis, SobrevivenciaIntervenciongis, PodaIntervenciongis, RaleoIntervenciongis
 from planificacion.models import PlanificacionIntervenciones
 
-
 from rodales.utility import *
 
 from configuration.serializers import CapasBasesSerializer
-
-
 
 
 from django.contrib.auth.decorators import login_required
@@ -24,6 +21,8 @@ from django.urls import NoReverseMatch, reverse
 
 from django.core.serializers import serialize
 import json
+
+from general_utility import getRodalesApiSap
 
 
 # Create your views here.
@@ -52,15 +51,27 @@ def addRodal(request):
     empresas = Empresas.objects.values_list("empresas_id", "name")
     context.update({'empresas' : empresas})
 
+    #proceso los rodales desde la api
+    data_sap = getRodalesApiSap(request)
+
+    if data_sap:
+        
+        rodales_sap = filterRodales(data_sap)
+        #print(rodales_sap)
+        context.update({'rodales_sap' : list(rodales_sap.items())})
+
+
+
 
     if request.method == 'POST':
         try:
         
-            cod_sap = request.POST.get('cod_sap')
+            #cod_sap = request.POST.get('cod_sap')
             campo = request.POST.get('campo')
             certificado = request.POST.get('is_certificado')
             uso = request.POST.get('select-uso')
             empresa = request.POST.get('select-empresa')
+            sap_id = request.POST.get('select-rodales')
            
             is_certificado = True if certificado == 'SI' else False
        
@@ -70,7 +81,18 @@ def addRodal(request):
             uso_rodal = Usosrodales.objects.get(pk=uso)
             empresa_ent = Empresas.objects.get(pk=empresa)
 
-            rodal = Rodales.objects.create(cod_sap=cod_sap, campo=campo, is_certificado=is_certificado, usos_rodales=uso_rodal, user=user_entity, empresa=empresa_ent)
+            cod_sap = None
+
+            for item in data_sap:
+                 if(item['objnr'] == sap_id):
+                      cod_sap = item['rodal']
+                      break
+
+
+
+            rodal = Rodales.objects.create(cod_sap=cod_sap, sap_id=sap_id, campo=campo, is_certificado=is_certificado, 
+                                           usos_rodales=uso_rodal, user=user_entity, empresa=empresa_ent)
+            
         
 
             messages.success(request, "El Rodal se ha creado con éxito!.")
@@ -81,8 +103,7 @@ def addRodal(request):
             messages.error(request, str('Ya existe un Rodal con el Código SAP sugerido!'))
             context.update({'campo' : campo,
                             'is_certificado' : certificado})
-            
-
+        
             return render(request, 'rodales/add.html', context)
         except Exception as e:
             messages.error(request, str(e))
@@ -92,7 +113,7 @@ def addRodal(request):
     
         return render(request, 'rodales/add.html', context)
     
-
+@login_required
 def editRodal(request, id):
 
     context = {
@@ -100,6 +121,20 @@ def editRodal(request, id):
             'action' : 'Editar un Rodal'}
     
     try:
+        #traigo el rodal
+        rodal = Rodales.objects.get(pk = id)
+        context.update({'rodal' : rodal})
+
+        #proceso los rodales desde la api
+        data_sap = getRodalesApiSap(request)
+
+        if data_sap:
+            
+            rodales_sap = filterRodalesWithId(data_sap, rodal.sap_id)
+            #print(rodales_sap)
+            context.update({'rodales_sap' : list(rodales_sap.items())})
+
+
 
         usos_rodales = Usosrodales.objects.values_list("usosrodales_id", "name")
         context.update({'usos_rodales' : usos_rodales})
@@ -108,13 +143,11 @@ def editRodal(request, id):
         empresas = Empresas.objects.values_list("empresas_id", "name")
         context.update({'empresas' : empresas})
 
-        #traigo el rodal
-        rodal = Rodales.objects.get(pk = id)
-        context.update({'rodal' : rodal})
+     
 
         if (request.method == 'POST'):
             
-            cod_sap = request.POST.get('cod_sap')
+            sap_id = request.POST.get('select-rodales')
             campo = request.POST.get('campo')
             certificado = request.POST.get('is_certificado')
             uso = request.POST.get('select-uso')
@@ -127,6 +160,15 @@ def editRodal(request, id):
             empresa_ent = Empresas.objects.get(pk=empresa)
 
 
+            cod_sap = None
+
+            for item in data_sap:
+                 if(item['objnr'] == sap_id):
+                      cod_sap = item['rodal']
+                      break
+
+
+            rodal.sap_id = sap_id
             rodal.cod_sap = cod_sap
             rodal.campo = campo
             rodal.is_certificado = is_certificado
@@ -273,4 +315,16 @@ def viewRodales(request, idrodal):
                 
     return render(request, 'rodales/view.html', context)
 
+@login_required
+def deleteRodal(request, idrodal):
+    try:
+        obj = Rodales.objects.get(pk=idrodal)
+        obj.delete()
+       
+        messages.success(request, "El Rodal ha sido eliminado.")
+        return redirect('rodales-index')
 
+    except Rodales.DoesNotExist:
+        raise Http404("error")
+    except Exception as e:
+        raise Http404(str(e))

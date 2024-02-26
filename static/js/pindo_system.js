@@ -27,7 +27,15 @@ function deleteInformation(element){
     let message = 'Si acepta se borrará toda la información de la Empresa';
     
     dialogDeleteConfirm(element, title, message, URLS_DELETE.EMPRESA_DELETE);
-  } else if(controller === 'users') {
+  } else if(controller === 'rodales') {
+
+    let title = '¿Desea Eliminar el Rodal?';
+    let message = 'Si acepta se borrará toda la información del Rodal';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.RODALES_DELETE);
+  }
+  
+  else if(controller === 'users') {
 
     let title = '¿Desea Eliminar el Usuario?';
     let message = 'Si acepta se borrará toda la información del Usuario';

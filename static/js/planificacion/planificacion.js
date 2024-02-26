@@ -136,19 +136,23 @@ function createLegendByCategorias(timeline, categorias)
     let domain = [];
     let range = [];
 
-    for (item of categorias) {
+    if (categorias != null){
+      for (item of categorias) {
 
      
-       domain.push(item.fields.name);
-       range.push(item.fields.color);
+        domain.push(item.fields.name);
+        range.push(item.fields.color);
+ 
+      }
+ 
+      const valColorScale = d3.scaleOrdinal()
+      .domain(domain)
+      .range(range);
+  
+      timeline.zColorScale(valColorScale);
 
     }
-
-    const valColorScale = d3.scaleOrdinal()
-    .domain(domain)
-    .range(range);
-
-    timeline.zColorScale(valColorScale);
+  
 
 
 }
@@ -314,11 +318,17 @@ function getDataGeneral(rodales)
 {
   let data_final = []
 
-  for (rod of rodales) {
+  if(rodales != null){
 
-    data_final.push(getDataForGanttByRodalGeneral(rod.eventos_planificacion, rod.cod_sap));
-  
+    for (rod of rodales) {
+
+      data_final.push(getDataForGanttByRodalGeneral(rod.eventos_planificacion, rod.cod_sap));
+    
+    }
+
   }
+
+ 
 
 
 

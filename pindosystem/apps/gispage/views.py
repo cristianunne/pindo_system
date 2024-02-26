@@ -17,7 +17,7 @@ from django.urls import reverse
 from django.core.serializers import serialize
 import json
 from django.forms.models import model_to_dict
-from homepage.serializers import rodales_with_data_serializer
+from gispage.serializers import rodales_with_data_serializer
 from rodales.serializers import RodalesSerializer
 from configuration.serializers import CapasBasesWithDefaultSerializer
 from intervenciones.serializers import IntervencionesByRodalSerializer
@@ -36,6 +36,8 @@ def IndexView(request):
     try:
 
         #traigo las configuraciones del mapa
+        #DEBO CONTROLAR EL FLUJO DE DATOS A TRAER
+
         map_config = MapConfigGis.objects.all().first()
         dict_obj = model_to_dict( map_config )
 
@@ -43,10 +45,19 @@ def IndexView(request):
        
         context.update({'map_config' : map_config_json})
 
+
+        #voy a ver que trae cuando agrego el otro detalle a basemap
+        capasbase_serializer = CapasBasesWithDefaultSerializer()
+        context.update({'capasbase_serializer' :  json.dumps(capasbase_serializer)})
+
+
+
+
         #traigo los eventos
         planificacion = PlanificacionIntervenciones.objects.all()
         
         rod_gis_ids = get_rodales_with_gis()
+        
         rodales = Rodales.objects.filter(pk__in = rod_gis_ids)
         #mando los rodales para construir la tabla de atributos inicial
         context.update({'rodales' : rodales})
@@ -65,9 +76,7 @@ def IndexView(request):
         rodales_serializer = RodalesSerializer(rodales)
         context.update({'rodales_serializer' :  json.dumps(rodales_serializer)})
 
-        #voy a ver que trae cuando agrego el otro detalle a basemap
-        capasbase_serializer = CapasBasesWithDefaultSerializer()
-        context.update({'capasbase_serializer' :  json.dumps(capasbase_serializer)})
+        
 
         #traigo las capas extra y contruyo el sidebar
         capas_overlays = TileLayerWMS.objects.filter(active = True)
@@ -78,12 +87,6 @@ def IndexView(request):
         #traigo las categorias
         categorias_capas = CategoriasCapas.objects.filter(pk__in = layers_wms_idxs)
         context.update({'categorias_capas' :  categorias_capas})
-
-        print(categorias_capas)
-
-
-
-
 
 
 

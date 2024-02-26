@@ -52,10 +52,17 @@
                     <div class="col-md-6 col-lg-6 col-sm-6">
                       <form action="{% url 'rodales-add' %}" method="POST">
                         {% csrf_token %}
-                        <div class="mb-4">
-                          <label class="form-label required">Código SAP:</label>
-                          <input type="text" class="form-control" placeholder="Código SAP" required name="cod_sap" id="cod_sap" value="{{cod_sap}}"/>
+
+                        <div class="mb-5">
+                          <label class="form-label required">Rodal:</label>
+                          <select type="text" class="form-select" name="select-rodales" id="select-rodales" required value="">
+                            {% for index, value in rodales_sap %}
+                              <option value="{{ index }}">{{ value }}</option>
+                            {% endfor %}
+                          </select>
                         </div>
+
+          
                         <div class="mb-4">
                           <label class="form-label required">Campo:</label>
                           <input type="text" class="form-control" placeholder="Campo" required name="campo" id="campo" value="{{campo}}"/>
@@ -146,6 +153,32 @@
 
       <script>
         // @formatter:off
+
+        document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-rodales')), {
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+
+
         document.addEventListener('DOMContentLoaded', function () {
           var el
           window.TomSelect &&

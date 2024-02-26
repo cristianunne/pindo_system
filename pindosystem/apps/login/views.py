@@ -228,7 +228,10 @@ def login(request):
             #request.session.set_expiry(600)
             if user.is_active:
                 auth.login(request, user)
-                return redirect('index')
+
+                #verifico el tipo de usuario para redireccionar
+
+                return redirect('indexAdmin')
             else:
                  return redirect('logout')
 
@@ -285,5 +288,5 @@ def signin(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect('login')
+    return redirect('index')
 

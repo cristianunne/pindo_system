@@ -1,6 +1,6 @@
 from plantaciones.models import Plantaciones
 from rodales_gis.models import Rodalesgis
-
+from rodales.models import Rodales
 
 
 def get_stock_by_rodal(rodal):
@@ -104,7 +104,57 @@ def get_rodales_with_gis():
 
     rodales_gis = Rodalesgis.objects.all()
 
+    
+
     for rod in rodales_gis:
-        data.append(rod.rodales.pk)
+
+        if (rod.rodales != None):
+
+            data.append(rod.rodales.pk)
 
     return data
+
+
+def filterRodales(lista_rodales):
+    
+    rodales_sap = {}
+    #traigo los rodales
+    rodales = Rodales.objects.all()
+
+    for rod in lista_rodales:
+
+        exists = False
+
+        for rod_local in rodales:
+            
+            if rod['objnr'] == rod_local.sap_id:
+                exists = True
+
+        if (exists == False):
+
+            rodales_sap[rod['objnr']] = rod['rodal']
+
+    return rodales_sap
+
+
+def filterRodalesWithId(lista_rodales, rodal_id):
+    
+    rodales_sap = {}
+    #traigo los rodales
+    rodales = Rodales.objects.all()
+
+    for rod in lista_rodales:
+
+        exists = False
+
+        for rod_local in rodales:
+            
+            if rod['objnr'] == rod_local.sap_id and rod['objnr'] != rodal_id:
+                exists = True
+
+        if (exists == False):
+
+            rodales_sap[rod['objnr']] = rod['rodal']
+
+    return rodales_sap
+

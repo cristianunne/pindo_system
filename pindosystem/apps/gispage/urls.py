@@ -3,6 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.IndexView, name='index')
+    path('gis/gishome', views.IndexView, name='gishome')
 
 ]

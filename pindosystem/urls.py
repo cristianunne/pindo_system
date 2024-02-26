@@ -8,8 +8,10 @@ from django.conf import settings
 urlpatterns = [
    
     path('admin/', admin.site.urls),
+    #urls generales
+    path('', include('pindosystem.apps.home.urls')),
     path('', include('pindosystem.apps.login.urls')),
-    path('', include('pindosystem.apps.homepage.urls')),
+    path('', include('pindosystem.apps.gispage.urls')),
     path('', include('pindosystem.apps.empresas.urls')),
     path('', include('pindosystem.apps.emsefor.urls')),
     path('', include('pindosystem.apps.procedencias.urls')),

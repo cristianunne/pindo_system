@@ -43,7 +43,8 @@
                   <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path d="M21 21l-6 -6"></path></svg>
                 </span>
-                <input type="text" value="" id="input-buscar-rodal" onkeyup="filterRodalesTOC(this)" class="form-control" placeholder="Filtrar..." aria-label="Buscar Rodal">
+                <input type="text" value="" id="input-buscar-rodal" onkeyup="filterRodalesTOC(this)" 
+                class="form-control" placeholder="Filtrar..." aria-label="Buscar Rodal"/>
               </div>
   
           </div>
@@ -239,13 +240,7 @@
                 
                         </div>
 
-                         
-
-                          
-
-                      
-
-                        </div>
+                      </div>
 
 
                        
@@ -329,6 +324,8 @@
         let rodales_serializer = "{{rodales_serializer|escapejs}}";
         var rodales_serializer_json = JSON.parse(rodales_serializer != '' ? rodales_serializer : null);
 
+        //informo que los rodales estan vacios
+
         //console.log(rodales_serializer_json)
 
        
@@ -336,8 +333,11 @@
       </script>
 
       <script>
-        let categorias_inter = JSON.parse("{{categorias_intervencion|escapejs}}");
-        let eventos_planificacion = JSON.parse("{{eventos_planificacion|escapejs}}");
+        let cat_json = "{{categorias_intervencion|escapejs}}";
+        let even_json = "{{eventos_planificacion|escapejs}}";
+
+        let categorias_inter = JSON.parse(cat_json != '' ? cat_json : null);
+        let eventos_planificacion = JSON.parse(even_json != '' ? even_json : null);
        
         initGanttGeneral(categorias_inter, eventos_planificacion, 'tab-container');
 

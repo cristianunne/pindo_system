@@ -8,7 +8,13 @@ import base64
 from django.core.files.base import ContentFile
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+
+from empresas.utility import filterEmpresas, filterEmpresasWithId
+
+
 # Create your views here.
+
+from general_utility import getEmpresasApiSap
 
 
 def index(request):
@@ -23,19 +29,40 @@ def index(request):
     return render(request, 'empresas/index.html', context)
 
 
+@login_required
 def add(request):
+
+    context = {}
+
+    #traigo los datos de las empresas
+    data_sap = getEmpresasApiSap(request)
+  
+    if data_sap:
+        
+        empresa_sap = filterEmpresas(data_sap)
+        context.update({'empresa_sap' : list(empresa_sap.items())})
+
 
     if request.method == 'POST':
         
-        name = request.POST.get('name')
+        sap_id = request.POST.get('select-empresa')
         address = request.POST.get('address')
         phone = request.POST.get('phone')
         email = request.POST.get('email')
         cuit = request.POST.get('cuit')
+        name = None
 
+        #traigo el nombre
+        for item in data_sap:
+
+            if(item['idempresa'] == sap_id):
+                name = item['nombre']
+                break
+        
         try:
             #creo el objeto
             empresa = Empresas()
+            empresa.sap_id = sap_id
             empresa.name = name
             empresa.address = address
             empresa.phone = phone
@@ -50,24 +77,46 @@ def add(request):
         
         except Exception as e:
             messages.error(request, str(e))
-            return render(request, 'empresas/add.html')
+            return render(request, 'empresas/add.html', context)
     
-    return render(request, 'empresas/add.html')
+    return render(request, 'empresas/add.html', context)
 
 
 def editEmpresa(request, id):
     context = {}
+
+  
+    
+
     try:
         empresa = Empresas.objects.get(empresas_id = id)
         context.update({'empresa_data' : empresa})
 
+        #traigo los datos de las empresas
+        data_sap = getEmpresasApiSap(request)
+  
+        if data_sap:
+            empresa_sap = filterEmpresasWithId(data_sap, empresa.sap_id)
+            context.update({'empresa_sap' : list(empresa_sap.items())})
+      
+
         if request.method == 'POST':
-            name = request.POST.get('name')
+            sap_id = request.POST.get('select-empresa')
+            #name = request.POST.get('name')
             address = request.POST.get('address')
             phone = request.POST.get('phone')
             email = request.POST.get('email')
             cuit = request.POST.get('cuit')
+            name = None
 
+            #traigo el nombre
+            for item in data_sap:
+
+                if(item['idempresa'] == sap_id):
+                    name = item['nombre']
+                    break
+
+            empresa.sap_id = sap_id
             empresa.name = name
             empresa.address = address
             empresa.phone = phone
@@ -82,7 +131,7 @@ def editEmpresa(request, id):
 
             except Exception as e:
                 messages.error(request, str(e))
-                return render(request, 'empresas/edit.html')
+                return render(request, 'empresas/edit.html', context)
 
         else :
             return render(request, 'empresas/edit.html', context)

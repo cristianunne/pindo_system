@@ -44,23 +44,41 @@ function createBaseMaps(basemap)
 function loadBaseMaps(basemap_serializer)
 {
 
-    let basemaps_object = {};
-    basemap_serializer.forEach(element => {
+    if(basemap_serializer != null){
 
-        //creo la capa
-        let capa_b = createBaseMaps(element);
+        let basemaps_object = {};
+        basemap_serializer.forEach(element => {
 
-        //agrego la capa base default al mapa
-        if (element.default == true) {
+            //creo la capa
+            let capa_b = createBaseMaps(element);
 
-            capa_b.addTo(map);
+            //agrego la capa base default al mapa
+            if (element.default == true) {
 
-        }
-        basemaps_object[`${element.name}`] = capa_b;
+                capa_b.addTo(map);
+
+            }
+            basemaps_object[`${element.name}`] = capa_b;
+            
+        });
         
-    });
-    
 
-    L.control.layers(basemaps_object, null).addTo(map);
+        L.control.layers(basemaps_object, null).addTo(map);
+
+    } else {
+        //mensaje de error
+        Toastify({
+            text: "Error al cargar las Capas Bases. Verifique las configuraciones.",
+            duration: 4500,
+            newWindow: true,
+            gravity: "bottom", 
+            position: 'right',
+            style: {
+                background: COLORS.DANGER,
+              }
+        }).showToast();
+    }
+
+    
 
 }

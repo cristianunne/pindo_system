@@ -10,6 +10,7 @@ from empresas.models import Empresas
 class Rodales(models.Model):
     rodales_id = models.AutoField(primary_key=True)
     cod_sap = models.CharField("Código", unique=True, max_length=100, blank=True)
+    sap_id = models.CharField("sap_id", unique=False, max_length=100, blank=True)
     campo = models.CharField("Campo", unique=False, max_length=100, blank=True)
     is_certificado = models.BooleanField("Certificado", unique=False, blank=False, default=False)
     is_finish = models.BooleanField("Finalizado", unique=False, blank=False, default=False)

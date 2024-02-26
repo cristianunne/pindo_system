@@ -5,6 +5,7 @@ var map = null;
 function initGis(map_config)
 {
 
+  
     if (map_config != null){
 
         let options = {

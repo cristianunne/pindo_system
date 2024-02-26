@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     "django.contrib.gis",
     'login',
-    'homepage',
+    'gispage',
     'empresas',
     'emsefor',
     'procedencias',
@@ -55,7 +55,9 @@ INSTALLED_APPS = [
     'plantaciones',
     'intervenciones',
     'planificacion',
-    'api'
+    'api',
+    'sap',
+    'home'
 
 ]
 

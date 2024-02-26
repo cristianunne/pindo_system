@@ -1,0 +1,79 @@
+<!doctype html>
+
+{% extends "../layout/base.html" %}
+
+{% load static %}
+
+
+{% block sidebar %}
+
+{% include "../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../element/pageheader.html" %}
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+          
+            {% if messages %}
+
+            {% include "../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row row-cards mb-5">
+
+                <div class="col-md-3 col-lg-4 col-sm-4">
+                    <div class="card bg-primary-lt">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                        
+                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                              <path d="M12 4v16" /><path d="M4 15h8" />
+                              <path d="M12 12h8" /><path d="M16 12v8" />
+                              <path d="M16 16h4" /></svg>
+                            
+                    
+                            </div>
+                            <div class="col-md-8">
+                                <h3 class="card-title h3">Index Admin</h3>
+                                <p class="text-muted">En esta sección puede realizar las ediciones de la información de las Rodales </p>
+                             
+                            </div>
+                        </div>
+
+                        
+                        </div>
+                    </div>
+                  </div>
+            </div>
+
+        
+        </div>
+      </div>
+
+      
+    {% endblock main_content %}
+
+
+    
+  </div>
+
+{% endblock  %}

@@ -8,6 +8,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import base64
 from django.core.files.base import ContentFile
+from general_utility import getEmseforsApiSap
+
+from emsefor.utility import filterEmsefor, filterEmseforWithId
 
 # Create your views here.
 
@@ -22,22 +25,44 @@ def index(request):
 
     return render(request, 'emsefor/index.html', context)
 
-
+@login_required
 def addEmsefor(request):
+
+    context = {}
+    #traigo los datos de las empresas
+    data_sap = getEmseforsApiSap(request)
+
+    if data_sap:
+        
+        emsefor_sap = filterEmsefor(data_sap)
+       
+        context.update({'emsefor_sap' : list(emsefor_sap.items())})
+        
+       
 
     if request.method == 'POST':
         
-        name = request.POST.get('name')
+        #name = request.POST.get('name')
         address = request.POST.get('address')
         phone = request.POST.get('phone')
         email = request.POST.get('email')
         cuit = request.POST.get('cuit')
         contratista = request.POST.get('contratista')
+        sap_id = request.POST.get('select-emsefor')
+
+        name = None
+
+        for item in data_sap:
+            if(item['lifnr'] == sap_id):
+                name = item['name']
+                break
+
 
         try:
             #creo el objeto
             emsefor = Emsefor()
             emsefor.name = name
+            emsefor.sap_id = sap_id
             emsefor.address = address
             emsefor.phone = phone
             emsefor.email = email
@@ -52,25 +77,47 @@ def addEmsefor(request):
         
         except Exception as e:
             messages.error(request, str(e))
-            return render(request, 'emsefor/add.html')
+            return render(request, 'emsefor/add.html', context)
     
-    return render(request, 'emsefor/add.html')
+    return render(request, 'emsefor/add.html', context)
 
-
+@login_required
 def editEmsefor(request,id):
     context = {}
+
+
+
+
     try:
         emsefor = Emsefor.objects.get(emsefor_id = id)
         context.update({'emsefor_data' : emsefor})
 
+          #traigo los datos de las empresas
+        data_sap = getEmseforsApiSap(request)
+
+        if data_sap:
+        
+            emsefor_sap = filterEmseforWithId(data_sap, emsefor.sap_id)
+        
+            context.update({'emsefor_sap' : list(emsefor_sap.items())})
+
         if request.method == 'POST':
-            name = request.POST.get('name')
+            
             address = request.POST.get('address')
             phone = request.POST.get('phone')
             email = request.POST.get('email')
             cuit = request.POST.get('cuit')
             contratista = request.POST.get('contratista')
+            sap_id = request.POST.get('select-emsefor')
 
+            name = None
+
+            for item in data_sap:
+                if(item['lifnr'] == sap_id):
+                    name = item['name']
+                    break
+
+            emsefor.sap_id = sap_id
             emsefor.name = name
             emsefor.address = address
             emsefor.phone = phone

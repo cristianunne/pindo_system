@@ -58,7 +58,17 @@
                         {% csrf_token %}
                         <div class="mb-4">
                           <label class="form-label required">Nombre:</label>
-                          <input type="text" class="form-control" placeholder="Nombre" name="name" id="name" value="{{emsefor_data.name}}">
+                          <select type="text" class="form-select" name="select-emsefor" id="select-emsefor" required value="">
+                            {% for index, value in emsefor_sap %}
+                           
+                              {% if emsefor_data.sap_id ==  index %}
+                                <option selected value="{{ index }}">{{ value }}</option>
+                            
+                              {% else %}
+                                <option value="{{ index }}">{{ value }}</option>
+                              {% endif %}
+                            {% endfor %}
+                          </select>
                         </div>
                         <div class="mb-4">
                           <label class="form-label required">Dirección:</label>
@@ -85,7 +95,7 @@
                        
 
                         <div class="form-footer">
-                          <a href="{% url 'empresas-index' %}" class="btn btn-dark" aria-label="Button">
+                          <a href="{% url 'emsefor-index' %}" class="btn btn-dark" aria-label="Button">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-left-filled" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
                               <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                               <path d="M9.586 4l-6.586 6.586a2 2 0 0 0 0 2.828l6.586 6.586a2 2 0 0 0 2.18 .434l.145 -.068a2 2 0 0 0 1.089 -1.78v-2.586h7a2 2 0 0 0 2 -2v-4l-.005 -.15a2 2 0 0 0 -1.995 -1.85l-7 -.001v-2.585a2 2 0 0 0 -3.414 -1.414z" stroke-width="0" fill="currentColor" />
@@ -130,9 +140,45 @@
           </div>
         </div>
       </div>
+     
       <script src="{% static 'dist/libs/nouislider/dist/nouislider.min.js' %}"></script>
       <script src="{% static 'dist/libs/litepicker/dist/litepicker.js' %}"></script>
-     
+      <script src="{% static 'dist/libs/tom-select/dist/js/tom-select.base.min.js' %}"></script>
+
+      <script>
+        // @formatter:off
+       
+
+        document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-emsefor')), {
+
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              maxOptions: null,
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+
+    
+
+        // @formatter:on
+      </script>
 
     {% endblock %}
   </div>

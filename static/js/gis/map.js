@@ -152,23 +152,47 @@ function removeLayerOverlay(idlayer, TYPE_LAYER)
 
 function flyToLayer(idlayer, TYPE_LAYER)
 {
-
+    let arr_cordinates = [];
     
     map.eachLayer(function(layer){
+
+        //deberia guardar los layer y hacer un getbounds completo
+
+        
    
         if(layer.options.type_layer !== undefined){
      
             
             if(parseInt(layer.options.idlayer) == idlayer && layer.options.type_layer == TYPE_LAYER && 
                 layer.feature != null){
-                console.log(layer);
+                //console.log(layer.feature.geometry.coordinates[0]);
+                arr_cordinates.push(layer.getCenter());
 
-              map.flyToBounds(layer.getBounds());
-
-            
+             
             }
         }
 
+      
+
     });
+
+    //calculo el promedio
+    let sum_lat = null;
+    let sum_long = null;
+    let num_el = 0;
+
+    arr_cordinates.forEach(el => {
+        console.log(el.lat);
+        sum_lat = sum_lat + el.lat;
+        sum_long = sum_long + el.lng;
+        num_el++;
+    })
+
+    let prom_lat = sum_lat / num_el;
+    let prom_long = sum_long / num_el;
+
+    let latlng = L.latLng(prom_lat, prom_long);
+
+    map.flyTo(latlng, 16);
 
 }
