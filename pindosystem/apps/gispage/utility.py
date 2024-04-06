@@ -7,9 +7,6 @@ def get_baselayers():
         capasbases = CapasBases.objects.all()
         #traigo el default
 
-
-
-
     except Exception as e:
         return False
 

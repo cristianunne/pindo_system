@@ -1,6 +1,16 @@
+from pindosystem.apps.api.utility import getPkFromData
+from django.db import connection
+import pprint
 from plantaciones.models import Plantaciones
 from gis_pindo.models import Plantacionesgis
+from rodales.models import Rodales
 from django.core.serializers import serialize
+
+from django.db.models import Sum, F, Count
+
+from sagpyas.models import Sagpyas
+
+
 
 
 
@@ -34,3 +44,75 @@ def PlantacionesByRodalSerializer(rodal):
     }
 
     return data
+
+
+
+
+def getSuperficiePlantacionByEmpresa(id_empresa):
+    
+    #filtro los rodales por empresas
+    rodales = Rodales.objects.filter(empresa = id_empresa)
+
+    #traigo solo los ids
+    rodales_ids = getPkFromData(rodales)
+
+    
+    """plantaciones = Plantaciones.objects.select_related('rodales', 'rodales__usos_rodales') \
+    .filter(rodales__in = rodales_ids).annotate(suma_superficie = Sum('superficie'), uso = F('rodales__usos_rodales__name')) \
+    .values('uso', 'suma_superficie')
+    print(plantaciones)"""
+
+    plantaciones = Plantaciones.objects.select_related('rodales', 'rodales__usos_rodales') \
+    .filter(rodales__in = rodales_ids) \
+    .annotate(uso = F('rodales__usos_rodales__name')) \
+    .values('uso') \
+    .annotate(suma_superficie = Sum('superficie')) 
+
+    return list(plantaciones)
+
+
+def getSuperficiePlantacionYearsByEmpresa(id_empresa):
+
+     #filtro los rodales por empresas
+    rodales = Rodales.objects.select_related('usos_rodales').filter(empresa = id_empresa, usos_rodales__name__contains = 'Forestal')
+
+    #traigo solo los ids
+    rodales_ids = getPkFromData(rodales)
+
+    plantacion = Plantaciones.objects.select_related('rodales') \
+     .filter(rodales__in = rodales_ids) \
+      .annotate(year = F('fecha__year')) \
+     .values('year') \
+     .annotate(suma_superficie = Sum('superficie')) \
+    .order_by('year')
+
+
+    return list(plantacion)
+
+
+
+
+
+
+def getSagpyasByEmpresaSerializer(idempresa):
+ 
+    try:
+
+        sagpyas = Sagpyas.objects\
+        .filter(rodales__empresa__pk = idempresa, rodales__usos_rodales__name__contains = 'Forestal') \
+        .values() \
+        .annotate(cantidad_rodales = Count('rodales'))
+        
+        return list(sagpyas)
+    
+    except Exception as e:
+        return False
+    
+
+        
+
+
+    
+   
+
+   

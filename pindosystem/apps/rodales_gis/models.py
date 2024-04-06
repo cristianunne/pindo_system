@@ -5,8 +5,35 @@ from rodales.models import Rodales
 
 class Rodalesgis(models.Model):
     rodalesgis_id = models.AutoField(primary_key=True)
-    area = models.FloatField(blank=True, null=True)
+    superficie = models.FloatField(blank=True, null=True)
     perimetro = models.FloatField(blank=True, null=True)
+    departamento = models.CharField("Departamento", unique=False, max_length=100, blank=True, null=True)
+    municipio = models.CharField("Municipio", unique=False, max_length=100, blank=True, null=True)
+    seccion = models.CharField("Sección", unique=False, max_length=100, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    #establezco la relacion con el rodal
+    rodales = models.ForeignKey(Rodales, related_name='rodales_rodales_gis', blank=True, null=True, on_delete=models.SET_NULL)
+
+    geom = models.MultiPolygonField(srid=5349, blank=True, null=True)
+    geom_4326 = models.MultiPolygonField(blank=True, null=True)
+
+
+class RodalesState(models.Model):
+    rodalesstate_id = models.AutoField(primary_key=True)
+    superficie = models.FloatField(blank=True, null=True)
+    perimetro = models.FloatField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    #establezco la relacion con el rodal
+    rodales = models.ForeignKey(Rodales, related_name='rodales_rodalesstate_gis', blank=True, null=True, on_delete=models.SET_NULL)
+    geom = models.MultiPolygonField(srid=5349, blank=True, null=True)
+    geom_4326 = models.MultiPolygonField(blank=True, null=True)
+
+
+class RodalesParcelas(models.Model):
+    rodales_parcelas_id = models.AutoField(primary_key=True)
     departamento = models.CharField("Departamento", unique=False, max_length=100, blank=True, null=True)
     municipio = models.CharField("Municipio", unique=False, max_length=100, blank=True, null=True)
     seccion = models.CharField("Sección", unique=False, max_length=100, blank=True, null=True)
@@ -15,11 +42,6 @@ class Rodalesgis(models.Model):
     parcela = models.CharField("Parcela", unique=False, max_length=100, blank=True, null=True)
     subparcela = models.CharField("Subparcela", unique=False, max_length=100, blank=True, null=True)
     partida = models.CharField("Partida", unique=False, max_length=100, blank=True, null=True)
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-
-    #establezco la relacion con el rodal
-    rodales = models.ForeignKey(Rodales, related_name='rodales_rodales_gis', blank=True, null=True, on_delete=models.SET_NULL)
-
+    rodales = models.ForeignKey(Rodales, related_name='rodales_rodalesparcelas_gis', blank=True, null=True, on_delete=models.SET_NULL)
     geom = models.MultiPolygonField(srid=5349, blank=True, null=True)
     geom_4326 = models.MultiPolygonField(blank=True, null=True)

@@ -1,5 +1,6 @@
 from django.db import models
 from login.models import Users
+from rodales.models import Rodales
 
 # Create your models here.
 
@@ -14,6 +15,7 @@ class Sagpyas(models.Model):
     turno_minimo = models.CharField("Turno Mínimo", unique=False, max_length=50, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    rodales = models.ManyToManyField(Rodales, related_name='sagpyas_rodales')
 
 
 

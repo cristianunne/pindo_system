@@ -141,6 +141,14 @@ function deleteInformation(element){
     dialogDeleteConfirm(element, title, message, URLS_DELETE.LAYERS_DELETE);
   }
 
+  else if(controller === 'sagpyas_rodales') {
+
+    let title = '¿Desea Eliminar el Rodal del Sagpya Actual?';
+    let message = 'Si acepta se borrará toda la información de la Capa';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.SAGPYAS_RODALES_DELETE);
+  }
+
 
 
 
@@ -177,6 +185,7 @@ function dialogDeleteConfirm(element, title, message, url) {
         '</svg>';
 
     let id = element.getAttribute('attr');
+    let id2 = element.getAttribute('attr2');
 
 
     let modal = document.createElement("div");
@@ -234,7 +243,14 @@ function dialogDeleteConfirm(element, title, message, url) {
     btn_aceptar.addEventListener('click', function(){
         modal.style.display = 'none';
         document.body.classList.remove('modal-open');
-        window.location = url + id;
+
+        if(id2 == undefined || id2 == null){
+          window.location = url + id;
+        } else {
+          window.location = url + id + '/' + id2;
+        }
+
+      
         
     });
 
@@ -363,12 +379,24 @@ function modalError(element, title, message, url) {
   btn_aceptar.classList.add('btn', 'btn-danger');
   btn_aceptar.innerHTML = 'Aceptar';
 
-  btn_aceptar.addEventListener('click', function(){
+  if(url != null){
+      btn_aceptar.addEventListener('click', function(){
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+        window.location = url;
+        
+    });
+  } else {
+
+    btn_aceptar.addEventListener('click', function(){
       modal.style.display = 'none';
       document.body.classList.remove('modal-open');
-      window.location = url;
       
   });
+
+  }
+
+  
 
 
 

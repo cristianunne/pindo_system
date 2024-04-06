@@ -3,6 +3,7 @@ from sagpyas.models import Sagpyas, SagpyasFiles
 from django.contrib import messages
 from django.http import FileResponse, Http404
 from login.models import Users
+from rodales.models import Rodales
 import os, re
 
 
@@ -82,7 +83,7 @@ def viewSagpyas(request, id):
         #print(settings.MEDIA_URL)
         #print(BASE_DIR)
      
-        
+        context.update({'rodales' : sagpyas.rodales.all()})
         context.update({'sagpyas_data' : sagpyas})
         context.update({'sagpyas_files' : files_sagpyas})
         
@@ -237,3 +238,78 @@ def deleteSagpyasFiles(request, id):
         raise Http404("error")
     except Exception as e:
         raise Http404(str(e))
+    
+
+def assignRodalToSagpya(request, idsagpya):
+
+    try:
+        context = {
+               'category' : 'Sagpyas',
+                'action' : 'Administración de Sagpyas / Gestión de Rodales'}
+        
+        sagpyas = Sagpyas.objects.get(pk = idsagpya)
+
+        #res_ = sagpyas.rodales.remove(7)
+      
+
+        lista_rodales_ids = []
+
+        for rod_sag in sagpyas.rodales.all():
+
+            lista_rodales_ids.append(rod_sag.pk)
+
+
+        #traigo los rodales que estan relacionados con este sagpya
+        rodales = Rodales.objects.exclude(rodales_id__in = lista_rodales_ids).values_list("rodales_id", "cod_sap")
+       
+        context.update({'rodales' : rodales})
+   
+
+        if (request.method == 'POST'):
+
+            rodal = request.POST.get('select-rodal')
+            rod_obj = Rodales.objects.get(pk=rodal)
+
+            exist_rod = False
+
+            for rod_sag in sagpyas.rodales.all():
+                if rod_sag.pk == rod_obj.pk:
+                    exist_rod = True
+        
+            
+            if exist_rod == False:
+                sagpyas.rodales.add(rod_obj)
+                messages.success(request, "El Rodal se ha asignado correctamente!.")
+                return redirect('sagpyas-view', id=idsagpya)
+              
+            else:
+                messages.error(request, 'El Rodal ya esta asignado en el actual Sagpya')
+                
+           
+
+        context.update({'sagpyas_data' : sagpyas})
+
+
+        return render(request, 'sagpyas/assign_rodal_sagpya.html', context=context)
+     
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('sagpyas-index')
+    
+
+
+def deleteRodalesSagpyas(request, idsagpya, idrodal):
+    
+   
+    try:
+        sagpyas = Sagpyas.objects.get(pk = idsagpya)
+        sagpyas.rodales.remove(idrodal)
+       
+        messages.success(request, "El Rodal ha sido eliminado del Sagpya.")
+        return redirect('sagpyas-view', id=idsagpya)
+
+    except Sagpyas.DoesNotExist:
+        raise Http404("error")
+    except Exception as e:
+        raise Http404(str(e))
+

@@ -14,7 +14,9 @@ urlpatterns = [
     path('sagpyas/view-upload-files-sagpyas/<int:id>/', views.uploadFilesViewSagpyas, name='view-upload-files-sagpyas'),
     path('sagpyas/download-files-sagpyas/<int:id>/', views.downloadFile, name='download-files-sagpyas'),
     path('sagpyas/view-details-file-sagpyas/<int:id>/', views.viewDetailsFile, name='view-details-file-sagpyas'),
-    path('sagpyas/sagpyas-delete-files/<int:id>/', views.deleteSagpyasFiles, name='sagpyas-delete-files')
+    path('sagpyas/sagpyas-delete-files/<int:id>/', views.deleteSagpyasFiles, name='sagpyas-delete-files'),
+    path('sagpyas/sagpyas-assign-rodales/<int:idsagpya>/', views.assignRodalToSagpya, name='sagpyas-assign-rodales'),
+    path('sagpyas/sagpyas-assign-delete/<int:idsagpya>/<int:idrodal>/', views.deleteRodalesSagpyas, name='sagpyas-assign-delete'),
 ]
 
 if settings.DEBUG:

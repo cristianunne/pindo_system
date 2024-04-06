@@ -97,22 +97,33 @@ def get_stock_by_rodal(rodal):
     return data
 
 
-def get_rodales_with_gis():
+def get_rodales_with_gis(rodales_list):
 
-   
-    data = []
+    if len(rodales_list) == 0:
+        data = []
 
-    rodales_gis = Rodalesgis.objects.all()
+        rodales_gis = Rodalesgis.objects.all()
 
+        for rod in rodales_gis:
+
+            if (rod.rodales != None):
+
+                data.append(rod.rodales.pk)
+
+        return data
     
+    else:
+        data = []
+        #los argumentos recibidos seran la lista derodales objnr
+        rodales = Rodales.objects.filter(sap_id__in = rodales_list)
 
-    for rod in rodales_gis:
+        for rod in rodales:
 
-        if (rod.rodales != None):
+            data.append(rod.pk)              
+        return data
 
-            data.append(rod.rodales.pk)
 
-    return data
+
 
 
 def filterRodales(lista_rodales):

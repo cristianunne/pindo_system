@@ -22,6 +22,8 @@ const URLS_DELETE = {
     SERVICIOS_IDE_DELETE: 'delete-servicios-ide/',
     LAYERS_DELETE: 'delete-layers/',
 
+    SAGPYAS_RODALES_DELETE: '../../sagpyas-assign-delete/',
+
 
 }
 
