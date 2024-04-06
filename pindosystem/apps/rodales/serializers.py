@@ -1,6 +1,9 @@
 
 from rodales.models import Rodales
 from rodales_gis.models import Rodalesgis
+from plantaciones.models import Plantaciones
+
+
 from django.core.serializers import serialize
 
 from sagpyas.models import Sagpyas
@@ -109,3 +112,11 @@ def getRodalesByEmpresaSerializer(id_empresa):
   
 
     return list(rodales)
+
+
+def getRodalWithMaterialGeneticoById(idrodal):
+    
+    procedencia = Plantaciones.objects.select_related('rodales_plantaciones', 'plantacion_procedencias') \
+    .filter(rodales__pk = idrodal).values('procedencias__name', 'procedencias__especie')
+
+    return list(procedencia)

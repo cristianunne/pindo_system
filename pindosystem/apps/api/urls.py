@@ -27,10 +27,18 @@ urlpatterns = [
     path('api/empresas/getRodalesSagpyasByEmpresas/<int:empresa_id>/', 
          views.getRodalesSagpyasByEmpresas, name='getRodalesSagpyasByEmpresas'),
 
+     #rodales
      path('api/rodales/getRodalesByUso/<str:uso>/', views.getRodalesByUso, name='getRodalesByUso'),
+     path('api/rodales/getRodalesById/<int:idrodal>/', views.getRodalesById, name='getRodalesById'),
+     path('api/rodales/getMaterialGeneticoByRodalById/<int:idrodal>/', views.getMaterialGeneticoByRodalById, name='getMaterialGeneticoByRodalById'),
+
 
 
      #GIS REQUEST
      path('api/gis/getRodalesGisById/<int:idrodal>/', views.getRodalgisById, name='getRodalgisById'),
+
+     #planificacion
+     path('api/planificacion/getPlanificacionIntervencionesByRodal/<int:idrodal>/', views.getPlanificacionIntervencionesByRodal, name='getPlanificacionIntervencionesByRodal'),
+      path('api/planificacion/getReferenciasPlanificacion/', views.getReferenciasPlanificacion, name='getReferenciasPlanificacion'),
 
 ]

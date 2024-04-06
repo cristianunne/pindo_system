@@ -14,7 +14,11 @@ from plantaciones.serializers import PlantacionesByRodalSerializer, getSuperfici
 getSuperficiePlantacionYearsByEmpresa, getSagpyasByEmpresaSerializer
 
 
-from rodales.serializers import getRodalesByUsoSerializer, getRodalesSagpyasByEmpresaSerializer, getRodalesByEmpresaSerializer
+from rodales.serializers import getRodalesByUsoSerializer, getRodalesSagpyasByEmpresaSerializer, getRodalesByEmpresaSerializer, \
+    getRodalesByIdSerializer, getRodalWithMaterialGeneticoById
+
+
+from planificacion.serializers import getPlanificacionByRodal, getReferenciasPlanificacionSerializer
 
 from rodales_gis.serializers import get_rodalesgis_by_id
 
@@ -218,9 +222,56 @@ def getRodalesByUso(request, uso):
 
 
 @csrf_exempt
+def getRodalesById(request, idrodal):
+     
+    if request.method == 'GET':
+
+        rodal =  getRodalesByIdSerializer(idrodal)
+        return JsonResponse(rodal, safe=False)
+    
+    return JsonResponse(False, safe=False)
+    
+
+@csrf_exempt
 def getRodalgisById(request, idrodal):
      
     if request.method == 'GET':
 
-        rodal =  get_rodalesgis_by_id(5)
+        rodal =  get_rodalesgis_by_id(idrodal)
         return JsonResponse(rodal, safe=False)
+    
+    return JsonResponse(False, safe=False)
+
+
+@csrf_exempt
+def getMaterialGeneticoByRodalById(request, idrodal):
+
+    #El camino para extraer el material es ir a travez de plantaciones, puede devolver muchos objetos
+    
+    if request.method == 'GET':
+        materail_gen = getRodalWithMaterialGeneticoById(5)
+        return JsonResponse(materail_gen, safe=False)
+
+    return JsonResponse(False, safe=False)
+
+
+
+@csrf_exempt
+def getPlanificacionIntervencionesByRodal(request, idrodal):
+
+    if request.method == 'GET':
+
+        plan_ = getPlanificacionByRodal(idrodal=idrodal)
+        return JsonResponse(plan_, safe=False)
+
+    return JsonResponse(False, safe=False)
+
+@csrf_exempt
+def getReferenciasPlanificacion(request):
+
+    if request.method == 'GET':
+
+        plan_ = getReferenciasPlanificacionSerializer()
+        return JsonResponse(plan_, safe=False)
+
+    return JsonResponse(False, safe=False)
