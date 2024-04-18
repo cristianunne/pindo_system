@@ -2,6 +2,10 @@ from plantaciones.models import Plantaciones
 from rodales_gis.models import Rodalesgis
 from rodales.models import Rodales
 
+from django.db.models import Sum, F, Count, Min
+
+import datetime
+
 
 def get_stock_by_rodal(rodal):
 
@@ -124,8 +128,6 @@ def get_rodales_with_gis(rodales_list):
 
 
 
-
-
 def filterRodales(lista_rodales):
     
     rodales_sap = {}
@@ -169,3 +171,23 @@ def filterRodalesWithId(lista_rodales, rodal_id):
 
     return rodales_sap
 
+#.annotate(year = F('fecha__year'))
+def get_edad_rodal(idrodal):
+    
+
+    today = datetime.date.today()
+
+    edad = today.year - get_fecha_plantacion(idrodal)
+    
+    return edad
+
+
+def get_fecha_plantacion(idrodal):
+
+    
+    #utilizo a plantacion como parametro
+    edad_plantada = list(Plantaciones.objects.select_related('rodales').filter(rodales_id = idrodal) \
+        .aggregate(year = Min('fecha__year')).values())[0]
+    
+    
+    return edad_plantada

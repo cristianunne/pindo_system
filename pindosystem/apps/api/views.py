@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
+from django.conf import settings
+import os
 # Create your views here.
 
 from emsefor.models import Emsefor
@@ -10,20 +12,31 @@ from empresas.models import Empresas
 from rodales.models import Rodales
 from plantaciones.models import Plantaciones
 from gis_pindo.models import Plantacionesgis
+from sagpyas.models import SagpyasFiles
+
+
 from plantaciones.serializers import PlantacionesByRodalSerializer, getSuperficiePlantacionByEmpresa, \
-getSuperficiePlantacionYearsByEmpresa, getSagpyasByEmpresaSerializer
+getSuperficiePlantacionYearsByEmpresa, getSagpyasByEmpresaSerializer, getSuperficiePlantacionForestalByEmpresa
 
 
 from rodales.serializers import getRodalesByUsoSerializer, getRodalesSagpyasByEmpresaSerializer, getRodalesByEmpresaSerializer, \
-    getRodalesByIdSerializer, getRodalWithMaterialGeneticoById
+    getRodalesByIdSerializer, getRodalWithMaterialGeneticoById, getRodalesBySagpyasSerializer, getRodalesByIdSapSerializer
+
+from sagpyas.serializers import getSagpyasWithDetailsSerializer, getFilesDetailsBySagpyaSerializer
+
+from planificacion.serializers import getPlanificacionByRodal, getReferenciasPlanificacionSerializer, getPlanificacionRodales, \
+getPlanificacionDetailsWithYearsAndTipoSerializer
+
+from rodales_gis.serializers import getRodalResumenGis, getRodalesGisBySagpyaWithDetailsSerializer
+from rodales_gis.utility import get_area_rodal_state_gis_by_empresa
+
+from sagpyas.utility import get_rodales_with_details_by_sagpya
 
 
-from planificacion.serializers import getPlanificacionByRodal, getReferenciasPlanificacionSerializer
-
-from rodales_gis.serializers import get_rodalesgis_by_id
-
-
-from intervenciones.serializers import IntervencionesByRodalSerializer
+from intervenciones.serializers import IntervencionesByRodalSerializer, getSobrevivenciaByRodalSerializer, \
+      getSobrevivenciaWithGisDetailsByRodalSerializer, getPodaByRodalSerializer, getPodaWithGisDetailsByRodalSerializer, \
+      getRaleoByRodalSerializer, getRaleoWithGisDetailsByRodalSerializer, getTalarazByRodalSerializer, \
+      getTalarazaWithGisDetailsByRodalSerializer
 
 from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
@@ -124,7 +137,7 @@ def getEmpresas(request):
 
 
 
-csrf_exempt
+@csrf_exempt
 def getEmpresaById(request, empresa_id):
 
     if request.method == 'GET':
@@ -134,8 +147,29 @@ def getEmpresaById(request, empresa_id):
 
     return JsonResponse(False, safe=False)
 
-        
 
+@csrf_exempt
+def getResumenEmpresasById(request, empresa_id):
+     
+    if request.method == 'GET':
+        cantidad = len(Rodales.objects.filter(empresa = empresa_id))
+
+        super_rod_state = get_area_rodal_state_gis_by_empresa(empresa_id)
+
+        sup_plan = getSuperficiePlantacionForestalByEmpresa(empresa_id)
+
+        result = []
+        result.append({
+            'cantidad' : cantidad,
+            'superficie' : super_rod_state,
+            'superficie_plantacion' : sup_plan['suma_superficie']
+        })
+
+
+
+        return JsonResponse(result, safe=False)
+    
+    return JsonResponse(False, safe=False)
 
 @csrf_exempt
 def getSuperficieUsoRodalesByEmpresa(request, empresa_id):
@@ -230,6 +264,17 @@ def getRodalesById(request, idrodal):
         return JsonResponse(rodal, safe=False)
     
     return JsonResponse(False, safe=False)
+
+@csrf_exempt
+def getRodalesByIdSap(request, idrodal):
+     
+    if request.method == 'GET':
+
+        print(idrodal)
+        rodal =  getRodalesByIdSapSerializer(idrodal)
+        return JsonResponse(rodal, safe=False)
+    
+    return JsonResponse(False, safe=False)
     
 
 @csrf_exempt
@@ -237,7 +282,7 @@ def getRodalgisById(request, idrodal):
      
     if request.method == 'GET':
 
-        rodal =  get_rodalesgis_by_id(idrodal)
+        rodal =  getRodalResumenGis(idrodal)
         return JsonResponse(rodal, safe=False)
     
     return JsonResponse(False, safe=False)
@@ -266,6 +311,27 @@ def getPlanificacionIntervencionesByRodal(request, idrodal):
 
     return JsonResponse(False, safe=False)
 
+
+@csrf_exempt
+def getPlanificacionIntervenciones(request):
+     
+    if request.method == 'GET':
+        
+        plan_ = getPlanificacionRodales()
+        return JsonResponse(plan_, safe=False)
+    
+    return JsonResponse(False, safe=False)
+
+
+@csrf_exempt
+def getPlanificacionDetailsByYearsAndTipo(request):
+    #traigo la superficie de planificacion organizada por a;o y tipo de intervencion
+    if request.method == 'GET':
+        result = getPlanificacionDetailsWithYearsAndTipoSerializer('Forestal')
+        return JsonResponse(result, safe=False)
+
+    return JsonResponse(False, safe=False)
+
 @csrf_exempt
 def getReferenciasPlanificacion(request):
 
@@ -275,3 +341,171 @@ def getReferenciasPlanificacion(request):
         return JsonResponse(plan_, safe=False)
 
     return JsonResponse(False, safe=False)
+
+@csrf_exempt
+def getSagpyasWithDetails(request):
+     
+    if request.method == 'GET':
+
+        data_sagpya = getSagpyasWithDetailsSerializer()
+
+
+        return JsonResponse(data_sagpya, safe=False)
+
+    return JsonResponse(False, safe=False)
+
+@csrf_exempt
+def getRodalesGisBySagpyas(request, idsagpya):
+    
+    
+    if request.method == 'GET':
+        rodales_gis = getRodalesGisBySagpyaWithDetailsSerializer(idsagpya)
+
+  
+        return JsonResponse(rodales_gis, safe=False)
+    
+    return JsonResponse(False, safe=False)
+
+
+@csrf_exempt
+def getFilesDetailsBySagpya(request, idsagpya):
+    
+    if request.method == 'GET':
+        sagpyas_files = getFilesDetailsBySagpyaSerializer(idsagpya)
+        
+        return JsonResponse(sagpyas_files, safe=False)
+    
+    return JsonResponse(False, safe=False)
+
+@csrf_exempt
+def downloadFileSagpya(request, idfile):
+    
+    try:
+       
+        sagpyas_file = SagpyasFiles.objects.get(pk = idfile)
+        #print(sagpyas_file.file)
+
+        file = os.path.join(settings.MEDIA_ROOT, str(sagpyas_file.file))
+        fileOpen = open(file, 'rb')
+
+        return FileResponse(fileOpen)
+     
+     
+    except Exception as e:
+        return JsonResponse(False, safe=False)
+    
+
+@csrf_exempt
+def getRodalesBySagpya(request, idsagpya):
+
+    try:
+        if request.method == 'GET':
+            rodales = getRodalesBySagpyasSerializer(idsagpya)
+
+            return JsonResponse(rodales, safe=False)
+    except Exception as e:
+        return JsonResponse(False, safe=False)
+    
+
+#metodos asociados a las intervenciones
+    
+@csrf_exempt
+def getSobrevivenciaIntervencionByRodal(request, idrodal):
+    
+    try:
+        if request.method == 'GET':
+
+            sobre = getSobrevivenciaByRodalSerializer(idrodal=idrodal)
+            return JsonResponse(sobre, safe=False)
+
+    except Exception as e:
+        return JsonResponse(False, safe=False)
+
+
+@csrf_exempt
+def getSobrevivenciaIntervencionGisByRodal(request, idrodal):
+
+    try:
+        if request.method == 'GET':
+            sobre_gis = getSobrevivenciaWithGisDetailsByRodalSerializer(idrodal)
+            return JsonResponse(sobre_gis, safe=False)
+
+    except Exception as e:
+        return JsonResponse(False, safe=False)
+    
+
+@csrf_exempt
+def getPodaIntervencionByRodal(request, idrodal):
+    
+    try:
+        if request.method == 'GET':
+
+            sobre = getPodaByRodalSerializer(idrodal=idrodal)
+            return JsonResponse(sobre, safe=False)
+
+    except Exception as e:
+        return JsonResponse(False, safe=False)
+    
+
+@csrf_exempt
+def getPodaIntervencionGisByRodal(request, idrodal):
+
+    try:
+        if request.method == 'GET':
+            poda_gis = getPodaWithGisDetailsByRodalSerializer(idrodal)
+            return JsonResponse(poda_gis, safe=False)
+
+    except Exception as e:
+        return JsonResponse(False, safe=False)
+    
+
+
+@csrf_exempt
+def getRaleoIntervencionByRodal(request, idrodal):
+    
+    try:
+        if request.method == 'GET':
+
+            sobre = getRaleoByRodalSerializer(idrodal=idrodal)
+            return JsonResponse(sobre, safe=False)
+
+    except Exception as e:
+        return JsonResponse(False, safe=False)
+    
+
+@csrf_exempt
+def getRaleoIntervencionGisByRodal(request, idrodal):
+
+    try:
+        if request.method == 'GET':
+            raleo_gis = getRaleoWithGisDetailsByRodalSerializer(idrodal)
+            return JsonResponse(raleo_gis, safe=False)
+
+    except Exception as e:
+        return JsonResponse(False, safe=False)
+    
+
+
+@csrf_exempt
+def getTalarazaIntervencionByRodal(request, idrodal):
+    
+    try:
+        if request.method == 'GET':
+
+            sobre = getTalarazByRodalSerializer(idrodal=idrodal)
+            return JsonResponse(sobre, safe=False)
+
+    except Exception as e:
+        return JsonResponse(False, safe=False)
+    
+
+@csrf_exempt
+def getTalarazaIntervencionGisByRodal(request, idrodal):
+
+    try:
+        if request.method == 'GET':
+            talaraza_gis = getTalarazaWithGisDetailsByRodalSerializer(idrodal)
+            return JsonResponse(talaraza_gis, safe=False)
+
+    except Exception as e:
+        return JsonResponse(False, safe=False)

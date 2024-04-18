@@ -7,6 +7,7 @@ from gis_pindo.models import PodaIntervenciongis, SobrevivenciaIntervenciongis, 
 from rodales_gis.models import Rodalesgis
 from configuration.serializers import CapasBasesSerializer
 from configuration.models import IntervencionesTypes
+from planificacion.models import PlanificacionIntervenciones
 
 from django.contrib import messages
 from django.http import JsonResponse, Http404, HttpResponseRedirect
@@ -14,6 +15,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 from django.views.decorators.csrf import csrf_exempt
+
 
 from django.db import transaction
 
@@ -23,7 +25,7 @@ import json
 # Create your views here.
 @login_required
 def indexIntervencion(request, idrodal):
-    intervenciones = Intervenciones.objects.all()
+    intervenciones = Intervenciones.objects.select_related('rodales').filter(rodales__pk = idrodal)
 
     context = {'intervenciones' : intervenciones, 
                'category' : 'Intervenciones',
@@ -67,8 +69,12 @@ def addIntervencionPoda(request, idrodal):
 
         inter_types = IntervencionesTypes.objects.values_list("intervencionestypes_id", "name")
         context.update({'inter_types' : inter_types})
+
+        #cargo las planificaciones segun los planificados en el rodal
+        planific_inter = PlanificacionIntervenciones.objects.filter(rodales = idrodal)
+        print(planific_inter)
         
-        print(inter_types)
+      
 
         if request.method == 'POST':
             fecha = request.POST.get('fecha')
@@ -306,6 +312,10 @@ def addIntervencionSobrevivencia(request, idrodal):
         emsefors = Emsefor.objects.values_list("emsefor_id", "name")
         context.update({'emsefors' : emsefors})
 
+        #cargo las planificaciones segun los planificados en el rodal
+        planific_inter = PlanificacionIntervenciones.objects.filter(rodales = idrodal).values_list('planificacionintervencion_id', 'title')
+        context.update({'planificacion_inter' : planific_inter})
+
         if request.method == 'POST':
             type_intervencion = INTERVENCIONES_DICT['Sobrevivencia']
             fecha = request.POST.get('fecha')
@@ -321,16 +331,17 @@ def addIntervencionSobrevivencia(request, idrodal):
             name = request.POST.get('name')
 
             emsefor = request.POST.get('select-emsefor')
-
+            planif = request.POST.get('select-planificacion')
             #traigo las entidades
             rodal_ent = Rodales.objects.get(pk = idrodal)
             user_entity = Users.objects.get(pk=request.user.pk)
             emsefor_ent = Emsefor.objects.get(pk = emsefor)
+            planif_ent = PlanificacionIntervenciones.objects.get(pk=planif)
 
             try:
                 with transaction.atomic():
                     intervencion = Intervenciones.objects.create(rodales=rodal_ent, fecha=fecha, type=type_intervencion, superficie=superficie,
-                                                                 users=user_entity, emsefors=emsefor_ent,name=name)
+                                                                 users=user_entity, emsefors=emsefor_ent,name=name, planificacion_inter=planif_ent)
                     
                     sobrevivencia_res = SobrevivenciaIntervencion.objects.create(intervenciones=intervencion, parcela_size = parcela_size, parcela_relevadas = parcela_relevadas,
                                                                                  plantas_vivas = plantas_vivas, plantas_muertas = plantas_muertas, 

@@ -113,6 +113,68 @@ def addRodal(request):
     
         return render(request, 'rodales/add.html', context)
     
+
+
+@login_required
+def addRodalNoSap(request):
+    context = {
+            'category' : 'Rodales',
+            'action' : 'Crea un nuevo Rodal'}
+    
+
+    usos_rodales = Usosrodales.objects.values_list("usosrodales_id", "name")
+    context.update({'usos_rodales' : usos_rodales})
+
+    #traigo las empresas
+    empresas = Empresas.objects.values_list("empresas_id", "name")
+    context.update({'empresas' : empresas})
+
+
+
+    if request.method == 'POST':
+        try:
+        
+            #cod_sap = request.POST.get('cod_sap')
+            campo = request.POST.get('campo')
+            certificado = request.POST.get('is_certificado')
+            uso = request.POST.get('select-uso')
+            empresa = request.POST.get('select-empresa')
+            name = request.POST.get('name')
+           
+            is_certificado = True if certificado == 'SI' else False
+       
+            user_entity = Users.objects.get(pk=request.user.pk)
+
+            #creo el objeto
+            uso_rodal = Usosrodales.objects.get(pk=uso)
+            empresa_ent = Empresas.objects.get(pk=empresa)
+
+            cod_sap = None
+
+
+            rodal = Rodales.objects.create(name=name, campo=campo, is_certificado=is_certificado, 
+                                           usos_rodales=uso_rodal, user=user_entity, empresa=empresa_ent, is_sap = False)
+            
+        
+
+            messages.success(request, "El Rodal se ha creado con éxito!.")
+            return redirect('rodales-index')
+    
+        except IntegrityError as e:
+            #messages.error(request, str(e))
+            messages.error(request, str('Ya existe un Rodal con el Código SAP sugerido!'))
+            context.update({'campo' : campo,
+                            'is_certificado' : certificado})
+        
+            return render(request, 'rodales/add_no_sap.html', context)
+        except Exception as e:
+            messages.error(request, str(e))
+            return render(request, 'rodales/add_no_sap.html', context)
+
+    else:
+    
+        return render(request, 'rodales/add_no_sap.html', context)
+
 @login_required
 def editRodal(request, id):
 

@@ -1,6 +1,4 @@
 from pindosystem.apps.api.utility import getPkFromData
-from django.db import connection
-import pprint
 from plantaciones.models import Plantaciones
 from gis_pindo.models import Plantacionesgis
 from rodales.models import Rodales
@@ -18,8 +16,6 @@ def PlantacionesByRodalSerializer(rodal):
   
     plantacion = Plantaciones.objects.filter(rodales=rodal).first()
   
-
-
     data_plantacion = {
         'plantaciones_id' : plantacion.pk,
         'fecha' : plantacion.fecha,
@@ -56,11 +52,6 @@ def getSuperficiePlantacionByEmpresa(id_empresa):
     #traigo solo los ids
     rodales_ids = getPkFromData(rodales)
 
-    
-    """plantaciones = Plantaciones.objects.select_related('rodales', 'rodales__usos_rodales') \
-    .filter(rodales__in = rodales_ids).annotate(suma_superficie = Sum('superficie'), uso = F('rodales__usos_rodales__name')) \
-    .values('uso', 'suma_superficie')
-    print(plantaciones)"""
 
     plantaciones = Plantaciones.objects.select_related('rodales', 'rodales__usos_rodales') \
     .filter(rodales__in = rodales_ids) \
@@ -70,6 +61,21 @@ def getSuperficiePlantacionByEmpresa(id_empresa):
 
     return list(plantaciones)
 
+def getSuperficiePlantacionForestalByEmpresa(id_empresa):
+    
+    #filtro los rodales por empresas
+    rodales = Rodales.objects.filter(empresa = id_empresa)
+
+    #traigo solo los ids
+    rodales_ids = getPkFromData(rodales)
+
+
+    plantaciones = Plantaciones.objects.select_related('rodales', 'rodales__usos_rodales') \
+    .filter(rodales__in = rodales_ids, rodales__usos_rodales__name__icontains = 'Forestal') \
+    .aggregate(suma_superficie = Sum('superficie'))
+   
+
+    return plantaciones
 
 def getSuperficiePlantacionYearsByEmpresa(id_empresa):
 
@@ -111,6 +117,14 @@ def getSagpyasByEmpresaSerializer(idempresa):
 
         
 
+def getSuperficiePlantacionByRodal(idrodal):
+
+    plantacion = Plantaciones.objects.select_related('rodales') \
+     .filter(rodales = idrodal) \
+     .values('pk') \
+     .annotate(suma = Sum('superficie'))
+    
+    return list(plantacion)
 
     
    

@@ -13,6 +13,8 @@ class Rodalesgis(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
+    #agregar relaciones a castastro ID A LA OBJETO DEL CATASTRO
+
     #establezco la relacion con el rodal
     rodales = models.ForeignKey(Rodales, related_name='rodales_rodales_gis', blank=True, null=True, on_delete=models.SET_NULL)
 

@@ -30,6 +30,7 @@ class PodaIntervenciongis(models.Model):
     user = models.ForeignKey(Users, related_name='user_created_poda_intervencion_gis', blank=False, null=True, on_delete=models.SET_NULL)
     geom = models.MultiPolygonField(srid=5349, blank=True, null=True)
     geom_4326 = models.MultiPolygonField(blank=True, null=True)
+    name = models.CharField('Nombre', unique=False, max_length=100, null=True)
 
 
 class SobrevivenciaIntervenciongis(models.Model):
@@ -40,7 +41,7 @@ class SobrevivenciaIntervenciongis(models.Model):
     user = models.ForeignKey(Users, related_name='user_created_sobrevivencia_intervencion_gis', blank=False, null=True, on_delete=models.SET_NULL)
     geom = models.MultiPolygonField(srid=5349, blank=True, null=True)
     geom_4326 = models.MultiPolygonField(blank=True, null=True)
-    name = models.CharField('Nombre de Parcela', unique=False, max_length=100, null=True)
+    name = models.CharField('Nombre', unique=False, max_length=100, null=True)
 
 
 class RaleoIntervenciongis(models.Model):
@@ -52,6 +53,7 @@ class RaleoIntervenciongis(models.Model):
     user = models.ForeignKey(Users, related_name='user_created_raleo_intervencion_gis', blank=False, null=True, on_delete=models.SET_NULL)
     geom = models.MultiPolygonField(srid=5349, blank=True, null=True)
     geom_4326 = models.MultiPolygonField(blank=True, null=True)
+    name = models.CharField('Nombre', unique=False, max_length=100, null=True)
 
 
 class TalarazaIntervenciongis(models.Model):
@@ -62,6 +64,7 @@ class TalarazaIntervenciongis(models.Model):
     user = models.ForeignKey(Users, related_name='user_created_talaraza_intervencion_gis', blank=False, null=True, on_delete=models.SET_NULL)
     geom = models.MultiPolygonField(srid=5349, blank=True, null=True)
     geom_4326 = models.MultiPolygonField(blank=True, null=True)
+    name = models.CharField('Nombre', unique=False, max_length=100, null=True)
 
 
    

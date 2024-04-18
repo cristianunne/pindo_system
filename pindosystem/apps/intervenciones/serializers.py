@@ -2,7 +2,12 @@
 from intervenciones.models import Intervenciones, PodaIntervencion, RaleoIntervencion, TalarazaIntervencion, SobrevivenciaIntervencion
 from gis_pindo.models import PodaIntervenciongis, SobrevivenciaIntervenciongis, RaleoIntervenciongis, TalarazaIntervenciongis
 
+from intervenciones.utility import getSobrevivenciaByRodal, getSobrevivenciaGis, getPodaByRodal, getPodaGis, getRaleoByRodal, getRaleoGis, \
+getTalarazaByRodal, getTalarazaGis
+
 from django.core.serializers import serialize
+
+from rodales_gis.utility import get_rodal_gis_state, get_extent_rodalstate_gis
 
 
 def IntervencionesByRodalSerializer(idrodal):
@@ -75,7 +80,6 @@ def IntervencionesByRodalSerializer(idrodal):
 
             data_final.append(data)
         
-        print(data_final)
         return data_final 
 
 
@@ -131,5 +135,179 @@ def __get_talaraza_intervencion(intervencion):
     except TalarazaIntervencion.DoesNotExist:
         return False
     
+    except Exception:
+        return False
+    
+
+
+def getSobrevivenciaByRodalSerializer(idrodal):
+    
+    sobrevivencia = getSobrevivenciaByRodal(idrodal)
+
+    return list(sobrevivencia)
+
+
+def getSobrevivenciaWithGisDetailsByRodalSerializer(idrodal):
+    
+    try:
+
+    
+        #traigo los ids de las intervenciones del rodal
+        ids_intervencion = Intervenciones.objects.filter(rodales__pk = idrodal)
+
+        ids_inter = []
+
+        for ids in ids_intervencion:
+            ids_inter.append(ids.pk)
+
+        sobrevivencia_gis = getSobrevivenciaGis(ids_inter)
+
+        extent = get_extent_rodalstate_gis(idrodal)
+
+        #traigo los rodales
+
+        #aca devuelvo toda la informacion necesaria
+        result = []
+
+        result.append({'sobrevivencia_gis': sobrevivencia_gis, 
+                       'config': extent,
+                       'rodal' : get_rodal_gis_state(idrodal)
+                       })
+        
+        
+        return result
+
+
+
+    except Intervenciones.DoesNotExist:
+        return False
+    except Exception:
+        return False
+    
+
+def getPodaByRodalSerializer(idrodal):
+    
+    poda = getPodaByRodal(idrodal)
+
+    return list(poda)
+
+
+def getPodaWithGisDetailsByRodalSerializer(idrodal):
+    
+    try:  
+
+        #traigo los ids de las intervenciones del rodal
+        ids_intervencion = Intervenciones.objects.filter(rodales__pk = idrodal)
+
+        ids_inter = []
+
+        for ids in ids_intervencion:
+            ids_inter.append(ids.pk)
+
+        poda_gis = getPodaGis(ids_inter)
+
+        extent = get_extent_rodalstate_gis(idrodal)
+
+        #traigo los rodales
+
+        #aca devuelvo toda la informacion necesaria
+        result = []
+
+        result.append({'poda_gis': poda_gis, 
+                       'config': extent,
+                       'rodal' : get_rodal_gis_state(idrodal)
+                       })
+        
+        
+        return result
+
+    except Intervenciones.DoesNotExist:
+        return False
+    except Exception:
+        return False
+    
+
+def getRaleoByRodalSerializer(idrodal):
+    
+    raleo = getRaleoByRodal(idrodal)
+
+    return list(raleo)
+
+
+def getRaleoWithGisDetailsByRodalSerializer(idrodal):
+    
+    try:  
+
+        #traigo los ids de las intervenciones del rodal
+        ids_intervencion = Intervenciones.objects.filter(rodales__pk = idrodal)
+
+        ids_inter = []
+
+        for ids in ids_intervencion:
+            ids_inter.append(ids.pk)
+
+        raleo_gis = getRaleoGis(ids_inter)
+
+        extent = get_extent_rodalstate_gis(idrodal)
+
+        #traigo los rodales
+
+        #aca devuelvo toda la informacion necesaria
+        result = []
+
+        result.append({'raleo_gis': raleo_gis, 
+                       'config': extent,
+                       'rodal' : get_rodal_gis_state(idrodal)
+                       })
+        
+        
+        return result
+
+    except Intervenciones.DoesNotExist:
+        return False
+    except Exception:
+        return False
+    
+
+
+
+def getTalarazByRodalSerializer(idrodal):
+    
+    tala = getTalarazaByRodal(idrodal)
+
+    return list(tala)
+
+
+def getTalarazaWithGisDetailsByRodalSerializer(idrodal):
+    
+    try:  
+
+        #traigo los ids de las intervenciones del rodal
+        ids_intervencion = Intervenciones.objects.filter(rodales__pk = idrodal)
+
+        ids_inter = []
+
+        for ids in ids_intervencion:
+            ids_inter.append(ids.pk)
+
+        talaraza_gis = getTalarazaGis(ids_inter)
+
+        extent = get_extent_rodalstate_gis(idrodal)
+
+        #traigo los rodales
+
+        #aca devuelvo toda la informacion necesaria
+        result = []
+
+        result.append({'talaraza_gis': talaraza_gis, 
+                       'config': extent,
+                       'rodal' : get_rodal_gis_state(idrodal)
+                       })
+        
+        
+        return result
+
+    except Intervenciones.DoesNotExist:
+        return False
     except Exception:
         return False

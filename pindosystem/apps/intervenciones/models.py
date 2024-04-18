@@ -3,6 +3,7 @@ from rodales.models import Rodales
 from login.models import Users
 from emsefor.models import Emsefor
 from configuration.models import IntervencionesTypes
+from planificacion.models import PlanificacionIntervenciones
 
 # Create your models here.
 INTERVENCIONES_CHOICES = (
@@ -25,7 +26,7 @@ class Intervenciones(models.Model):
     intervenciones_id = models.AutoField(primary_key=True)
     rodales = models.ForeignKey(Rodales, related_name='rodales_intervenciones', blank=False, null=False, on_delete=models.CASCADE)
     fecha = models.DateTimeField()
-    type = models.EmailField("Tipo de Intervencion", choices=INTERVENCIONES_CHOICES, max_length=15, blank=False)
+    type = models.CharField("Tipo de Intervencion", choices=INTERVENCIONES_CHOICES, max_length=15, blank=False)
     superficie = models.FloatField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -34,6 +35,8 @@ class Intervenciones(models.Model):
     name = models.CharField('Nombre de Intervencion', unique=False, max_length=100, null=True)
     intervenciones_types = models.ForeignKey(IntervencionesTypes, related_name='inter_type_intervencion', blank=True, null=True, on_delete=models.CASCADE)
 
+    #la asocio a Planificacion
+    planificacion_inter = models.ForeignKey(PlanificacionIntervenciones, related_name='intervencion_planificacion', blank=True, null=True, on_delete=models.SET_NULL)
 
 
 
@@ -64,6 +67,8 @@ class SobrevivenciaIntervencion(models.Model):
     damage_mecanico = models.IntegerField(blank=True, null=True)
     sobrevivencia = models.FloatField(blank=True, null=True)
     responsable = models.CharField('Responsable', unique=False, max_length=100, null=True)
+
+ 
 
 
 class RaleoIntervencion(models.Model):

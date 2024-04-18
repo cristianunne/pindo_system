@@ -67,7 +67,16 @@
 
           <div class="card">
             <div class="card-body">
-              <div class="d-flex justify-content-end mb-3">
+             
+
+              <div class="d-flex justify-content-end mb-3 gap-3">
+                <a href="{% url 'rodales-add-no-sap' %}" class="btn btn-lime" aria-label="Button">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M12 5l0 14"></path>
+                    <path d="M5 12l14 0"></path>
+                </svg> Nuevo No SAP</a>
+
                   <a href="{% url 'rodales-add' %}" class="btn btn-success" aria-label="Button">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -80,7 +89,7 @@
                   <thead>
                     <tr>
                       <th class="dt-center align-middle"></th>
-                      <th class="dt-center align-middle">Código SAP</th>
+                      <th class="dt-center align-middle">Código SAP/Nombre</th>
                       <th class="dt-center align-middle">Campo</th>
                       <th class="dt-center align-middle">¿Certificado?</th>
                       <th class="dt-center align-middle">¿Finalizado?</th>
@@ -109,7 +118,13 @@
                                   </a>
                                 </div>
                             </td>
-                            <td class="dt-center align-middle"> {{ rodal.cod_sap }}</td>
+
+                            {% if rodal.is_sap%}
+                              <td class="dt-center align-middle"> {{ rodal.cod_sap }}</td>
+                            {% else %}
+                              <td class="dt-center align-middle"> {{ rodal.name }}</td>
+                            {% endif%}
+
                             <td class="dt-center align-middle">{{ rodal.campo }}</td>
                             <td class="dt-center align-middle"> {{ rodal.is_certificado|yesno:"Si,No" }}</td>
                             <td class="dt-center align-middle"> {{ rodal.is_finish|yesno:"Si,No" }}</td>
