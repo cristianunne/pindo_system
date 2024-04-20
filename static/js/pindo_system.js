@@ -149,6 +149,13 @@ function deleteInformation(element){
     dialogDeleteConfirm(element, title, message, URLS_DELETE.SAGPYAS_RODALES_DELETE);
   }
 
+  else if(controller === 'planificacion') {
+
+    let title = '¿Desea Eliminar la Planificacion?';
+    let message = 'Si acepta se borrará toda la información de la Capa';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.PLANIFICACION_DELETE);
+  }
 
 
 

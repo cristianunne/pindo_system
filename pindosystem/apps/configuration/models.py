@@ -108,4 +108,31 @@ class TileLayerWMS(models.Model):
     min_y = models.FloatField(blank=False, null=False,  default=0)
     max_x = models.FloatField(blank=False, null=False,  default=0)
     max_y = models.FloatField(blank=False, null=False,  default=0)
+
+
+    #Clases orientadas al manejo de materiales
+class CategoriasMateriales(models.Model):
+    idcategoriamateriales = models.AutoField(primary_key=True)
+    name = models.CharField('nombre', null=False, blank=False, max_length=100, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(Users, related_name='categoriasmat_users', blank=True, null=True, on_delete=models.SET_NULL)
+
     
+class SubCategoriasMateriales(models.Model):
+    idsubcategoriamateriales = models.AutoField(primary_key=True)
+    name = models.CharField('nombre', null=False, blank=False, max_length=100, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    categorias_materiales = models.ForeignKey(CategoriasMateriales, related_name='categorias_mat_sub_cat', blank = False, null=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, related_name='subcategoriasmat_users', blank=True, null=True, on_delete=models.SET_NULL)
+
+
+class MaterialesSAP(models.Model):
+    idmaterialessap = models.AutoField(primary_key=True)
+    matnr = models.CharField('matnr', null=False, blank=True, max_length=200, unique=True)
+    maktx = models.CharField('maktx', null=False, blank=True, max_length=200, unique=False)
+    subcategorias_materiales = models.ForeignKey(SubCategoriasMateriales, related_name='subcategorias_mat_sap', blank = False, null=False, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(Users, related_name='matsap_users', blank=True, null=True, on_delete=models.SET_NULL)

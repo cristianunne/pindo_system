@@ -24,6 +24,8 @@ const URLS_DELETE = {
 
     SAGPYAS_RODALES_DELETE: '../../sagpyas-assign-delete/',
 
+    PLANIFICACION_DELETE: '../../planificacion-delete/',
+
 
 }
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from configuration.models import Usosrodales, IntervencionesTypes, InventariosTypes, MapConfigGis, CapasBases, \
-    CapasBasesDefault, CategoriasCapas, ServiciosIDEConfig, TileLayerWMS
+    CapasBasesDefault, CategoriasCapas, ServiciosIDEConfig, TileLayerWMS, CategoriasMateriales, SubCategoriasMateriales, MaterialesSAP
 from login.models import Users
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -8,11 +8,17 @@ from django.http import JsonResponse, Http404, HttpResponseRedirect
 from django.db import IntegrityError
 from django.urls import reverse
 
-from configuration.forms import CapasBasesForm, CategoriasCapasForm, ServicioIDEForm, LayersForm
+from configuration.forms import CapasBasesForm, CategoriasCapasForm, ServicioIDEForm, LayersForm, CategoriasMaterialesForm, \
+    SubCategoriasMaterialesForm, MaterialesForm
 from configuration.serializers import CapasBasesByDefaultSerializer
 import json
 
 from django.core import serializers
+
+from pindosystem.apps.general_utility import getMaterialessApiSap
+from configuration.utility import filter_materiales, get_maktx_from_datasap
+
+
 
 # Create your views here.
 @login_required
@@ -848,3 +854,214 @@ def viewLayers(request, idlayer):
             return HttpResponseRedirect(reverse("index-layers"))
     
     return render(request, 'configuration/layers/view.html', context)
+
+
+@login_required
+def indexCategoriasMateriales(request):
+    
+    context = {
+               'category' : 'Configuración de las Categorías de Materiales',
+                'action' : 'Ver Categorías de Materiales cargadas en el Sistema'}
+    
+    try:
+
+        categorias = CategoriasMateriales.objects.all()
+        context.update({'categorias' : categorias})
+
+        return render(request, 'configuration/categorias_materiales/index.html', context)
+
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index"))
+    
+@login_required
+def addCategoriaMaterial(request):
+
+    context = {
+               'category' : 'Configuración de las Categorías de Materiales',
+                'action' : 'Agregar Categorías de Materiales cargadas en el Sistema'}
+    
+    try:
+        if request.method == 'POST':
+            proc_form = CategoriasMaterialesForm(request.POST)
+          
+            if proc_form.is_valid():
+                #proceso los cambios del atributo
+                proc_form.instance.user = proc_form.cleaned_data['user'] = Users.objects.get(pk=request.user.pk)
+              
+                proc_form.save()
+                messages.success(request, "La Categoria se ha creado correctamente")
+                return redirect('index-categorias-materiales')
+            
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index-categorias-materiales"))
+    
+    return render(request, 'configuration/categorias_materiales/add.html', context)
+
+
+@login_required
+def editCategoriaMaterial(request, idcategoria):
+
+    context = {
+               'category' : 'Configuración de las Categorías de Materiales',
+                'action' : 'Editar Categorías de Materiales cargadas en el Sistema'}
+    
+    try:
+
+        categoria = CategoriasMateriales.objects.get(pk=idcategoria)
+
+        context.update({'categoria' : categoria})
+
+        if request.method == 'POST':
+            proc_form = CategoriasMaterialesForm(request.POST, instance=categoria)
+          
+            if proc_form.is_valid():
+                #proceso los cambios del atributo
+                proc_form.instance.user = proc_form.cleaned_data['user'] = Users.objects.get(pk=request.user.pk)
+              
+                proc_form.save()
+                messages.success(request, "La Categoria se ha editado correctamente")
+                return redirect('index-categorias-materiales')
+            
+    
+    except CategoriasMateriales.DoesNotExist as e:
+            messages.error(request, str('Error al traer la Categoria. Intente nuevamente!'))
+            return HttpResponseRedirect(reverse("index-categorias-materiales"))
+    
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index-categorias-materiales"))
+    
+    return render(request, 'configuration/categorias_materiales/edit.html', context)
+
+
+@login_required
+def indexSubCategoriasMateriales(request):
+    
+    context = {
+               'category' : 'Configuración de las SubCategorías de Materiales',
+                'action' : 'Ver SubCategorías de Materiales cargadas en el Sistema'}
+    
+    try:
+
+        subcategorias = SubCategoriasMateriales.objects.all()
+        context.update({'subcategorias' : subcategorias})
+
+        return render(request, 'configuration/subcategorias_materiales/index.html', context)
+
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index"))
+    
+
+@login_required
+def addSubCategoriaMaterial(request):
+
+    context = {
+               'category' : 'Configuración de las SubCategorías de Materiales',
+                'action' : 'Agregar SubCategorías de Materiales cargadas en el Sistema'}
+    
+    try:
+        
+        categorias =  CategoriasMateriales.objects.values_list('pk', 'name')
+
+        context.update({'categorias' : categorias})
+
+
+        if request.method == 'POST':
+            proc_form = SubCategoriasMaterialesForm(request.POST)
+        
+            if proc_form.is_valid():
+                #proceso los cambios del atributo
+                proc_form.instance.user = proc_form.cleaned_data['user'] = Users.objects.get(pk=request.user.pk)
+              
+                proc_form.save()
+                messages.success(request, "La SubCategoria se ha creado correctamente")
+                return redirect('index-subcategorias-materiales')
+            
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index-subcategorias-materiales"))
+    
+    return render(request, 'configuration/subcategorias_materiales/add.html', context)
+
+
+@login_required
+def indexMateriales(request):
+    
+    context = {
+               'category' : 'Configuración de Materiales',
+                'action' : 'Lista de Materiales cargadas en el Sistema'}
+    
+
+    try:
+       
+        materiales = MaterialesSAP.objects.all()
+        context.update({'materiales' : materiales})
+
+    except Exception as e:
+            messages.error(request, str(e))
+            return HttpResponseRedirect(reverse("index"))
+    
+    return render(request, 'configuration/materiales/index.html', context)
+
+@login_required
+def addMateriales(request):
+
+    context = {
+               'category' : 'Configuración de Materiales',
+                'action' : 'Agregar  Material al Sistema'}
+    
+    try:
+        data_sap = getMaterialessApiSap(request)
+
+        if(data_sap):
+            #hago un filter de los que estan y cuales no
+            mat_filter = filter_materiales(data_sap)
+            context.update({'materiales_sap' : list(mat_filter.items())})
+
+        
+        subcategoria = SubCategoriasMateriales.objects.values_list('pk', 'name')
+        context.update({'subcategorias' : subcategoria})
+        
+        if request.method == 'POST':
+
+            proc_form = MaterialesForm(request.POST)
+        
+
+            subcat = request.POST.get('subcategorias_materiales')
+            matnr = request.POST.get('matnr')
+
+            #traigo la categoria
+            maktx = get_maktx_from_datasap(data_sap, matnr)
+           
+
+            sub_cat_instance = SubCategoriasMateriales.objects.get(pk = subcat)
+
+            #controlo que no sea null
+
+            proc_form.instance.matnr = matnr
+            proc_form.instance.subcategorias_materiales  = sub_cat_instance
+
+            print(proc_form)
+
+
+            if proc_form.is_valid():
+                #proceso los cambios del atributo
+                proc_form.instance.user = proc_form.cleaned_data['user'] = Users.objects.get(pk=request.user.pk)
+                proc_form.instance.maktx = proc_form.cleaned_data['maktx'] = maktx
+              
+                proc_form.save()
+                messages.success(request, "El Material se ha creado correctamente")
+                return redirect('index-materiales')
+            
+            
+            
+
+    
+    except CategoriasMateriales.DoesNotExist as e:
+            messages.error(request, str('Error al traer la Categoria. Intente nuevamente!'))
+            return HttpResponseRedirect(reverse("index-categorias-materiales"))
+    
+    return render(request, 'configuration/materiales/add.html', context)

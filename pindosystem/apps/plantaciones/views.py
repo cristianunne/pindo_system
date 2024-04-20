@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 from django.views.decorators.csrf import csrf_exempt
 import json
+from decimal import Decimal
 
 
 # Create your views here.
@@ -66,10 +67,10 @@ def addPlantacionByRodal(request, idrodal):
             rodal = request.POST.get('select-rodal')
            
             fecha = request.POST.get('fecha')
-            densidad = request.POST.get('densidad')
-            superficie = request.POST.get('superficie')
-            dist_lineas = request.POST.get('dist_lineas')
-            dist_plantas = request.POST.get('dist_plantas')
+            densidad = Decimal(request.POST.get('densidad'))
+            superficie = Decimal(request.POST.get('superficie'))
+            dist_lineas = Decimal(request.POST.get('dist_lineas'))
+            dist_plantas = Decimal(request.POST.get('dist_plantas'))
             arboles_plantados = request.POST.get('arboles_plantados')
 
           
@@ -118,7 +119,7 @@ def addPlantacionByRodal(request, idrodal):
 @login_required
 def editPlantacion(request, id_plantacion):
     context = {'category' : 'Plantaciones',
-                    'action' : 'Crea una nueva Plantación'}
+                    'action' : 'Editar una Plantación'}
    
 
     try:

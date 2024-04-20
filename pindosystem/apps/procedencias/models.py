@@ -11,6 +11,7 @@ class Procedencias(models.Model):
     origen = models.CharField("Origen", unique=False, max_length=100)
     mejora = models.CharField("Mejora", unique=False, max_length=100)
     vivero = models.CharField("Vivero", unique=False, max_length=100)
+    material = models.CharField("Material", unique=False, default=None, null=True, max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     image = models.TextField()

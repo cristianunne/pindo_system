@@ -54,14 +54,14 @@ def getPlanificacionRodales():
     
     #filtrar los rodales sin planificacion
 
-    plan_inter = PlanificacionIntervenciones.objects.all()
+    plan_inter = PlanificacionIntervenciones.objects.exclude(rodales__pk = None)
 
     ids_rodales = []
 
     for plan in plan_inter:
         ids_rodales.append(plan.rodales.pk)
 
-    #tengo que filtrar los rodales fORESTAL
+    #tengo que filtrar los rodales Forestal
 
     rodal = list(Rodales.objects.select_related('usos_rodales_category') \
                  .filter(rodales_id__in = ids_rodales, usos_rodales__name__contains = 'Forestal').values())
@@ -105,6 +105,7 @@ def getPlanificacionDetailsWithYearsAndTipoSerializer(type_uso):
     .annotate(year = F('date_start__year'), suma = Sum('rodales__rodales_rodalesstate_gis__superficie')) \
     .exclude(suma__isnull=True) \
     .values('intervenciones_types__pk', 'intervenciones_types__name', 'year' ,'suma'))
+
 
     #traigo los years
     min_year = list(PlanificacionIntervenciones.objects.filter().aggregate(min_year = Min('date_start__year')).values())[0]

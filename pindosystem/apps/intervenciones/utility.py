@@ -161,6 +161,8 @@ def getTalarazaByRodal(idrodal):
 
         intervenciones = Intervenciones.objects.select_related('talaraza_intervencion') \
             .filter(rodales = idrodal, type = 'Talaraza').values(*names)
+        
+        print(intervenciones)
 
 
         return intervenciones
@@ -173,6 +175,12 @@ def getTalarazaByRodal(idrodal):
 
 def getTalarazaGis(idintervencion):
 
-    inter = serialize('geojson', TalarazaIntervenciongis.objects.filter(intervencion_gis__pk__in = idintervencion), geometry_field='geom_4326')
+    inte_leng = len(TalarazaIntervenciongis.objects.filter(intervencion_gis__pk__in = idintervencion))
+    
+    inter = False
+    if inte_leng > 0:
 
+        inter = serialize('geojson', TalarazaIntervenciongis.objects.filter(intervencion_gis__pk__in = idintervencion), geometry_field='geom_4326')
+        print(inter)
+    
     return inter

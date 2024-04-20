@@ -21,7 +21,7 @@ def get_rodal_gis(idrodal):
 
 def get_rodales_gis(ids_rodal):
 
-    rodal = serialize('geojson', Rodalesgis.objects.filter(rodales_id__in = ids_rodal), geometry_field='geom_4326')
+    rodal = serialize('geojson', Rodalesgis.objects.filter(rodales_id = ids_rodal), geometry_field='geom_4326')
 
     return rodal
 
@@ -35,7 +35,7 @@ def get_rodal_gis_state(idrodal):
 def get_extent_rodalgis(idrodal):
     
     try:
-        extent = Rodalesgis.objects.filter(rodales_id=idrodal).aggregate(Extent('geom_4326'))
+        extent = Rodalesgis.objects.filter(rodales=idrodal).aggregate(Extent('geom_4326'))
         ext_list = list(extent['geom_4326__extent'])
 
         ext_new = [
@@ -82,14 +82,20 @@ def get_extent_rodalesgis_by_sagpyas(idsagpya):
 def get_area_rodal_gis(idrodal):
      #traigo los datos resumen de superficie
     area = list(Rodalesgis.objects.filter(rodales_id=idrodal).annotate(area_ = Area( Transform('geom_4326', 22177))).values('area_'))[0]
-   
+    
     return area
 
 def get_area_rodal_state_gis(idrodal):
      #traigo los datos resumen de superficie
-    area = list(RodalesState.objects.filter(rodales_id=idrodal).annotate(area_ = Area( Transform('geom_4326', 22177))).values('area_'))[0]
+    
+    try:
+
+        area = list(RodalesState.objects.filter(rodales_id=idrodal).annotate(area_ = Area( Transform('geom_4326', 22177))).values('area_'))[0]
+        return area
+    except Exception as e:
+        return False
    
-    return area
+    
 
 
 def get_cantidad_parcelas_by_rodal(idrodal):

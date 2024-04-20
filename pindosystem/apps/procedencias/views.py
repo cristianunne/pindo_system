@@ -52,6 +52,11 @@ def editProcedencia(request, id):
                 messages.success(request, "La Procedencia se ha editado con éxito")
 
                 return redirect('procedencias-index')
+            else:
+                messages.error(request, "Error")
+
+                return render(request, 'procedencias/edit.html', context)
+
         else:
             return render(request, 'procedencias/edit.html', context)
     

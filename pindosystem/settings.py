@@ -27,7 +27,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -75,9 +75,16 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:5173',
-)
+ALLOWED_HOSTS = ["localhost","192.168.36.220", "192.168.36.65", "0.0.0.0"]
+
+"""CORS_ORIGIN_WHITELIST = (
+    'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://192.168.36.220:5175'
+)"""
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+
 
 ROOT_URLCONF = 'pindosystem.urls'
 

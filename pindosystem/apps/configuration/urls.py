@@ -44,5 +44,11 @@ urlpatterns = [
     path('configuration/layers/delete-layers/<int:id>/', views.deleteLayers, name='delete-layers'),
     path('configuration/layers/view-layers/<int:idlayer>/', views.viewLayers, name='view-layers'),
 
-   
+    path('configuration/materiales/index-categorias-materiales', views.indexCategoriasMateriales, name='index-categorias-materiales'),
+    path('configuration/materiales/add-categoria-material', views.addCategoriaMaterial, name='add-categoria-material'),
+    path('configuration/materiales/edit-categoria-material/<int:idcategoria>/', views.editCategoriaMaterial, name='edit-categoria-material'),
+    path('configuration/materiales/index-subcategorias-materiales', views.indexSubCategoriasMateriales, name='index-subcategorias-materiales'),
+    path('configuration/materiales/add-subcategoria-material', views.addSubCategoriaMaterial, name='add-subcategoria-material'),
+     path('configuration/materiales/index-materiales', views.indexMateriales, name='index-materiales'),
+    path('configuration/materiales/add-material', views.addMateriales, name='add-material'),
 ]

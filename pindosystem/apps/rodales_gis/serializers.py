@@ -66,7 +66,7 @@ def getRodalResumenGis(idrodal):
         'area' : area['area_'].sq_m,
         'sup_plantacion' : area_plantacion[0]['suma'],
         'cantidad_parcelas' : cantidad_parcelas,
-        'area_current' : area_state['area_'].sq_m,
+        'area_current' :  area_state['area_'].sq_m if area_state != False else 0,
         'edad_rodal' : edad_rodal,
         'fecha_plantacion' : fecha_plantacion
     }})
