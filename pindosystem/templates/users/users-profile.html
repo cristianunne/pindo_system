@@ -1,0 +1,79 @@
+<!doctype html>
+
+{% extends "../layout/base.html" %}
+
+{% load static %}
+
+
+{% block sidebar %}
+
+{% include "../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../element/pageheader.html" %}
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+          
+            {% if messages %}
+
+            {% include "../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row row-cards mb-5">
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                      <div class="card-body p-4 text-center">
+                        <img class="avatar avatar-xl mb-3 rounded" src="data:image/*; base64,{{user.image}} " class="avatar">
+                       
+                        <h3 class="m-0 mb-1"><a href="#">{{ user }}</a></h3>
+
+                        {% if user.role == 'AG' %}
+                            <div class="text-secondary">General Administrator</div>
+                        {% elif user.role == 'AA' %}
+                            <div class="text-secondary">Area Administrator</div>
+                        {% elif user.role == 'AAWP'  %}
+                            <div class="text-secondary">Area Administrator Witouth Permission</div>
+                        {% else %}
+                            <div class="text-secondary">Danta Entry</div>
+                        {% endif %}
+
+                        <div class="mt-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path><path d="M3 7l9 6l9 -6"></path></svg>
+                            {{user.email}}
+                        </div>
+            
+                  </div>
+                     
+                     
+                    </div>
+                  </div>
+
+             
+            </div>
+
+        </div>
+      </div>
+
+      
+    {% endblock main_content %}
+
+  </div>
+
+{% endblock  %}

@@ -213,7 +213,22 @@ def uploadImage(request):
 
   
          
+@login_required
+def usersProfile(request, iduser):
+    try:
+        
+        user = Users.objects.get(id =iduser)
 
+        context = {
+            'user' : user
+        }
+
+        return render(request, 'users/users-profile.html', context=context)
+
+
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('user-index')
 
 def login(request):
     

@@ -12,4 +12,5 @@ urlpatterns = [
     path('users/delete-user/<int:id>',views.delete, name='delete-user'),
     path('users/modified-image-profile/<int:id>',views.modifiedImageProfile, name='modified-image-profile'),
     path('users/upload-image', views.uploadImage, name='upload-image'),
+    path('users/users-profile/<int:iduser>', views.usersProfile, name='users-profile'),
 ]

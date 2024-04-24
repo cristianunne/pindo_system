@@ -23,7 +23,7 @@
             </div>
           </a>
           <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-            <a href="#" class="dropdown-item">Mi Perfil</a>
+            <a href="{% url 'users-profile' iduser=user.pk %}" class="dropdown-item">Mi Perfil</a>
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item">Configuraciones</a>
             <a href="{% url 'logout' %}" class="dropdown-item">Cerrar Sesión</a>
