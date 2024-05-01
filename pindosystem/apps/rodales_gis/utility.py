@@ -96,6 +96,22 @@ def get_area_rodal_state_gis(idrodal):
         return False
    
     
+def get_area_rodal_gis_by_empresa(idempresa):
+     #traigo los datos resumen de superficie
+    area = list(Rodalesgis.objects.filter(rodales__empresa_id=idempresa).annotate(area_ = Area( Transform('geom_4326', 22177))).values('area_'))[0]
+    
+    return area
+
+
+def get_area_rodal_state_gis_by_empresa(idempresa):
+     #traigo los datos resumen de superficie
+    
+    try:
+
+        area = list(RodalesState.objects.filter(rodales__empresa_id=idempresa).annotate(area_ = Area( Transform('geom_4326', 22177))).values('area_'))[0]
+        return area
+    except Exception as e:
+        return False
 
 
 def get_cantidad_parcelas_by_rodal(idrodal):

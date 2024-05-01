@@ -11,6 +11,13 @@ from django.http import JsonResponse
 
 from empresas.utility import filterEmpresas, filterEmpresasWithId
 
+from sagpyas.models import Sagpyas
+from sagpyas.utility import get_sagpyas_by_empresa
+
+from rodales_gis.utility import get_area_rodal_gis_by_empresa, get_area_rodal_state_gis_by_empresa
+
+from plantaciones.serializers import getSuperficiePlantacionForestalByEmpresa
+
 
 # Create your views here.
 
@@ -211,6 +218,62 @@ def viewEmpresa(request, id):
     context = {
                'category' : 'Empresas',
                 'action' : 'Administración de Empresas / Detalles'}
+    
+
+    try:
+        empresa = Empresas.objects.get(pk = id)
+
+        rodales = Empresas.objects.get(pk = id).empresas_rodales.filter(usos_rodales__name__icontains = 'Forestal')
+       
+        context.update({
+            'empresa_current' : empresa,
+            'rodales' : rodales
+        });
+    
+        rodales_bop = Empresas.objects.get(pk = id).empresas_rodales.filter(usos_rodales__name__icontains = 'Conservación')
+       
+        context.update({
+           
+            'rodales_bop' : rodales_bop
+        });
+    
+        #traigo el sagpya sagpyas_rodales
+
+        sagpyas = get_sagpyas_by_empresa(idempresa=id)
+
+        context.update({
+           
+            'sagpyas' : sagpyas
+        });
+        
+
+        superficie_total = round(float(get_area_rodal_gis_by_empresa(idempresa=id)['area_'].sq_m / 10000), 2)
+
+        #superficie plantada
+        sum_plantacion = getSuperficiePlantacionForestalByEmpresa(id)
+
+        superficie_actual = round(float(get_area_rodal_state_gis_by_empresa(idempresa=id) / 10000), 2)
+
+
+    
+        #traigo los resultados resumen
+        context.update({
+           
+            'total_rodales' : len(rodales),
+            'total_rodales_bop' : len(rodales_bop),
+            'superficie_total' : superficie_total,
+            'superficie_plantacion' : sum_plantacion['suma_superficie'],
+            'superficie_actual': superficie_actual
+        });
+    
+        #calculo la superficie usando rodales_gis
+
+
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('user-index')
+
+
     return render(request, 'empresas/view.html', context=context)
 
 

@@ -37,27 +37,24 @@
 
             <div class="row row-cards mb-5">
 
-              <div class="col-xxl-3 col-lg-6 col-md-7 col-sm-12">
+                <div class="col-xxl-3 col-lg-7 col-md-7 col-sm-12">
                     <div class="card bg-primary-lt">
                       <div class="card-body">
                         <div class="row align-items-center">
-                          <div class="d-flex justify-content-center col-xxl-4 col-lg-4 col-md-4 col-sm-12">
-                              <svg xmlns="http://www.w3.org/2000/svg" 
-                              class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
-                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
-                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
-                                <path d="M9 7l1 0"></path>
-                                <path d="M9 13l6 0"></path>
-                                <path d="M13 17l2 0"></path>
-                             </svg>
+                          <div class="d-flex justify-content-center col-xxl-4 col-lg-4 col-md-4 col-sm-12 align-items-start">
+                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                             class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 15m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                              <path d="M7 15l0 .01" /><path d="M19 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                              <path d="M10.5 17l6.5 0" /><path d="M20 15.2v-4.2a1 1 0 0 0 -1 -1h-6l-2 -5h-6v6.5" />
+                              <path d="M18 5h-1a1 1 0 0 0 -1 1v4" /></svg>
                             
                     
                             </div>
-                            <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
-                                <h3 class="card-title text-center">Sección de Administración de Sagpyas</h3>
-                                <p class="text-muted">En esta sección puede realizar las ediciones de la información de las Sagpyas</p>
+                            <div class="col-md-8">
+                                <h3 class="card-title">Sección de Administración de Máquinas de la Emsefor</h3>
+                                <p class="text-muted">En esta sección puede realizar las ediciones de las Máquinas propiedad de las Emsefors</p>
                              
                             </div>
                         </div>
@@ -70,35 +67,26 @@
 
           <div class="card">
             <div class="card-body">
-              <div class="d-flex justify-content-end mb-3">
-                  <a href="{% url 'sagpyas-add' %}" class="btn btn-success" aria-label="Button">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M12 5l0 14"></path>
-                    <path d="M5 12l14 0"></path>
-                 </svg> Nuevo</a>
-              </div>
+         
               <div id="" class="table-responsive">
-                <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text">
+                <table id="tabladata" class="table table-bordered table-hover dataTable">
                   <thead>
                     <tr>
-                      <th class="dt-center align-middle"></button></th>
-                      <th class="dt-center align-middle">Operaciones</button></th>
-                      <th class="dt-center align-middle">Fecha</button></th>
-                      <th class="dt-center align-middle">Superficie Aprobada</button></th>
-                      <th class="dt-center align-middle">Expediente</button></th>
-                      <th class="dt-center align-middle">Turno Mínimo</button></th>
-                      <th class="dt-center align-middle">Fecha de Registro</button></th>
-                      <th class="dt-center align-middle">Acciones</button></th>
+                      <th class="dt-center align-middle"></th>
+                      <th class="dt-center align-middle">Cantidad</th>
+                      <th class="dt-center align-middle">Nombre</th>
+                      <th class="dt-center align-middle">Marca</th>
+                      <th class="dt-center align-middle">Modelo</th>
+                      <th class="dt-center align-middle">Acciones</th>
                     </tr>
                   </thead>
                   <tbody class="table-tbody">
-                    {% for sagpya in sagpyas %}
+                    {% for maquina in maquinas %}
                         <tr>
                           
                             <td class="dt-center align-middle"> 
                               <div class="mr-3">
-                                <a href="{% url 'sagpyas-view' id=sagpya.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{sagpya.pk}}">
+                                <a href="#" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{maquina.pk}}">
                                    
                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -108,17 +96,18 @@
                                 </a>
                             </div>
                             </td>
-                            <td class="dt-center align-middle"> {{ sagpya.operaciones }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.fecha }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.sup_aprobada }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.expediente }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.turno_minimo }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.created }}</td>
+                            <td class="dt-center align-middle"> {{ maquina.cantidad }}</td>
+                            <td class="dt-center align-middle"> {{ maquina.nombre }}</td>
+                            <td class="dt-center align-middle">{{ maquina.marca }}</td>
+                            <td class="dt-center align-middle">{{ maquina.modelo }}</td>
+                           
+
+            
                             <td>
                                 <div class="d-flex justify-content-center">
                   
                                     <div class="mr-3">
-                                        <a href="{% url 'sagpyas-edit' id=sagpya.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{sagpya.pk}}">
+                                        <a href="{% url 'emsefor-edit-cantidad-maquinas' idmaquina_ems=maquina.id %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{maquina.id}}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                 <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
@@ -129,7 +118,7 @@
                                     </div>
 
                                     <div>
-                                        <a href="#" onclick="deleteInformation(this)" attr="{{sagpya.pk}}" class="btn btn-youtube btn-icon" controller="sagpyas">
+                                        <a href="#" onclick="deleteInformation(this)" attr="{{maquina.id}}" class="btn btn-youtube btn-icon" controller="maquinas_emsefor">
                                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path d="M4 7l16 0"></path>
@@ -152,6 +141,17 @@
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="form-footer">
+                    <a href="{% url 'emsefor-view' id=emsefor.pk %}" class="btn btn-dark" aria-label="Button">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-left-filled" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M9.586 4l-6.586 6.586a2 2 0 0 0 0 2.828l6.586 6.586a2 2 0 0 0 2.18 .434l.145 -.068a2 2 0 0 0 1.089 -1.78v-2.586h7a2 2 0 0 0 2 -2v-4l-.005 -.15a2 2 0 0 0 -1.995 -1.85l-7 -.001v-2.585a2 2 0 0 0 -3.414 -1.414z" stroke-width="0" fill="currentColor" />
+                      </svg> Volver</a>
+                   
+                  </div>
             </div>
           </div>
         </div>

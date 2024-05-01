@@ -2,10 +2,10 @@
 
 {% block header %}
 
-    <header class="navbar navbar-expand-md d-print-none"  data-bs-theme="dark">
+    <header class="navbar navbar-expand-md d-print-none d-none d-xxl-block d-lg-block"  data-bs-theme="dark">
     <div class="container-xl" style="justify-content: end;">
 
-      <div class="navbar-nav flex-row order-md-last">
+      <div class="navbar-nav flex-row order-md-last d-lg-flex">
 
         {% if user.pk is null %}
           <a href="{% url 'login' %}" class="dropdown-item justify-content-around">Iniciar Sesión</a>

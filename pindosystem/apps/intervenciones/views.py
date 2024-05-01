@@ -97,10 +97,13 @@ def addIntervencionPoda(request, idrodal):
             emsefor_ent = Emsefor.objects.get(pk = emsefor)
             user_entity = Users.objects.get(pk=request.user.pk)
 
+            #traigo la entidad poda
+            poda_ent = IntervencionesTypes.objects.get(name = 'Poda')
+
             try:
                 with transaction.atomic():
                     intervencion = Intervenciones.objects.create(rodales=rodal_ent, fecha=fecha, type=type_intervencion, superficie=superficie,
-                                                                 users=user_entity, emsefors=emsefor_ent, name=name)
+                                                                 users=user_entity, emsefors=emsefor_ent, name=name, intervenciones_types=poda_ent)
                     
                     poda_intervencion = PodaIntervencion.objects.create(intervenciones=intervencion, arb_podados=arb_podados, arb_no_podados=arb_no_podados, 
                                                                         alt_deseada=alt_deseada, alt_poda=alt_poda, dap=dap, altura=altura, dmsm=dmsm, 

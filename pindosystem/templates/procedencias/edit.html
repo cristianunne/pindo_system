@@ -20,12 +20,14 @@
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-cards mb-5">
-            <div class="col-md-3 col-lg-3">
+            <div class="col-xxl-3 col-lg-6 col-md-6 col-sm-12 mb-4">
               <div class="card bg-primary-lt">
                 <div class="card-body">
                   <div class="row align-items-center">
-                    <div class="col-md-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <div class="d-flex justify-content-center col-xxl-4 col-lg-4 col-md-4 col-sm-12 align-items-start">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+                      class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                      stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M2 9a10 10 0 1 0 20 0"></path>
                         <path d="M12 19a10 10 0 0 1 10 -10"></path>
@@ -35,14 +37,14 @@
                      </svg>
                     </div>
                     <div class="col-md-8">
-                      <h3 class="card-title">Sección de Administración de Procedencias</h3>
+                      <h3 class="card-title text-center">Sección de Administración de Procedencias</h3>
                       <p class="text-muted">En esta sección puede Editar una Procedencia.</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-9 col-lg-9">
+            <div class="col-xxl-9 col-lg-10 col-md-10 col-sm-12 m-auto">
               <div class="card">
                 <div class="card-status-top bg-blue"></div>
                 <div class="card-header">
@@ -50,7 +52,7 @@
                 </div>
                 <div class="card-body">
                   <div class="row justify-content-center flex-column align-items-center">
-                    <div class="col-md-6 col-lg-6 col-sm-6">
+                    <div class="col-xxl-7 col-md-11 col-lg-11 col-sm-12">
                       <form action="{% url 'procedencias-edit' id=procedencias_data.pk %}" method="POST">
                         {% csrf_token %}
                         <div class="mb-4">

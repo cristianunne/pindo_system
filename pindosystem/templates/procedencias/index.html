@@ -37,12 +37,14 @@
 
             <div class="row row-cards mb-5">
 
-                <div class="col-md-7 col-lg-3">
+                <div class="col-xxl-3 col-md-7 col-lg-7 col-sm-12">
                     <div class="card bg-primary-lt">
                       <div class="card-body">
                         <div class="row align-items-center">
-                            <div class="col-md-4 col-sm-2">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <div class="d-flex justify-content-center col-xxl-4 col-lg-4 col-md-4 col-sm-12 align-items-start">
+                              <svg xmlns="http://www.w3.org/2000/svg" 
+                              class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M2 9a10 10 0 1 0 20 0"></path>
                                 <path d="M12 19a10 10 0 0 1 10 -10"></path>
@@ -54,7 +56,7 @@
                     
                             </div>
                             <div class="col-md-8">
-                                <h3 class="card-title">Sección de Administración de Procedencias</h3>
+                                <h3 class="card-title text-center">Sección de Administración de Procedencias</h3>
                                 <p class="text-muted">En esta sección puede realizar las ediciones de la información de las Procedencias</p>
                              
                             </div>
@@ -77,9 +79,10 @@
                  </svg> Nuevo</a>
               </div>
               <div id="" class="table-responsive">
-                <table id="tabladata" class="table table-bordered table-hover dataTable">
+                <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text">
                   <thead>
                     <tr>
+                      <th class="dt-center align-middle"></th>
                       <th class="dt-center align-middle"></th>
                       <th class="dt-center align-middle">Nombres</th>
                       <th class="dt-center align-middle">Especie</th>
@@ -95,6 +98,17 @@
                     {% for procedencia in procedencias %}
                         <tr>
                           <td class="dt-center align-middle"> 
+                            <div class="mr-3">
+                              <a href="{% url 'procedencias-view' idprocedencia=procedencia.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                               </svg>
+                              </a>
+                            </div>
+                        </td>
+                          <td class="dt-center align-middle"> 
                             <img src="data:image/*; base64,{{procedencia.image}} " class="avatar">
                           </td>
                             <td class="dt-center align-middle"> {{ procedencia.name }}</td>
@@ -104,7 +118,7 @@
                             <td class="dt-center align-middle">{{ procedencia.vivero }}</td>
                             <td class="dt-center align-middle">{{ procedencia.material }}</td>
                             <td class="dt-center align-middle">{{ procedencia.created }}</td>
-                            <td>
+                            <td class="dt-center align-middle">
                                 <div class="d-flex justify-content-center">
                                   <div class="mr-3">
                                     <a href="{% url 'modified-logo-procedencias' id=procedencia.pk %}" class="btn btn-lime btn-icon" aria-label="Button" attr="{{procedencia.pk}}">

@@ -30,16 +30,18 @@
 
           {% include "../element/alert-sucess.html" %}
           {% endif %}
-          <div class="row row-cards col-lg-12 col-md-12 col-sm-12 mb-5">
+          <div class="row row-cards mb-5">
 
 
-            <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-12">
+            <div class="col-xxl-3 col-lg-7 col-md-7 col-sm-12">
                 <div class="row gy-3">
                     <div class="card bg-primary-lt">
                         <div class="card-body">
                           <div class="row align-items-center">
-                            <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="col-xxl-2 col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
+                              <svg xmlns="http://www.w3.org/2000/svg" 
+                              class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                 <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
                                 <path d="M12 4v16" /><path d="M4 15h8" />
@@ -154,22 +156,23 @@
                         </div>
                     </div>
 
-                    <div class="card bg-white">
+                    <div class="card bg-white mb-2">
                         <div class="card-body">
                           <div class="row align-items-center">
                             <div>
                                 <h2 class="card-title text-center h2 text-green">Plantaciones</h2>
                               </div>
-                            <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start text-green">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 21c.5 -4.5 2.5 -8 7 -10" />
+                            <div class="col-xxl-2 col-lg-2 col-md-3 col-sm-12 d-flex align-items-start text-green justify-content-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" 
+                              class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 21c.5 -4.5 2.5 -8 7 -10" />
                                 <path d="M9 18c6.218 0 10.5 -3.288 11 -12v-2h-4.014c-9 0 -11.986 4 -12 9c0 1 0 3 2 5h3z" /></svg>
 
 
                             </div>
-                            <div class="col-lg-7 col-md-7 col-sm-7"> 
+                            <div class="col-xxl-7 col-lg-9 col-md-9 col-sm-12 d-flex justify-content-center"> 
 
-
-                                <div class="mb-2">
+                                <div class="mb-3">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/book -->
                                   
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-info-circle-filled text-green" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -180,7 +183,7 @@
         
                             </div>
 
-                            <div class="col-lg-3 col-md-3 col-sm-3">
+                            <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-12 d-flex justify-content-center">
 
                               <a href="{% url 'plantaciones-index' id=rodal.pk %}" class="btn btn-success" aria-label="Button" attr="{{rodal.pk}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -201,8 +204,12 @@
                             <div>
                                 <h2 class="card-title text-center h2 text-red">Intervenciones</h2>
                               </div>
-                            <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start text-red">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
+
+                            <div class="col-xxl-2 col-lg-2 col-md-3 col-sm-12 d-flex align-items-start text-red justify-content-center">
+                
+                              <svg xmlns="http://www.w3.org/2000/svg" 
+                              class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M3 21l18 0"></path>
                                 <path d="M9 8l1 0"></path>
@@ -214,7 +221,7 @@
                                 <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16"></path>
                               </svg>
                             </div>
-                            <div class="col-lg-7 col-md-7 col-sm-7"> 
+                             <div class="col-xxl-7 col-lg-9 col-md-9 col-sm-12 d-flex justify-content-center"> 
 
 
                                 <div class="mb-2">
@@ -240,7 +247,7 @@
         
                             </div>
 
-                            <div class="col-lg-3 col-md-3 col-sm-3">
+                            <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-12 d-flex justify-content-center">
 
                               <a href="{% url 'intervenciones-index' idrodal=rodal.pk %}" class="btn btn-danger" aria-label="Button" attr="{{rodal.pk}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -262,8 +269,10 @@
                           <div>
                               <h2 class="card-title text-center h2 text-blue">Planificación</h2>
                             </div>
-                          <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start text-blue">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
+                            <div class="col-xxl-2 col-lg-2 col-md-3 col-sm-12 d-flex align-items-start text-blue justify-content-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+                            class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
                               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                               <path d="M3 21l18 0"></path>
                               <path d="M9 8l1 0"></path>
@@ -275,7 +284,7 @@
                               <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16"></path>
                             </svg>
                           </div>
-                          <div class="col-lg-7 col-md-7 col-sm-7"> 
+                          <div class="col-xxl-7 col-lg-9 col-md-9 col-sm-12 d-flex justify-content-center"> 
 
 
                               <div class="mb-2">
@@ -301,7 +310,7 @@
       
                           </div>
 
-                          <div class="col-lg-3 col-md-3 col-sm-3">
+                          <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-12 d-flex justify-content-center">
 
                             <a href="{% url 'planificacion-inter-index' idrodal=rodal.pk %}" class="btn btn-primary" aria-label="Button" attr="{{rodal.pk}}">
                               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

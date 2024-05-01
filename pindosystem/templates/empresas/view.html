@@ -27,12 +27,13 @@
           {% endif %}
           <div class="row row-cards col-lg-12 col-md-12 col-sm-12 mb-5">
            
-            <div class="col-xxl-4 col-lg-4 col-md-4 col-sm-12">
+            <div class="col-xxl-3 col-lg-7 col-md-12 col-sm-12">
               <div class="card bg-primary-lt">
                 <div class="card-body">
                   <div class="row align-items-center">
-                    <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
+                    <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start justify-content-center">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" 
+                      class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
                       stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M3 21l18 0"></path>
@@ -47,7 +48,7 @@
                     </div>
                     <div class="col-lg-10 col-md-9 col-sm-9"> 
                       <div>
-                        <h2 class="card-title text-center h2">Empresa</h2>
+                        <h2 class="card-title text-center h2">{{empresa_current.name}}</h2>
                       </div>
                       <div class="mb-2">
                         <!-- Download SVG icon from http://tabler-icons.io/i/book -->
@@ -66,32 +67,33 @@
                             <path d="M12 12l-2 -1.12"></path>
                             <path d="M6 8.6l-2 -1.1"></path>
                          </svg>
-                       <strong>Operariones: </strong> Plantacion
+                       <strong>Dirección: </strong> {{empresa_current.address}}
                       </div>
 
                       <div class="mb-2">
                         <!-- Download SVG icon from http://tabler-icons.io/i/book -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                            <path d="M16 3v4"></path>
-                            <path d="M8 3v4"></path>
-                            <path d="M4 11h16"></path>
-                            <path d="M11 15h1"></path>
-                            <path d="M12 15v3"></path>
-                         </svg>
-                       <strong>Fecha: </strong> Plantacion
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                          <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                          <path d="M9 9l1 0"></path>
+                          <path d="M9 13l6 0"></path>
+                          <path d="M9 17l6 0"></path>
+                       </svg>
+                       <strong>Teléfono: </strong> {{ empresa_current.phone }}
                       </div>
 
                       <div class="mb-2">
                         <!-- Download SVG icon from http://tabler-icons.io/i/book -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13"></path>
-                            <path d="M9 4v13"></path>
-                            <path d="M15 7v13"></path>
-                         </svg>
-                       <strong>Superficie aprobada: </strong> Plantacion
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                          <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                          <path d="M9 9l1 0"></path>
+                          <path d="M9 13l6 0"></path>
+                          <path d="M9 17l6 0"></path>
+                       </svg>
+                       <strong>Email: </strong> {{ empresa_current.email }}
                       </div>
 
 
@@ -105,19 +107,8 @@
                             <path d="M9 13l6 0"></path>
                             <path d="M9 17l6 0"></path>
                          </svg>
-                       <strong>Expediente: </strong> Plantacion
-                      </div>
-
-
-                      <div class="mb-2">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/book -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
-                            <path d="M12 7v5l3 3"></path>
-                         </svg>
-                       <strong>Turno mínimo: </strong> Plantacion
-                      </div>
+                       <strong>CUIT: </strong> {{empresa_current.cuit}}
+                        </div>
 
                     </div>
                   </div>
@@ -125,7 +116,347 @@
               </div>
             </div>
 
-            <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
+            <div class="col-xxl-9 col-lg-12 col-md-12 col-sm-12">
+
+              <div class="row row-cards">
+
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-green text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                              <path d="M12 4v16" /><path d="M4 15h8" />
+                              <path d="M12 12h8" /><path d="M16 12v8" />
+                              <path d="M16 16h4" /></svg>
+                          </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            Cantidad de Rodales
+                          </div>
+                          <div class="text-secondary">
+                            {{total_rodales}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-orange text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                              <path d="M12 4v16" /><path d="M4 15h8" />
+                              <path d="M12 12h8" /><path d="M16 12v8" />
+                              <path d="M16 16h4" /></svg>
+                          </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            Total de Rodales BOP
+                          </div>
+                          <div class="text-secondary">
+                            {{ total_rodales_bop }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-green text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/shopping-cart -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                              <path d="M12 4v16" /><path d="M4 15h8" />
+                              <path d="M12 12h8" /><path d="M16 12v8" />
+                              <path d="M16 16h4" /></svg> 
+                            </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            Superficie Total
+                          </div>
+                          <div class="text-secondary">
+                            {{superficie_total}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-lime text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                              <path d="M12 4v16" /><path d="M4 15h8" />
+                              <path d="M12 12h8" /><path d="M16 12v8" />
+                              <path d="M16 16h4" /></svg>  
+                            </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            Superficie Plantada
+                          </div>
+                          <div class="text-secondary">
+                            {{ superficie_plantacion }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-lime text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                              <path d="M12 4v16" /><path d="M4 15h8" />
+                              <path d="M12 12h8" /><path d="M16 12v8" />
+                              <path d="M16 16h4" /></svg>  
+                            </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            Superficie Actual
+                          </div>
+                          <div class="text-secondary">
+                            {{ superficie_actual }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               
+              </div>
+
+              <div class="row mt-7">
+
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Rodales de Uso Forestal</h3>
+                  </div>
+                  <div class="card-body" style="max-height: 700px; overflow-y: auto;">
+          
+                    <div id="" class="table-responsive">
+                      <table id="tabladata" class="table table-bordered table-hover dataTable">
+                        <thead>
+                          <tr>
+                            <th class="dt-center align-middle"></th>
+                            <th class="dt-center align-middle">Código SAP/Nombre</th>
+                            <th class="dt-center align-middle">Campo</th>
+                            <th class="dt-center align-middle">¿Certificado?</th>
+                            <th class="dt-center align-middle">¿Finalizado?</th>
+                            <th class="dt-center align-middle">Uso</th>
+                            <th class="dt-center align-middle">Empresa</th>
+                            <th class="dt-center align-middle">Fecha de Registro</th>
+                            <th class="dt-center align-middle">Fecha de Modificación</th>
+                            <th class="dt-center align-middle">Usuario</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-tbody">
+                          {% for rodal in rodales %}
+                              <tr> 
+                        
+                                  <td class="dt-center align-middle"> 
+                                      <div class="mr-3">
+                                        <a href="{% url 'rodales-view' idrodal=rodal.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{rodal.pk}}">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                                            <path d="M12 4v16" /><path d="M4 15h8" />
+                                            <path d="M12 12h8" /><path d="M16 12v8" />
+                                            <path d="M16 16h4" />
+                                         </svg>
+                                        </a>
+                                      </div>
+                                  </td>
+      
+                                  {% if rodal.is_sap%}
+                                    <td class="dt-center align-middle"> 
+                                      <a href={% url 'rodales-view' idrodal=rodal.pk %}>
+                                        {{ rodal.cod_sap }}
+                                      </a>
+                                      </td>
+                                  {% else %}
+                                    <td class="dt-center align-middle"> {{ rodal.name }}</td>
+                                  {% endif%}
+      
+                                  <td class="dt-center align-middle">{{ rodal.campo }}</td>
+                                  <td class="dt-center align-middle"> {{ rodal.is_certificado|yesno:"Si,No" }}</td>
+                                  <td class="dt-center align-middle"> {{ rodal.is_finish|yesno:"Si,No" }}</td>
+                                  <td class="dt-center align-middle text-green">{{ rodal.usos_rodales.name }}</td>
+                                  <td class="dt-center align-middle">{{ rodal.empresa.name }}</td>
+                                  <td class="dt-center align-middle">{{ rodal.created }}</td>
+                                  <td class="dt-center align-middle">{{ rodal.modified }}</td>
+                                  <td class="dt-center align-middle">{{ rodal.user }}</td>
+                                
+                              </tr>
+                          
+                          {% endfor %}
+      
+      
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card mt-5">
+                  <div class="card-header">
+                    <h3 class="card-title">Rodales Bosques Protectores</h3>
+                  </div>
+                  <div class="card-body" style="max-height: 700px; overflow-y: auto;">
+          
+                    <div id="" class="table-responsive">
+                      <table id="tabladata2" class="table table-bordered table-hover dataTable">
+                        <thead>
+                          <tr>
+                            <th class="dt-center align-middle"></th>
+                            <th class="dt-center align-middle">Nombre</th>
+                            <th class="dt-center align-middle">Campo</th>
+                            <th class="dt-center align-middle">¿Certificado?</th>
+                            <th class="dt-center align-middle">¿Finalizado?</th>
+                            <th class="dt-center align-middle">Uso</th>
+                            <th class="dt-center align-middle">Empresa</th>
+                            <th class="dt-center align-middle">Fecha de Registro</th>
+                            <th class="dt-center align-middle">Fecha de Modificación</th>
+                            <th class="dt-center align-middle">Usuario</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-tbody">
+                          {% for rodal in rodales_bop %}
+                              <tr> 
+                        
+                                  <td class="dt-center align-middle"> 
+                                      <div class="mr-3">
+                                        <a href="{% url 'rodales-view' idrodal=rodal.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{rodal.pk}}">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                                            <path d="M12 4v16" /><path d="M4 15h8" />
+                                            <path d="M12 12h8" /><path d="M16 12v8" />
+                                            <path d="M16 16h4" />
+                                         </svg>
+                                        </a>
+                                      </div>
+                                  </td>
+      
+                                  {% if rodal.is_sap%}
+                                    <td class="dt-center align-middle"> 
+                                      <a href={% url 'rodales-view' idrodal=rodal.pk %}>
+                                        {{ rodal.cod_sap }}
+                                      </a>
+                                      </td>
+                                  {% else %}
+                                    <td class="dt-center align-middle"> {{ rodal.name }}</td>
+                                  {% endif%}
+      
+                                  <td class="dt-center align-middle">{{ rodal.campo }}</td>
+                                  <td class="dt-center align-middle"> {{ rodal.is_certificado|yesno:"Si,No" }}</td>
+                                  <td class="dt-center align-middle"> {{ rodal.is_finish|yesno:"Si,No" }}</td>
+                                  <td class="dt-center align-middle text-orange">{{ rodal.usos_rodales.name }}</td>
+                                  <td class="dt-center align-middle">{{ rodal.empresa.name }}</td>
+                                  <td class="dt-center align-middle">{{ rodal.created }}</td>
+                                  <td class="dt-center align-middle">{{ rodal.modified }}</td>
+                                  <td class="dt-center align-middle">{{ rodal.user }}</td>
+                                
+                              </tr>
+                          
+                          {% endfor %}
+      
+      
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card mt-5">
+                  <div class="card-header">
+                    <h3 class="card-title">Expedienes Sagpyas</h3>
+                  </div>
+                  <div class="card-body" style="max-height: 700px; overflow-y: auto;">
+          
+                    <div id="" class="table-responsive">
+                      <table id="tabladata3" class="table table-bordered table-hover dataTable">
+                        <thead>
+                          <tr>
+                            <th class="dt-center align-middle"></th>
+                            <th class="dt-center align-middle">Expediente</th>
+                            <th class="dt-center align-middle">Operaciones</th>
+                            <th class="dt-center align-middle">Fecha</th>
+                            <th class="dt-center align-middle">Superficie Aprobada</th>
+                            <th class="dt-center align-middle">Turno Mínimo</th>
+                            <th class="dt-center align-middle">Fecha de Registro</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-tbody">
+                          {% for sagpya in sagpyas %}
+                              <tr>
+                                
+                                  <td class="dt-center align-middle"> 
+                                    <div class="mr-3">
+                                      <a href="{% url 'sagpyas-view' id=sagpya.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{sagpya.pk}}">
+                                         
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                          <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                          <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                       </svg>
+                                      </a>
+                                  </div>
+                                  </td>
+                                  <td class="dt-center align-middle">
+                                    <a href={% url 'sagpyas-view' id=sagpya.pk %}>
+                                      {{ sagpya.expediente }}
+                                    </a>
+                                    
+                                    </td>
+                                  <td class="dt-center align-middle"> {{ sagpya.operaciones }}</td>
+                                  <td class="dt-center align-middle">{{ sagpya.fecha }}</td>
+                                  <td class="dt-center align-middle text-green fw-bold">{{ sagpya.sup_aprobada }}</td>
+                                  <td class="dt-center align-middle">{{ sagpya.turno_minimo }}</td>
+                                  <td class="dt-center align-middle">{{ sagpya.created }}</td>
+                                 
+                              </tr>
+                          
+                          {% endfor %}
+      
+      
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+
              
             </div>
           </div>
@@ -137,6 +468,46 @@
         </div>
       </div>
     {% endblock %}
+
+    <script>
+      $(function () {
+          $('#tabladata').DataTable({
+              "paging": true,
+              "lengthChange": false,
+              "searching": true,
+              "ordering": true,
+              "info": true,
+              "autoWidth": false,
+              "responsive": false,
+              "pageLength": 10,
+              order: [[2, 'desc']],
+              language: {
+                  url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+              }
+          });
+  
+      })
+  </script>
+
+  <script>
+    $(function () {
+        $('#tabladata2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": false,
+            "pageLength": 10,
+            order: [[2, 'desc']],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+            }
+        });
+
+    })
+</script>
   </div>
 
 {% endblock %}

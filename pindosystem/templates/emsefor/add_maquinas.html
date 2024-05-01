@@ -20,72 +20,76 @@
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-cards mb-5">
-            <div class="col-xxl-3 col-md-7 col-lg-7 col-sm-12 mb-4">
+            <div class="col-xxl-3 col-lg-7 col-md-7 col-sm-12 mb-3">
               <div class="card bg-primary-lt">
                 <div class="card-body">
-                  <div class="row align-items-center">
+                  <div class="row align-items-center justify-content-center">
                     <div class="d-flex justify-content-center col-xxl-4 col-lg-4 col-md-4 col-sm-12 align-items-start">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
                       class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
                       stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M2 9a10 10 0 1 0 20 0"></path>
-                        <path d="M12 19a10 10 0 0 1 10 -10"></path>
-                        <path d="M2 9a10 10 0 0 1 10 10"></path>
-                        <path d="M12 4a9.7 9.7 0 0 1 2.99 7.5"></path>
-                        <path d="M9.01 11.5a9.7 9.7 0 0 1 2.99 -7.5"></path>
+                        <path d="M3 21l18 0"></path>
+                        <path d="M9 8l1 0"></path>
+                        <path d="M9 12l1 0"></path>
+                        <path d="M9 16l1 0"></path>
+                        <path d="M14 8l1 0"></path>
+                        <path d="M14 12l1 0"></path>
+                        <path d="M14 16l1 0"></path>
+                        <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16"></path>
                      </svg>
                     </div>
-                    <div class="col-md-8">
-                      <h3 class="card-title text-center">Sección de Administración de Procedencias</h3>
-                      <p class="text-muted">En esta sección puede agregar una Procedencia.</p>
+                    <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
+                      <h3 class="card-title text-center">Sección de Administración de Emsefor</h3>
+                      <p class="text-muted">En esta sección puede agregar una Emsefor.</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-xxl-7 col-md-10 col-lg-9 col-sm-12 m-auto">
+            <div class="col-xxl-9 col-md-12 col-lg-12 col-sm-12">
               <div class="card">
                 <div class="card-status-top bg-blue"></div>
                 <div class="card-header">
-                  <h3 class="card-title">Nueva Procedencia</h3>
+                  <h3 class="card-title">Agregar Máquinas a la Emsefor</h3>
                 </div>
                 <div class="card-body">
                   <div class="row justify-content-center flex-column align-items-center">
-                    <div class="col-xxl-12 col-md-12 col-lg-12 col-sm-12">
-                      <form action="{% url 'procedencias-add' %}" method="POST">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                    
+                      <form action="{% url 'emsefor-add-maquinas' idemsefor=emsefor.pk%}" method="POST">
                         {% csrf_token %}
-                        <div class="mb-4">
-                          <label class="form-label required">Nombre:</label>
-                          <input type="text" class="form-control" placeholder="Nombre" name="name" id="name" value="{{name}}" required/>
-                        </div>
-                        <div class="mb-4">
-                          <label class="form-label required">Especie:</label>
-                          <input type="text" class="form-control" placeholder="Especie" name="especie" id="especie" value="{{especie}}"/>
+                        
+                       
+                        <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column">
+
+                            {% for maquina in maquinas %}
+
+                                <label class="form-selectgroup-item flex-fill">
+                                    <input type="checkbox" name="maq_select" value="{{maquina.pk}}" class="form-selectgroup-input">
+                                    <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                    <div class="me-3">
+                                        <span class="form-selectgroup-check"></span>
+                                    </div>
+                                    <div class="form-selectgroup-label-content d-flex align-items-center">
+                                        <span class="avatar me-3" style="background-image: url({{maquina.image.url}})">
+
+                                        </span>
+                                        <div>
+                                        <div class="font-weight-medium">{{ maquina.nombre }}</div>
+                                        <div class="text-secondary">{{ maquina.marca }} - {{ maquina.modelo}}</div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </label>
+
+                              {% endfor %}
+
                         </div>
 
-                        <div class="mb-4">
-                          <label class="form-label required">Origen:</label>
-                          <input type="text" class="form-control" placeholder="Origen" name="origen" id="origen" value="{{origen}}"/>
-                        </div>
-                       
-                        <div class="mb-4">
-                          <label class="form-label required">Mejora:</label>
-                          <input type="text" class="form-control" placeholder="Mejora" name="mejora" id="mejora" value="{{mejora}}"/>
-                        </div>
-                        <div class="mb-4">
-                          <label class="form-label required">Vivero:</label>
-                          <input type="text" class="form-control" placeholder="Vivero" name="vivero" id="vivero" value="{{vivero}}"/>
-                        </div>
-
-                        <div class="mb-4">
-                          <label class="form-label required">Material:</label>
-                          <input type="text" class="form-control" placeholder="Material" name="material" id="material"/>
-                        </div>
-                       
 
                         <div class="form-footer">
-                          <a href="{% url 'procedencias-index' %}" class="btn btn-dark" aria-label="Button">
+                          <a href="{% url 'emsefor-view' id=emsefor.pk %}" class="btn btn-dark" aria-label="Button">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-left-filled" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
                               <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                               <path d="M9.586 4l-6.586 6.586a2 2 0 0 0 0 2.828l6.586 6.586a2 2 0 0 0 2.18 .434l.145 -.068a2 2 0 0 0 1.089 -1.78v-2.586h7a2 2 0 0 0 2 -2v-4l-.005 -.15a2 2 0 0 0 -1.995 -1.85l-7 -.001v-2.585a2 2 0 0 0 -3.414 -1.414z" stroke-width="0" fill="currentColor" />
@@ -128,37 +132,10 @@
           </div>
         </div>
       </div>
-      <script src="{% static 'dist/libs/nouislider/dist/nouislider.min.js' %}"></script>
-      <script src="{% static 'dist/libs/litepicker/dist/litepicker.js' %}"></script>
-      <script src="{% static 'dist/libs/tom-select/dist/js/tom-select.base.min.js' %}"></script>
 
-      <script>
-        // @formatter:off
-        document.addEventListener('DOMContentLoaded', function () {
-          var el
-          window.TomSelect &&
-            new TomSelect((el = document.getElementById('select-role')), {
-              copyClassesToDropdown: false,
-              dropdownParent: 'body',
-              controlInput: '<input>',
-              render: {
-                item: function (data, escape) {
-                  if (data.customProperties) {
-                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
-                  }
-                  return '<div>' + escape(data.text) + '</div>'
-                },
-                option: function (data, escape) {
-                  if (data.customProperties) {
-                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
-                  }
-                  return '<div>' + escape(data.text) + '</div>'
-                }
-              }
-            })
-        })
-        // @formatter:on
-      </script>
+
+     
+
     {% endblock %}
   </div>
 {% endblock %}

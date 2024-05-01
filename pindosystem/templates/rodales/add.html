@@ -20,12 +20,14 @@
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-cards mb-5">
-            <div class="col-md-3 col-lg-3">
+            <div class="col-xxl-3 col-lg-7 col-md-7 col-sm-12">
               <div class="card bg-primary-lt">
                 <div class="card-body">
                   <div class="row align-items-center">
-                    <div class="col-md-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <div class="d-flex justify-content-center col-xxl-4 col-lg-4 col-md-4 col-sm-12">
+                      <svg xmlns="http://www.w3.org/2000/svg" 
+                      class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                      viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                         <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
                         <path d="M12 4v16" /><path d="M4 15h8" />
@@ -33,15 +35,15 @@
                         <path d="M16 16h4" /></svg>
                       
                     </div>
-                    <div class="col-md-8">
-                      <h3 class="card-title">Sección de Administración de Rodales</h3>
+                    <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
+                      <h3 class="card-title text-center">Sección de Administración de Rodales</h3>
                       <p class="text-muted">En esta sección puede crear un Rodal.</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-9 col-lg-9">
+            <div class="col-xxl-9 col-lg-9 col-md-9 col-sm-12 m-auto mt-3">
               <div class="card">
                 <div class="card-status-top bg-blue"></div>
                 <div class="card-header">
@@ -49,7 +51,7 @@
                 </div>
                 <div class="card-body">
                   <div class="row justify-content-center flex-column align-items-center">
-                    <div class="col-md-6 col-lg-6 col-sm-6">
+                    <div class="col-xxl-6 col-md-10 col-lg-10 col-sm-12">
                       <form action="{% url 'rodales-add' %}" method="POST">
                         {% csrf_token %}
 

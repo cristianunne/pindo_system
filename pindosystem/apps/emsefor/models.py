@@ -1,4 +1,5 @@
 from django.db import models
+from maquinas.models import Maquinas
 
 # Create your models here.
 
@@ -14,3 +15,14 @@ class Emsefor(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     image = models.TextField()
+
+    #relacion con las maquinas
+    maquinas = models.ManyToManyField(Maquinas, through='EmseforMaquinas', related_name='emsefor_maquinas')
+
+
+
+class EmseforMaquinas(models.Model):
+    emsefor = models.ForeignKey(Emsefor, on_delete=models.CASCADE)
+    maquinas = models.ForeignKey(Maquinas, on_delete=models.CASCADE)
+    cantidad = models.IntegerField("Cantidad", null=True, blank=True, default=0)
+    

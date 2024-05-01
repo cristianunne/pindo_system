@@ -10,6 +10,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import base64
 
+from rodales.utility import get_rodales_by_procedencia
+
+
 # Create your views here.
 
 def index(request):
@@ -123,3 +126,29 @@ def uploadImage(request):
               return JsonResponse({'respuesta' : False})
         except Exception as e:
             return JsonResponse({'respuesta' : False})
+        
+
+@login_required
+def viewProcedencia(request, idprocedencia):
+    context = {}
+
+    try:
+        procedencias = Procedencias.objects.get(pk = idprocedencia)
+        context.update({'procedencias_data' : procedencias})
+
+        #traigo la cantidad de rodales
+        rodales = get_rodales_by_procedencia(idprocedencia)
+        context.update({'total_rodales' : len(rodales)})
+
+        context.update({'rodales' : rodales})
+
+        
+
+
+
+
+        return render(request, 'procedencias/view.html', context)
+    
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('procedencias-index')

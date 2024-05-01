@@ -37,13 +37,15 @@
 
             <div class="row row-cards mb-5">
 
-                <div class="col-md-3 col-lg-4 col-sm-4">
+                <div class="col-xxl-3 col-lg-6 col-md-7 col-sm-12">
                     <div class="card bg-primary-lt">
                       <div class="card-body">
                         <div class="row align-items-center">
-                            <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-flex justify-content-center col-xxl-4 col-lg-4 col-md-4 col-sm-12">
                               <svg xmlns="http://www.w3.org/2000/svg" 
-                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
+                              class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                              fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M3 21l18 0"></path>
                                 <path d="M9 8l1 0"></path>
@@ -57,8 +59,8 @@
                             
                     
                             </div>
-                            <div class="col-md-8">
-                                <h3 class="card-title h3">Sección de Administración de Emsefor</h3>
+                            <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
+                                <h3 class="card-title h3 text-center">Sección de Administración de Emsefor</h3>
                                 <p class="text-muted">En esta sección puede realizar las ediciones de la información de las Emsefor </p>
                              
                             </div>
@@ -81,9 +83,10 @@
                  </svg> Nuevo</a>
               </div>
               <div id="" class="table-responsive">
-                <table id="tabladata" class="table table-bordered table-hover dataTable">
+                <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text" >
                   <thead>
                     <tr>
+                      <th class="dt-center align-middle"></th>
                       <th class="dt-center align-middle"></button></th>
                       <th class="dt-center align-middle">Nombres</button></th>
                       <th class="dt-center align-middle">Dirección</button></th>
@@ -99,6 +102,18 @@
                     {% for emsefor in emsefors %}
                         <tr>
                           <td class="dt-center align-middle"> 
+                            <div class="mr-3">
+                              <a href="{% url 'emsefor-view'  id=emsefor.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" 
+                              attr="{{emsefor.pk}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                               </svg>
+                              </a>
+                            </div>
+                        </td>
+                          <td class="dt-center align-middle"> 
                             <img src="data:image/*; base64,{{emsefor.image}} " class="avatar" style="min-height: 40px; min-width: 40px;">
                           </td>
                             <td class="dt-center align-middle"> {{ emsefor.name }}</td>
@@ -108,7 +123,7 @@
                             <td class="dt-center align-middle">{{ emsefor.contratista }}</td>
                             <td class="dt-center align-middle">{{ emsefor.cuit }}</td>
                             <td class="dt-center align-middle">{{ emsefor.created }}</td>
-                            <td>
+                            <td class="dt-center align-middle">
                                 <div class="d-flex justify-content-center">
                                   <div class="mr-3">
                                     <a href="{% url 'modified-logo-emsefor' id=emsefor.pk %}" class="btn btn-lime btn-icon" aria-label="Button" attr="{{empresa.pk}}">

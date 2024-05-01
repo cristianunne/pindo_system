@@ -191,3 +191,10 @@ def get_fecha_plantacion(idrodal):
     
     
     return edad_plantada
+
+def get_rodales_by_procedencia(idprocedencia):
+    
+    rodales = Rodales.objects.filter(rodales_plantaciones__procedencias = idprocedencia)
+
+    return rodales
+

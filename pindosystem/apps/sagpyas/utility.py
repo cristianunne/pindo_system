@@ -26,6 +26,12 @@ def get_rodales_by_sagpya(idsagpya):
 
     return ids_rodales
 
+def get_sagpyas_by_empresa(idempresa):
+
+    sagpyas = Sagpyas.objects.filter(rodales__empresa__pk = idempresa)
+
+    return sagpyas
+
 
 def get_rodales_with_details_by_sagpya(idsagpya):
 

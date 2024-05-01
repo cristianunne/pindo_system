@@ -129,4 +129,9 @@ def getSuperficiePlantacionByRodal(idrodal):
     
    
 
-   
+def getPlantacionesByEmsefor(idemsefor):
+
+    plantaciones = Plantaciones.objects.filter(emsefors__pk = idemsefor)
+
+    return plantaciones
+

@@ -32,20 +32,21 @@
                 
         <div class="container-xl">
             <div class="row row-cards mb-5">
-                <div class="col-md-3 col-lg-3">
+                <div class="col-xxl-3 col-lg-6 col-md-6 col-sm-12">
                     <div class="card bg-primary-lt">
                       <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-4 col-sm-4">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-xxl-4 col-lg-4 col-md-4 col-sm-4">
                             
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" 
+                                class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
                                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
                                             <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                                          </svg>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
                                 <h3 class="card-title">Sección de Administración de Usuarios</h3>
                                 <p class="text-muted">En esta sección puede modificar el Logo.
                                 </p>
@@ -60,19 +61,19 @@
             </div>
             <div class="row row-cards mb-5">
                 
-                <div class="col-md-4">
+                <div class="col-xxl-4 col-lg-4 col-md-4 col-sm-12">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Logo de la Empresa</h3>
                             <input type="text" value="{{empresa_data.pk}}" style="display: none;" id="empresa_id"/>
                         </div>
-                        <div class="card-body">
-
-                            <img src="data:image/*; base64,{{empresa_data.image}} " class="card-img-top">
+                        <div class="card-body d-flex justify-content-center">
+                            <img src="data:image/*; base64,{{empresa_data.image}} " class="card-img-top 
+                            xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon">
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
                     <div class="card">
                         <div class="card-body">
                             <h3 class="card-title">Cambio de Foro de Perfil</h3>

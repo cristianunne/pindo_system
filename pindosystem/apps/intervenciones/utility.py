@@ -4,6 +4,7 @@ from intervenciones.models import Intervenciones, SobrevivenciaIntervencion, Pod
 from gis_pindo.models import SobrevivenciaIntervenciongis, PodaIntervenciongis, RaleoIntervenciongis, TalarazaIntervenciongis
 from django.core.serializers import serialize
 from django.contrib.gis.db.models import Extent
+from django.db.models import Sum, F, Count
 
 
 
@@ -184,3 +185,40 @@ def getTalarazaGis(idintervencion):
         print(inter)
     
     return inter
+
+
+def get_sobrevivencias_by_emsefor(idemsefor):
+
+    sobrevivencias = Intervenciones.objects.filter(type = 'Sobrevivencia', emsefors = idemsefor)
+
+    return sobrevivencias
+
+def get_podas_by_emsefor(idemsefor):
+
+    podas = Intervenciones.objects.filter(type = 'Poda', emsefors = idemsefor)
+
+    return podas
+
+def get_raleos_by_emsefor(idemsefor):
+
+    raleos = Intervenciones.objects.filter(type = 'Raleo', emsefors = idemsefor)
+
+    return raleos
+
+def get_talarasa_by_emsefor(idemsefor):
+
+    tala = Intervenciones.objects.filter(type = 'Talaraza', emsefors = idemsefor)
+
+    return tala
+
+
+def get_rodales_by_type_intervencion_by_emsefor(idemsefor, type):
+    
+    rodales = Intervenciones.objects.select_related('rodales_intervenciones').filter(emsefors = idemsefor, type = type) \
+    .values('name', 'rodales__pk', 'rodales__is_sap', 'rodales__cod_sap', 'rodales__campo', 'rodales__usos_rodales__name', 
+            'rodales__empresa__name', 'rodales__empresa_id', 'superficie', 'fecha__year', 'intervenciones_types__color') \
+    .order_by('fecha__year')
+
+    return rodales
+
+

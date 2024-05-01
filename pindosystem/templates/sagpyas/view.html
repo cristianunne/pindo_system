@@ -26,7 +26,7 @@
           {% include "../element/alert-sucess.html" %}
           {% endif %}
           <div class="row row-cards col-lg-12 col-md-12 col-sm-12 mb-5">
-            <div class="col-xxl-12">
+            <div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12 d-xxl-block d-lg-none d-md-none d-sm-none">
               <div class="mb-3 d-flex justify-content-end">
                 <a href="{% url 'view-upload-files-sagpyas' id=sagpyas_data.pk %}" class="btn btn-success" aria-label="Button">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-upload" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -39,14 +39,16 @@
            
 
             </div>
-            </div>
+          </div>
 
-            <div class="col-xxl-4 col-lg-4 col-md-4 col-sm-12">
+            <div class="col-xxl-4 col-lg-6 col-md-6 col-sm-12">
               <div class="card bg-primary-lt">
                 <div class="card-body">
                   <div class="row align-items-center">
                     <div class="col-lg-2 col-md-3 col-sm-3 d-flex align-items-start">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
+                      <svg xmlns="http://www.w3.org/2000/svg" 
+                      class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                      viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M3 21l18 0"></path>
                         <path d="M9 8l1 0"></path>
@@ -138,7 +140,23 @@
               </div>
             </div>
 
-            <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
+            <div class="col-xxl-8 col-lg-12 col-md-12 col-sm-12">
+
+              <div class="row row-cards col-lg-12 col-md-12 col-sm-12 mb-5 lg-mt-3 md-mt-3 sm-mt-3">
+                <div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12 d-xxl-none d-lg-block">
+                  <div class="mb-3 d-flex justify-content-end">
+                    <a href="{% url 'view-upload-files-sagpyas' id=sagpyas_data.pk %}" class="btn btn-success" aria-label="Button">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-upload" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                        <path d="M12 11v6"></path>
+                        <path d="M9.5 13.5l2.5 -2.5l2.5 2.5"></path>
+                     </svg> Subir Archivo</a>
+               
+    
+                </div>
+              </div>
              
                 <div class="card min-vh-75 max-vh-75">
                     <div class="card-body" style="overflow: auto;">
@@ -201,7 +219,7 @@
 
             <div class="hr-text mt-7">Rodales Sagpyas</div>
 
-            <div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12 mt-5">
+            <div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12 mt-5 lg-mt-3 -mt-3">
 
               <div class="card">
                 <div class="card-body">
@@ -214,7 +232,7 @@
                      </svg> Asignar</a>
                   </div>
                   <div id="" class="table-responsive">
-                    <table id="tabladata" class="table table-bordered table-hover dataTable">
+                    <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text">
                       <thead>
                         <tr>
                           <th class="dt-center align-middle"></th>

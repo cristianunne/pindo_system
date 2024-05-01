@@ -26,6 +26,8 @@ const URLS_DELETE = {
 
     PLANIFICACION_DELETE: '../../planificacion-delete/',
 
+    MAQUINAS_EMSEFOR_DELETE: '../../emsefor-maquina-delete/'
+
 
 }
 

@@ -157,6 +157,14 @@ function deleteInformation(element){
     dialogDeleteConfirm(element, title, message, URLS_DELETE.PLANIFICACION_DELETE);
   }
 
+  else if(controller === 'maquinas_emsefor') {
+
+    let title = '¿Desea Eliminar la Máquina?';
+    let message = 'Si acepta se borrará toda la información de la Capa';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.MAQUINAS_EMSEFOR_DELETE);
+  }
+
 
 
 
