@@ -387,6 +387,8 @@ def editIntervencionSobrevivencia(request, idsobrevivencia):
         sobre= Intervenciones.objects.get(pk=idsobrevivencia)
         idrodal = sobre.rodales.pk
 
+        context.update({'idrodal' : idrodal})
+
         rodales = Rodales.objects.values_list("rodales_id", "cod_sap").filter(rodales_id = idrodal)
         context.update({'rodales' : rodales})
         emsefors = Emsefor.objects.values_list("emsefor_id", "name")

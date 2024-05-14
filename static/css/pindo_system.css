@@ -383,7 +383,7 @@ body {
 
     .md-svg-icon{
         width: 68px !important;
-        height: 68px !important;
+        
     }
 
     .md-mt-1{
@@ -400,7 +400,7 @@ body {
 
     .lg-svg-icon{
         width: 88px !important;
-        height: 88px !important;
+       
     }
 
     .lg-mt-3{
@@ -413,6 +413,5 @@ body {
 
     .xxl-svg-icon{
         width: 150px !important;
-        height: 150px !important;
     }
  }
