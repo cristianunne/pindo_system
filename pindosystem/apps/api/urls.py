@@ -41,6 +41,9 @@ urlpatterns = [
 
      #GIS REQUEST
      path('api/gis/getRodalesGisById/<int:idrodal>/', views.getRodalgisById, name='getRodalgisById'),
+     #path('api/gis/getRodalesGis/', views.getRodalesgis, name='getRodalesGis'),
+
+     path('api/gis/getRodalesGisAll/', views.getRodalesgis, name='getRodalesGisAll'),
 
      #planificacion
      path('api/planificacion/getPlanificacionIntervencionesByRodal/<int:idrodal>/', views.getPlanificacionIntervencionesByRodal, name='getPlanificacionIntervencionesByRodal'),
@@ -49,6 +52,7 @@ urlpatterns = [
      path('api/planificacion/getPlanificacionDetailsByYearsAndTipo/', views.getPlanificacionDetailsByYearsAndTipo, name='getPlanificacionDetailsByYearsAndTipo'),
      
      #SAGPYAS
+     path('api/sagpyas/getSagpyasById/<int:idsagpya>/', views.getSagpyasById, name='getSagpyasById'),
      path('api/sagpyas/getSagpyasWithDetails/', views.getSagpyasWithDetails, name='getSagpyasWithDetails'),
      path('api/sagpyas/getRodalesGisBySagpyas/<int:idsagpya>/', views.getRodalesGisBySagpyas, name='getRodalesGisBySagpyas'),
      path('api/sagpyas/getFilesDetailsBySagpya/<int:idsagpya>/', views.getFilesDetailsBySagpya, name='getFilesDetailsBySagpya'),

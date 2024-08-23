@@ -92,6 +92,7 @@ def getPodaByRodal(idrodal):
 
         names.append('emsefors__name')
 
+
         intervenciones = Intervenciones.objects.select_related('poda_intervencion') \
             .filter(rodales = idrodal, type = 'Poda').values(*names)
 
@@ -106,7 +107,11 @@ def getPodaByRodal(idrodal):
 
 def getPodaGis(idintervencion):
 
+    
+
     inter = serialize('geojson', PodaIntervenciongis.objects.filter(intervencion_gis__pk__in = idintervencion), geometry_field='geom_4326')
+
+    
 
     return inter
 

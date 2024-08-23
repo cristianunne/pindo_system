@@ -49,7 +49,9 @@
 
                             </div>
                             <h3 class="mb-3">Administración General</h3>
-                            <p style="text-align: justify;"></p>
+                            <p style="text-align: justify; font-size: large;">
+                               En esta sección puede administrar las configuraciones generales del paquete de aplicaciones de Pindo. 
+                            </p>
                             <a class="btn px-3 mt-auto mx-auto" href="{% url 'indexAdmin' %}">Ir a...</a>
                         </div>
                     </div>
@@ -61,7 +63,7 @@
                                 <img src="{% static 'img/icons/gis.png' %}" alt="alternatetext" width="80px" height="80px">
                             </div>
                             <h3 class="mb-3">Sistema de Información Geográfica (GIS)</h3>
-                            <p style="text-align: justify;"></p>
+                            <p style="text-align: justify; font-size: large;">Aplicación GIS con información de Pindo y de Terceros.</p>
                             <a class="btn px-3 mt-auto mx-auto" href="{% url 'gishome' %}">Ir a...</a>
                         </div>
                     </div>
@@ -71,7 +73,9 @@
                                 <i class="fa fa-2x"><img src="{% static 'img/icons/costos.png' %}" alt="alternatetext" width="80px" height="80px"></i>
                             </div>
                             <h3 class="mb-3">Costos Generales</h3>
-                            <p style="text-align: justify;"></p>
+                            <p style="text-align: justify; font-size: large;">
+                                Aplicación de consulta y descarga de datos vinculado a los Costos registrados en SAP.
+                            </p>
                             <a class="btn px-3 mt-auto mx-auto" href="http://192.168.36.65:5173/" target="_blank">Ir a...</a>
                         </div>
                     </div>
@@ -79,21 +83,25 @@
                     <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.1s">
                         <div class="service-item d-flex flex-column justify-content-center text-center rounded">
                             <div class="service-icon flex-shrink-0">
-                                <i class="fa fa-2x"><img src="img/icon-2.png" alt="alternatetext" width="80px" height="80px"></i>
+                                <i class="fa fa-2x"><img src="{% static 'img/icons/tractor.png' %}" alt="alternatetext" width="80px" height="80px"></i>
                             </div>
                             <h3 class="mb-3">Producción Forestal</h3>
-                            <p style="text-align: justify;"></p>
-                            <a class="btn px-3 mt-auto mx-auto" href="http://192.168.36.65:5174/">Ir a...</a>
+                            <p style="text-align: justify; font-size: large;">
+                                Aplicación de consulta y descarga de datos vinculado a los Producción Forestal registrados en SAP.
+                            </p>
+                            <a class="btn px-3 mt-auto mx-auto" href="http://192.168.30.18/forestal-produccion/" target="_blank">Ir a...</a>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
                         <div class="service-item d-flex flex-column justify-content-center text-center rounded">
                             <div class="service-icon flex-shrink-0">
-                                <i class="fa fa-2x"><img src="img/icon-8.png" alt="alternatetext" width="80px" height="80px"></i>
+                                <i class="fa fa-2x"><img src="{% static 'img/icons/pino.png' %}"  alt="alternatetext" width="80px" height="80px"></i>
                             </div>
                             <h3 class="mb-3">Resumen General</h3>
-                            <p style="text-align: justify;"></p>
-                            <a class="btn px-3 mt-auto mx-auto" href="http://192.168.36.65:5175/">Ir a...</a>
+                            <p style="text-align: justify; font-size: large;">
+                                Aplicación de consulta integrada entre la Información SAP y GIS..
+                            </p>
+                            <a class="btn px-3 mt-auto mx-auto" href="http://192.168.30.18/pindo-app" target="_blank">Ir a...</a>
                         </div>
                     </div>
 

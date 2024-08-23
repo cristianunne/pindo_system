@@ -267,14 +267,16 @@
                         <thead>
                           <tr>
                             <th class="dt-center align-middle"></th>
+                            <th class="dt-center align-middle">ID</th>
                             <th class="dt-center align-middle">Código SAP/Nombre</th>
                             <th class="dt-center align-middle">Campo</th>
                             <th class="dt-center align-middle">¿Certificado?</th>
                             <th class="dt-center align-middle">¿Finalizado?</th>
                             <th class="dt-center align-middle">Uso</th>
-                            <th class="dt-center align-middle">Empresa</th>
+                          
                             <th class="dt-center align-middle">Fecha de Registro</th>
-                            <th class="dt-center align-middle">Fecha de Modificación</th>
+                            <th class="dt-center align-middle">Superficie</th>
+                            <th class="dt-center align-middle">Plantado?</th>
                             <th class="dt-center align-middle">Usuario</th>
                           </tr>
                         </thead>
@@ -295,6 +297,8 @@
                                         </a>
                                       </div>
                                   </td>
+
+                                  <td class="dt-center align-middle">{{ rodal.pk }}</td>
       
                                   {% if rodal.is_sap%}
                                     <td class="dt-center align-middle"> 
@@ -309,11 +313,36 @@
                                   <td class="dt-center align-middle">{{ rodal.campo }}</td>
                                   <td class="dt-center align-middle"> {{ rodal.is_certificado|yesno:"Si,No" }}</td>
                                   <td class="dt-center align-middle"> {{ rodal.is_finish|yesno:"Si,No" }}</td>
-                                  <td class="dt-center align-middle text-green">{{ rodal.usos_rodales.name }}</td>
-                                  <td class="dt-center align-middle">{{ rodal.empresa.name }}</td>
+                                  <td class="dt-center align-middle text-green">{{ rodal.usos_rodales__name }}</td>
+
+                                 
+
+                                 
                                   <td class="dt-center align-middle">{{ rodal.created }}</td>
-                                  <td class="dt-center align-middle">{{ rodal.modified }}</td>
-                                  <td class="dt-center align-middle">{{ rodal.user }}</td>
+                    
+                                  <td class="dt-center align-middle text-green fw-bold">
+
+                                    {{ rodal.rodales_rodales_gis__superficie|floatformat:2 }}
+                                    
+                                   </td>
+
+                                   {% if rodal.rodales_plantaciones__plantacion_plantaciongis %}
+                                   <td class="dt-center align-middle text-green">
+                                    <div class="mr-3">
+                                      <a href="{% url 'plantaciones-view'  id_plantacion=rodal.rodales_plantaciones %}" class="btn btn-lime btn-icon" aria-label="Button" attr="{{empresa.pk}}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                          <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                          <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                       </svg>
+                                      </a>
+                                    </div>
+
+                                   </td>
+                                 {% else %}
+                                 <td class="dt-center align-middle text-red">{{ 'No' }}</td>
+                                 {% endif%}
+                                  <td class="dt-center align-middle">{{ rodal.user__first_name }} {{' '}}{{ rodal.user__last_name}}</td>
                                 
                               </tr>
                           
@@ -327,9 +356,11 @@
                 </div>
 
                 <div class="card mt-5">
+
                   <div class="card-header">
-                    <h3 class="card-title">Rodales Bosques Protectores</h3>
+                    <h3 class="card-title">Rodales de Uso No Forestal</h3>
                   </div>
+              
                   <div class="card-body" style="max-height: 700px; overflow-y: auto;">
           
                     <div id="" class="table-responsive">
@@ -337,14 +368,15 @@
                         <thead>
                           <tr>
                             <th class="dt-center align-middle"></th>
+                            <th class="dt-center align-middle">ID</th>
                             <th class="dt-center align-middle">Nombre</th>
                             <th class="dt-center align-middle">Campo</th>
                             <th class="dt-center align-middle">¿Certificado?</th>
                             <th class="dt-center align-middle">¿Finalizado?</th>
                             <th class="dt-center align-middle">Uso</th>
-                            <th class="dt-center align-middle">Empresa</th>
+                            <th class="dt-center align-middle">GIS?</th>
                             <th class="dt-center align-middle">Fecha de Registro</th>
-                            <th class="dt-center align-middle">Fecha de Modificación</th>
+                            <th class="dt-center align-middle">Superficie</th>
                             <th class="dt-center align-middle">Usuario</th>
                           </tr>
                         </thead>
@@ -365,8 +397,8 @@
                                         </a>
                                       </div>
                                   </td>
-      
-                                  {% if rodal.is_sap%}
+                                  <td class="dt-center align-middle">{{ rodal.pk }}</td>
+                                  {% if rodal.is_sap %}
                                     <td class="dt-center align-middle"> 
                                       <a href={% url 'rodales-view' idrodal=rodal.pk %}>
                                         {{ rodal.cod_sap }}
@@ -379,11 +411,34 @@
                                   <td class="dt-center align-middle">{{ rodal.campo }}</td>
                                   <td class="dt-center align-middle"> {{ rodal.is_certificado|yesno:"Si,No" }}</td>
                                   <td class="dt-center align-middle"> {{ rodal.is_finish|yesno:"Si,No" }}</td>
-                                  <td class="dt-center align-middle text-orange">{{ rodal.usos_rodales.name }}</td>
-                                  <td class="dt-center align-middle">{{ rodal.empresa.name }}</td>
+                                  <td class="dt-center align-middle text-orange">{{ rodal.usos_rodales__name }}</td>
+
+                                  {% if rodal.rodales_rodales_gis %}
+                                  <td class="dt-center align-middle text-green">
+                                   <div class="mr-3">
+                                     <a href="{% url 'rodales-view' idrodal=rodal.pk %}" class="btn btn-lime btn-icon" aria-label="Button" attr="{{empresa.pk}}">
+                                       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                         <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                         <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                      </svg>
+                                     </a>
+                                   </div>
+      
+                                  </td>
+                                {% else %}
+                                <td class="dt-center align-middle text-red">{{ 'No' }}</td>
+                                {% endif%}
+                            
                                   <td class="dt-center align-middle">{{ rodal.created }}</td>
-                                  <td class="dt-center align-middle">{{ rodal.modified }}</td>
-                                  <td class="dt-center align-middle">{{ rodal.user }}</td>
+                                  <td class="dt-center align-middle text-green fw-bold">
+
+                                    
+
+                                    {{ rodal.rodales_rodales_gis__superficie|floatformat:2 }}
+                                    
+                                   </td>
+                                   <td class="dt-center align-middle">{{ rodal.user__first_name }} {{' '}}{{ rodal.user__last_name}}</td>
                                 
                               </tr>
                           
@@ -411,7 +466,7 @@
                             <th class="dt-center align-middle">Operaciones</th>
                             <th class="dt-center align-middle">Fecha</th>
                             <th class="dt-center align-middle">Superficie Aprobada</th>
-                            <th class="dt-center align-middle">Turno Mínimo</th>
+                    
                             <th class="dt-center align-middle">Fecha de Registro</th>
                           </tr>
                         </thead>
@@ -421,7 +476,7 @@
                                 
                                   <td class="dt-center align-middle"> 
                                     <div class="mr-3">
-                                      <a href="{% url 'sagpyas-view' id=sagpya.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{sagpya.pk}}">
+                                      <a href="{% url 'sagpyas-view' id=sagpya.sagpyas.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{sagpya.pk}}">
                                          
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -432,16 +487,16 @@
                                   </div>
                                   </td>
                                   <td class="dt-center align-middle">
-                                    <a href={% url 'sagpyas-view' id=sagpya.pk %}>
-                                      {{ sagpya.expediente }}
+                                    <a href={% url 'sagpyas-view' id=sagpya.sagpyas.pk %}>
+                                      {{ sagpya.sagpyas.expediente }}
                                     </a>
                                     
                                     </td>
-                                  <td class="dt-center align-middle"> {{ sagpya.operaciones }}</td>
-                                  <td class="dt-center align-middle">{{ sagpya.fecha }}</td>
-                                  <td class="dt-center align-middle text-green fw-bold">{{ sagpya.sup_aprobada }}</td>
-                                  <td class="dt-center align-middle">{{ sagpya.turno_minimo }}</td>
-                                  <td class="dt-center align-middle">{{ sagpya.created }}</td>
+                                  <td class="dt-center align-middle"> {{ sagpya.sagpyas.operaciones }}</td>
+                                  <td class="dt-center align-middle">{{ sagpya.sagpyas.fecha }}</td>
+                                  <td class="dt-center align-middle text-green fw-bold">{{ sagpya.sagpyas.sup_aprobada }}</td>
+                 
+                                  <td class="dt-center align-middle">{{ sagpya.sagpyas.created }}</td>
                                  
                               </tr>
                           

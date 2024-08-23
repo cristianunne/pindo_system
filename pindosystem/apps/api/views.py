@@ -16,18 +16,18 @@ from sagpyas.models import SagpyasFiles
 
 
 from plantaciones.serializers import PlantacionesByRodalSerializer, getSuperficiePlantacionByEmpresa, \
-getSuperficiePlantacionYearsByEmpresa, getSagpyasByEmpresaSerializer, getSuperficiePlantacionForestalByEmpresa
+getSuperficiePlantacionYearsByEmpresa, getSuperficiePlantacionByEmpresaUsos, getSuperficiePlantacionOnlyValueByEmpresa
 
 
 from rodales.serializers import getRodalesByUsoSerializer, getRodalesSagpyasByEmpresaSerializer, getRodalesByEmpresaSerializer, \
     getRodalesByIdSerializer, getRodalWithMaterialGeneticoById, getRodalesBySagpyasSerializer, getRodalesByIdSapSerializer
 
-from sagpyas.serializers import getSagpyasWithDetailsSerializer, getFilesDetailsBySagpyaSerializer
+from sagpyas.serializers import getSagpyasWithDetailsSerializer, getFilesDetailsBySagpyaSerializer, getSagpyasByIdSerializer, getSagpyasByEmpresaSerializer
 
 from planificacion.serializers import getPlanificacionByRodal, getReferenciasPlanificacionSerializer, getPlanificacionRodales, \
 getPlanificacionDetailsWithYearsAndTipoSerializer
 
-from rodales_gis.serializers import getRodalResumenGis, getRodalesGisBySagpyaWithDetailsSerializer
+from rodales_gis.serializers import getRodalResumenGis, getRodalesGisBySagpyaWithDetailsSerializer, getRodalesGis, getRodalesGisAllSerializer
 from rodales_gis.utility import get_area_rodal_state_gis_by_empresa
 
 from sagpyas.utility import get_rodales_with_details_by_sagpya
@@ -143,6 +143,7 @@ def getEmpresaById(request, empresa_id):
     if request.method == 'GET':
          
         empresa = list(Empresas.objects.filter(sap_id__contains =  empresa_id).values())
+        
         return JsonResponse(empresa, safe=False)
 
     return JsonResponse(False, safe=False)
@@ -156,15 +157,22 @@ def getResumenEmpresasById(request, empresa_id):
 
         super_rod_state = get_area_rodal_state_gis_by_empresa(empresa_id)
 
-        sup_plan = getSuperficiePlantacionForestalByEmpresa(empresa_id)
+
+
+        sup_plan = getSuperficiePlantacionByEmpresaUsos(empresa_id)
+
+        #traigo la superficie incial sumando la plantacion 
+
+        sup_all = getSuperficiePlantacionOnlyValueByEmpresa(empresa_id)
+  
 
         result = []
         result.append({
             'cantidad' : cantidad,
-            'superficie' : super_rod_state,
-            'superficie_plantacion' : sup_plan['suma_superficie']
+            'superficie' : super_rod_state['area_'],
+            'superficie_plantacion' : sup_plan['suma_superficie'],
+            'superficie_total' : sup_all
         })
-
 
 
         return JsonResponse(result, safe=False)
@@ -289,6 +297,17 @@ def getRodalgisById(request, idrodal):
 
 
 @csrf_exempt
+def getRodalesgis(request):
+     
+    if request.method == 'GET':
+
+        rodal =  getRodalesGisAllSerializer()
+        return JsonResponse(rodal, safe=False)
+    
+    return JsonResponse(False, safe=False)
+
+
+@csrf_exempt
 def getMaterialGeneticoByRodalById(request, idrodal):
 
     #El camino para extraer el material es ir a travez de plantaciones, puede devolver muchos objetos
@@ -355,9 +374,21 @@ def getSagpyasWithDetails(request):
     return JsonResponse(False, safe=False)
 
 @csrf_exempt
+def getSagpyasById(request, idsagpya):
+     
+    if request.method == 'GET':
+
+        data_sagpya = getSagpyasByIdSerializer(idsagpya)
+
+
+        return JsonResponse(data_sagpya, safe=False)
+
+    return JsonResponse(False, safe=False)
+
+@csrf_exempt
 def getRodalesGisBySagpyas(request, idsagpya):
     
-    
+   
     if request.method == 'GET':
         rodales_gis = getRodalesGisBySagpyaWithDetailsSerializer(idsagpya)
 
@@ -400,8 +431,9 @@ def getRodalesBySagpya(request, idsagpya):
 
     try:
         if request.method == 'GET':
+            
             rodales = getRodalesBySagpyasSerializer(idsagpya)
-
+ 
             return JsonResponse(rodales, safe=False)
     except Exception as e:
         return JsonResponse(False, safe=False)
@@ -436,6 +468,7 @@ def getSobrevivenciaIntervencionGisByRodal(request, idrodal):
 
 @csrf_exempt
 def getPodaIntervencionByRodal(request, idrodal):
+
     
     try:
         if request.method == 'GET':
@@ -453,6 +486,7 @@ def getPodaIntervencionGisByRodal(request, idrodal):
     try:
         if request.method == 'GET':
             poda_gis = getPodaWithGisDetailsByRodalSerializer(idrodal)
+            print(poda_gis)
             return JsonResponse(poda_gis, safe=False)
 
     except Exception as e:

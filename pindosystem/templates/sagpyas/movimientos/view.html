@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+{% extends '../../layout/base.html' %}
+
+{% load static %}
+
+{% block sidebar %}
+  {% include '../../element/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+  {% block header %}
+    {% include '../../element/header.html' %}
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+      {% include '../../element/pageheader.html' %}
+    {% endblock %}
+
+    {% block main_content %}
+      <div class="page-body">
+        <div class="container-xl">
+          {% if messages %}
+
+          {% include "../../element/alert-sucess.html" %}
+          {% endif %}
+     
+          <div class="row row-cards mb-5">
+            <div class="col-md-3 col-lg-3">
+              <div class="card bg-primary-lt">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-md-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                        <path d="M9 7l1 0"></path>
+                        <path d="M9 13l6 0"></path>
+                        <path d="M13 17l2 0"></path>
+                     </svg>
+                    </div>
+                    <div class="col-md-8">
+                      <h3 class="card-title">Sección de Administración de Expedientes</h3>
+                      <p class="text-muted">En esta sección puede administrar los movimientos de Expedientes.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            <div class="row row-cards mb-5 justify-content-center">
+             
+              <div class="col-xxl-7 col-lg-7 col-md-12 col-sm-12 mt-5 lg-mt-3 mt-3">
+
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="{% url 'movimiento-add' idsagpya=idsagpya %}" class="btn btn-success" aria-label="Button">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M12 5l0 14"></path>
+                          <path d="M5 12l14 0"></path>
+                       </svg> Agregar</a>
+                    </div>
+                    <div id="" class="table-responsive">
+                      <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text">
+                        <thead>
+                          <tr>
+                            <th class="dt-center align-middle"></th>
+                            <th class="dt-center align-middle">Nombre</th>
+                            <th class="dt-center align-middle">Fecha de Creación</th>
+                            <th class="dt-center align-middle">Usuario</th>
+                        
+                          
+                            <th class="dt-center align-middle">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-tbody">
+                          {% for exped in movimientos %}
+                              <tr> 
+                        
+                                  <td class="dt-center align-middle"> 
+                                      <div class="mr-3">
+                                        <a href="{% url 'movimientos-mov-view' idmovimiento=exped.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{rodal.pk}}">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                            <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                         </svg>
+                                        </a>
+                                      </div>
+                                  </td>
+                                  <td class="dt-center align-middle"> {{ exped.name }}</td>
+                                  <td class="dt-center align-middle">{{ exped.created }}</td>
+
+                                  <td class="dt-center align-middle">{{ exped.user_created }}</td>
+
+                        
+                                  <td>
+                                      <div class="d-flex justify-content-center">
+
+                                        <div class="mr-3">
+                                          <a href="{% url 'movimientos-edit' idmovimiento=exped.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{exped.pk}}">
+                                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                  <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                                  <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                                  <path d="M16 5l3 3"></path>
+                                               </svg>
+                                          </a>
+                                      </div>
+      
+                                          <div>
+                                              <a onclick="deleteInformation(this)" attr="{{exped.pk}}" 
+                                              class="btn btn-youtube btn-icon" controller="movimientos_sagpya">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" 
+                                                width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                                                fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                  <path d="M4 7l16 0"></path>
+                                                  <path d="M10 11l0 6"></path>
+                                                  <path d="M14 11l0 6"></path>
+                                                  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                               </svg>
+                                              </a>
+      
+                                          </div>
+                                        </div>
+                                      
+                                  </td>
+                              </tr>
+                          
+                          {% endfor %}
+      
+      
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+  
+              </div>
+
+            </div>
+           
+          </div>
+
+        </div>
+      </div>
+    {% endblock %}
+  </div>
+
+  <script src="{% static '/dist/libs/dropzone/dist/dropzone-min.js' %}"></script>
+  <script>
+   
+    // @formatter:off
+    document.addEventListener("DOMContentLoaded", function() {
+      myDropzone = new Dropzone("#dropzone-default-sagpyas", {
+        addRemoveLinks: true,
+        url: '../../upload-files-sagpyas',
+        maxFiles: 1,
+        acceptedFiles   : "image/*,application/pdf",
+        dictRemoveFileConfirmation: "Esta seguro?",
+        autoProcessQueue: false,
+
+        init: function() {
+            this.on("addedfile", function() {
+             
+              if (this.files[1]!=null){
+                this.removeFile(this.files[1]);
+              }
+              //console.log(this.files);
+            });
+
+            var myDropzone_sagpya = this;
+
+            $("#button-send").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                myDropzone_sagpya.processQueue();
+                //console.log(this.files);
+             
+            });
+
+          
+
+          },
+        sending: function(file, xhr, formData) {
+
+            let sagpyas_id = document.getElementById('sagpyas_id').value;
+
+            console.log(formData); // -> {}
+            formData.append('sagpyas_id', sagpyas_id);
+            console.log(formData); // -> {}
+        }, 
+        success: function(file, response){
+            if(response.respuesta == true){
+
+                setTimeout(() => {
+                    location.reload();
+                }, 5000);
+               
+            }
+
+            console.log(response);
+        
+         //
+        }
+
+      })
+    })
+  </script>
+{% endblock %}

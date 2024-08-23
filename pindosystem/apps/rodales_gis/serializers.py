@@ -6,7 +6,7 @@ from sagpyas.models import Sagpyas
 
 from django.core.serializers import serialize
 
-from rodales.serializers import getRodalesByIdSerializer
+from rodales.serializers import getRodalesByIdSerializer, getRodalesSerializer
 from rodales.utility import get_edad_rodal, get_fecha_plantacion
 
 from django.contrib.gis.db.models import Extent
@@ -15,13 +15,56 @@ from django.contrib.gis.db.models.functions import Area, Transform
 from django.db.models import Sum, F, Count
 
 from rodales_gis.utility import get_rodal_gis, get_extent_rodalgis, get_area_rodal_gis, get_cantidad_parcelas_by_rodal, get_rodal_gis_state, \
-    get_area_rodal_state_gis, get_rodales_gis, get_extent_rodalesgis_by_sagpyas
+    get_area_rodal_state_gis, get_rodales_gis, get_extent_rodalesgis_by_sagpyas, get_rodales_gis, get_extent_all_rodalgis, get_rodales_gis_all
 
 from plantaciones.serializers import getSuperficiePlantacionByRodal
 
 from sagpyas.utility import get_number_rodales_by_sagpya, get_rodales_with_details_by_sagpya
 
 
+
+
+def getRodalesGisAllSerializer():
+    
+    #consulta a la tabla rodales disolve!!
+
+    rodal = get_rodales_gis_all()
+
+    extent = get_extent_all_rodalgis()
+
+    rodales = getRodalesSerializer()
+    
+    
+    rodal_return = []
+
+    rodal_return.append({'config': extent})
+    rodal_return.append({'rodales': rodal})
+    rodal_return.append({'rodales_data': rodales})
+ 
+    
+
+    return rodal_return
+
+def getRodalesGis():
+    
+    #consulta a la tabla rodales disolve!!
+
+    rodal = get_rodales_gis()
+
+    extent = get_extent_all_rodalgis()
+
+    rodales = getRodalesSerializer()
+    
+    
+    rodal_return = []
+
+    rodal_return.append({'config': extent})
+    rodal_return.append({'rodales': rodal})
+    rodal_return.append({'rodales_data': rodales})
+ 
+    
+
+    return rodal_return
 
 
 
@@ -98,13 +141,15 @@ def getRodalesGisBySagpyaWithDetailsSerializer(idsagpya):
     
     rodales = get_rodales_with_details_by_sagpya(idsagpya)
 
+    
+
     #recorro la lista y agrego el extent
     lista_rodales = []
 
     for rod in rodales:
+       
         rod['extent'] = get_extent_rodalgis(rod['rodales_id'])
         lista_rodales.append(rod)
-
 
 
     array_data = []
@@ -117,5 +162,6 @@ def getRodalesGisBySagpyaWithDetailsSerializer(idsagpya):
             'extent' : get_extent_rodalesgis_by_sagpyas(idsagpya)
         }
     })
+
 
     return array_data

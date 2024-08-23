@@ -2,13 +2,15 @@
 from rodales.models import Rodales
 from rodales_gis.models import Rodalesgis
 from plantaciones.models import Plantaciones
+from rodales.utility import get_fecha_plantacion_all
 
 
 from django.core.serializers import serialize
 
-from sagpyas.models import Sagpyas
+from sagpyas.models import Sagpyas, SagpyasRodales
 
 from django.db.models import Sum, F, Count, Min
+import datetime
 
 
 def RodalesSerializer(rodales):
@@ -42,10 +44,26 @@ def getRodalesSerializer():
                                                                'created', 'modified', 
                                                                'usos_rodales__name', 'empresa__name', 'empresa__sap_id')
     
+    #la edad la calcularia usando la fecha de plantacion
+    #la superficie usando el GIS del rodal
+
+    plantaciones = get_fecha_plantacion_all()
     
-    
+  
     rodal_list = list(rodales)
 
+    today = datetime.date.today()
+
+
+
+    for rod in rodal_list:
+        for pla in plantaciones:
+          
+            if rod['pk'] == pla['rodales_id']:
+                rod['edad_rodal'] =  today.year - pla['year']
+
+
+    print(rodal_list)
     return rodal_list
 
 
@@ -54,10 +72,27 @@ def getRodalesByIdSerializer(idrodal):
     rodales = Rodales.objects.select_related('empresa', 'usos_rodales_category', 'empresas_rodales') \
     .filter(pk = idrodal) \
     .values('pk', 'cod_sap', 'sap_id', 'campo', 'is_certificado', 'is_finish', 
-                                                               'created', 'modified', 'usos_rodales__name', 'empresa__name', 'empresa__sap_id')
+                                                               'created', 'modified', 'usos_rodales__name', 'empresa__name', 
+                                                               'empresa__sap_id')
+    
+    sagpya = SagpyasRodales.objects.filter(rodales_id = idrodal)
+    
+    rodal_list = list(rodales)
+
+    if len(sagpya) > 0:
+
+        rodal_list[0]['sagpya_id'] = sagpya[0].sagpyas_id
+        rodal_list[0]['sagpya_name'] = sagpya[0].sagpyas.expediente
+
+        """rodal_list.append({'sagpya_id' : sagpya[0].sagpyas_id})
+        rodal_list.append({'sagpya_name' : sagpya[0].sagpyas.expediente})"""
+    
+    else:
+        rodal_list[0]['sagpya_id'] = None
+        rodal_list[0]['sagpya_name'] = None
     
 
-    return list(rodales)
+    return rodal_list
 
 def getRodalesByIdSapSerializer(cod_sap):
 
@@ -112,10 +147,10 @@ def getRodalesSagpyasByEmpresaSerializer(id_empresa):
     if len(ids_sagpyas) > 0:
 
         #filtro los rodales por empresas
-        rodales = Rodales.objects.select_related('usos_rodales', 'rodales_plantaciones', 'rodales_rodales_gis', 'sagpyas_rodales') \
-        .filter(empresa = id_empresa, usos_rodales__name__contains = 'Forestal') \
+        rodales = Rodales.objects.select_related('usos_rodales', 'rodales_plantaciones', 'rodales_rodales_gis') \
+        .filter(empresa = id_empresa, usos_rodales__name__contains = 'Forestal', sagpyas__in = ids_sagpyas) \
         .values('pk', 'cod_sap', 'campo', 'is_certificado', 'sap_id', 
-            'usos_rodales__name', 'sagpyas_rodales__pk') \
+            'usos_rodales__name', 'sagpyas__pk', 'sagpyas__expediente', 'empresa__name') \
         .annotate(suma_superficie = Sum('rodales_plantaciones__superficie'), rodal_superficie = Sum('rodales_rodales_gis__superficie'))
     
 
@@ -130,8 +165,8 @@ def getRodalesByEmpresaSerializer(id_empresa):
     #filtro los rodales por empresas
     rodales = Rodales.objects.select_related('usos_rodales', 'rodales_plantaciones', 'rodales_rodales_gis') \
     .filter(empresa = id_empresa, usos_rodales__name__contains = 'Forestal') \
-    .values('pk', 'cod_sap', 'campo', 'is_certificado', 'sap_id', 
-        'usos_rodales__name') \
+    .values('pk', 'cod_sap', 'campo', 'is_certificado', 'sap_id', 'is_finish',
+        'usos_rodales__name', 'empresa__name', 'sagpyas__expediente') \
     .annotate(suma_superficie = Sum('rodales_plantaciones__superficie'), \
               rodal_superficie = Sum('rodales_rodales_gis__superficie'), \
                 year_inicio = Min('rodales_plantaciones__fecha__year'))
@@ -150,7 +185,7 @@ def getRodalWithMaterialGeneticoById(idrodal):
 
 def getRodalesBySagpyasSerializer(idsagpya):
 
-    rodales = Rodales.objects.prefetch_related('sagpyas_rodales').filter(sagpyas_rodales__sagpyas_id = idsagpya, usos_rodales__name = 'Forestal') \
+    rodales = Rodales.objects.prefetch_related('sagpyas').filter(sagpyas__sagpyas_id = idsagpya, usos_rodales__name = 'Forestal') \
      .values('pk', 'cod_sap', 'sap_id', 'campo', 'is_certificado', 'is_finish', 
                                                                'created', 'modified', 
                                                                'usos_rodales__name', 'empresa__name', 'empresa__sap_id')

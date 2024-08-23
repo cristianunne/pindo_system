@@ -22,7 +22,9 @@ def getPlanificacionByRodal(idrodal):
     #tengo que filtrar los rodales fORESTAL
 
     rodal = list(Rodales.objects.select_related('usos_rodales_category') \
-                 .filter(rodales_id__in = ids_rodales, usos_rodales__name__contains = 'Forestal').values())
+                 .filter(rodales_id__in = ids_rodales, usos_rodales__name__contains = 'Forestal').values(
+                     'rodales_id', 'campo', 'cod_sap', 'is_sap', 'name', 'empresa__sap_id', 'empresa__name'
+                 ))
     
     #tengo que fitrar los rodales que son forestal
 
@@ -64,7 +66,8 @@ def getPlanificacionRodales():
     #tengo que filtrar los rodales Forestal
 
     rodal = list(Rodales.objects.select_related('usos_rodales_category') \
-                 .filter(rodales_id__in = ids_rodales, usos_rodales__name__contains = 'Forestal').values())
+                 .filter(rodales_id__in = ids_rodales, usos_rodales__name__contains = 'Forestal').order_by('empresa__name')\
+                    .values('rodales_id', 'campo', 'cod_sap', 'is_sap', 'name', 'empresa__sap_id', 'empresa__name'))
     
     #tengo que fitrar los rodales que son forestal
 

@@ -23,4 +23,5 @@ urlpatterns = [
     path('', include('pindosystem.apps.intervenciones.urls')),
     path('', include('pindosystem.apps.planificacion.urls')),
     path('', include('pindosystem.apps.api.urls')),
+    path('', include('pindosystem.apps.catastro.urls')),
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

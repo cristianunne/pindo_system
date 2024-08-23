@@ -24,13 +24,26 @@ import json
 
 from general_utility import getRodalesApiSap
 
+from catastro.models import Catastrogis
+
 
 # Create your views here.
 @login_required
 def index(request):
-    rodales = Rodales.objects.all()
+    rodales = Rodales.objects.prefetch_related('rodales_plantaciones').filter(is_finish = False) \
+        .values('pk', 'name', 'cod_sap', 'sap_id', 'campo', 'is_certificado', 'is_finish', 'is_sap', 'created', 'usos_rodales__name', 
+                'empresa__name', 'empresa__pk', 'user__first_name', 'user__last_name', 'rodales_plantaciones',
+                'rodales_plantaciones__plantacion_plantaciongis').distinct('cod_sap')
+
+    
+
+    rodales_close = Rodales.objects.prefetch_related('rodales_plantaciones').filter(is_finish = True) \
+        .values('pk', 'name', 'cod_sap', 'sap_id', 'campo', 'is_certificado', 'is_finish', 'is_sap', 'created', 'usos_rodales__name', 
+                'empresa__name', 'empresa__pk', 'user__first_name', 'user__last_name', 'rodales_plantaciones',
+                'rodales_plantaciones__plantacion_plantaciongis').distinct('cod_sap')
 
     context = {'rodales' : rodales, 
+               'rodales_close' : rodales_close, 
                'category' : 'Rodales',
                 'action' : 'Administración de Rodales'}
 
@@ -187,8 +200,9 @@ def editRodal(request, id):
         rodal = Rodales.objects.get(pk = id)
         context.update({'rodal' : rodal})
 
-        #proceso los rodales desde la api
+        #proceso los rodales desde la api, puede generar un error si la red no esta conectada a SAP
         data_sap = getRodalesApiSap(request)
+
 
         if data_sap:
             
@@ -252,9 +266,12 @@ def editRodal(request, id):
 
         else:
             return render(request, 'rodales/edit.html', context)
-
-
     
+    except TypeError as e:
+         
+        messages.error(request, str('Error con la conexion a SAP!'))
+        return redirect('rodales-index')
+         
     except Exception as e:
         messages.error(request, str(e))
         return redirect('rodales-index')
@@ -369,8 +386,16 @@ def viewRodales(request, idrodal):
        
 
         context.update({'resumen_intervenciones' :  json.dumps(resumen_intervenciones)})
-        
 
+
+        #traigo la inforacion catastral
+        catastros_parcelas = Catastrogis.objects.filter(geom_4326__intersects = Rodalesgis.objects.get(rodales=rodal).geom_4326)
+
+
+        context.update({'catastros' : catastros_parcelas})
+    
+
+        
         
     except Exception as e:
                 messages.error(request, str(e))
@@ -384,6 +409,37 @@ def deleteRodal(request, idrodal):
         obj.delete()
        
         messages.success(request, "El Rodal ha sido eliminado.")
+        return redirect('rodales-index')
+
+    except Rodales.DoesNotExist:
+        raise Http404("error")
+    except Exception as e:
+        raise Http404(str(e))
+
+@login_required
+def closeRodal(request, idrodal):
+    try:
+        obj = Rodales.objects.get(pk=idrodal)
+        obj.is_finish = True
+        obj.save()
+       
+        messages.success(request, "El Rodal ha sido cerrado.")
+        return redirect('rodales-index')
+
+    except Rodales.DoesNotExist:
+        raise Http404("error")
+    except Exception as e:
+        raise Http404(str(e))
+
+
+@login_required
+def openRodal(request, idrodal):
+    try:
+        obj = Rodales.objects.get(pk=idrodal)
+        obj.is_finish = False
+        obj.save()
+       
+        messages.success(request, "El Rodal ha sido cerrado.")
         return redirect('rodales-index')
 
     except Rodales.DoesNotExist:

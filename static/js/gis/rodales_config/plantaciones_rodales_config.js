@@ -1,15 +1,15 @@
 
-function initGis(rodal_gis, plantaciones) {
+function initGis(rodal_gis, plantaciones, clasified) {
 
 
     let osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    });
 
     let googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
         maxZoom: 20,
         subdomains:['mt0','mt1','mt2','mt3']
-    });
+    }).addTo(map);
 
     let Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
@@ -28,8 +28,8 @@ function initGis(rodal_gis, plantaciones) {
 
 
     let basemaps = {
-        'Open Street Map' : osm,
         'Google Satellite' : googleSat,
+        'Open Street Map' : osm,
         'ESRI Satellite' : Esri_WorldImagery,
         'CyclOSM' : CyclOSM,
         'Argenmap Black' : argenmap_oscuro,
@@ -38,7 +38,7 @@ function initGis(rodal_gis, plantaciones) {
 
 
     overlayMaps = null;
-    let rodal = loadRodal(rodal_gis);
+    let rodal = rodal_gis != null ? loadRodal(rodal_gis, clasified) : null;
     //traigo la plantacion
 
 
@@ -52,7 +52,12 @@ function initGis(rodal_gis, plantaciones) {
 
     layerControl = L.control.layers(basemaps, overlayMaps).addTo(map);
 
-    loadPlantaciones(plantaciones);
+    if(plantaciones != null){
+        loadPlantaciones(plantaciones);
+
+    }
+
+    
     
 
 }
@@ -60,7 +65,7 @@ function initGis(rodal_gis, plantaciones) {
 
 function loadPlantaciones(plantaciones) {
 
-    console.log(plantaciones);
+  
     for (item of plantaciones.features) {
 
         let color_plant = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
@@ -241,23 +246,25 @@ function loadIntervenciones(overlays, type_controller)
 
 }
 
-function loadRodal(rodal_gis)
+function loadRodal(rodal_gis, clasified)
 {
 
     let geoJSON = L.geoJson(rodal_gis, {
-        style: styleRodal
+        style: styleRodal,
+        onEachFeature: onEachFeature,
     });
     geoJSON.addTo(map);
-    console.log(geoJSON.getBounds());
+    
     map.fitBounds(geoJSON.getBounds());
 
 
     function styleRodal() {
+        let randomColor = Math.floor(Math.random()*16777215).toString(16);
         return {
-            fillColor: '#EE5555',
-            weight: 2,
+            fillColor: clasified ? '#' + randomColor : '#EE5555',
+            weight: clasified ? 2 : 2,
             opacity: 1,
-            color: 'red',
+            color:  clasified ? '#' + randomColor : '#EE5555',
             fillOpacity: 0.6
         };
     }
@@ -273,6 +280,33 @@ function loadRodal(rodal_gis)
         });
 
         layer.bringToFront();
+
+        //aca tengo la lista de rodales, voy a tener que filtrar
+        let nombre = '';
+        console.log()
+
+        rodal_data_serializer_json.forEach(element => {
+
+            if(layer.feature.properties.rodales == element.pk){
+                nombre = element.fields.cod_sap != null ? element.fields.cod_sap : '';
+            }
+           
+            
+            
+        });
+
+
+
+        let title = "<h5 style='text-align: center;'>" + 'Rodal: ' + nombre + "</h5>"
+
+        layer.bindTooltip(title, {
+            direction: 'top',
+            permanent: false,
+            sticky: false,
+            offset: [10, 0],
+            opacity: 0.75,
+            className: 'leaflet-tooltip'
+        }).openTooltip();
     }
 
     function resetHighlight(e) {
@@ -285,6 +319,8 @@ function loadRodal(rodal_gis)
             mouseout: resetHighlight
         });
     }
+
+    
 
 
     return geoJSON;
@@ -303,6 +339,111 @@ function createInfoRodal(rodal_data)
           this.update();
           return this._div;
       };
+
+      info.update = function () {
+
+        this._div.innerHTML = `<div class="card-body p-2">
+
+                <div>
+                <h2 class="card-title text-center mb-1">Rodal</h2>
+                </div>
+
+                <div class="mb-2">
+                <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-3d-cube-sphere" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M6 17.6l-2 -1.1v-2.5"></path>
+                    <path d="M4 10v-2.5l2 -1.1"></path>
+                    <path d="M10 4.1l2 -1.1l2 1.1"></path>
+                    <path d="M18 6.4l2 1.1v2.5"></path>
+                    <path d="M20 14v2.5l-2 1.12"></path>
+                    <path d="M14 19.9l-2 1.1l-2 -1.1"></path>
+                    <path d="M12 12l2 -1.1"></path>
+                    <path d="M18 8.6l2 -1.1"></path>
+                    <path d="M12 12l0 2.5"></path>
+                    <path d="M12 18.5l0 2.5"></path>
+                    <path d="M12 12l-2 -1.12"></path>
+                    <path d="M6 8.6l-2 -1.1"></path>
+                 </svg>
+               <strong>Código SAP: </strong> ${rodal_data[0].fields.cod_sap.toString()}
+              </div>
+
+              <div class="mb-2">
+              <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                  <path d="M16 3v4"></path>
+                  <path d="M8 3v4"></path>
+                  <path d="M4 11h16"></path>
+                  <path d="M11 15h1"></path>
+                  <path d="M12 15v3"></path>
+               </svg>
+             <strong>Campo: </strong> ${rodal_data[0].fields.campo.toString()}
+            </div>
+
+
+            <div class="mb-2">
+            <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                <path d="M9 9l1 0"></path>
+                <path d="M9 13l6 0"></path>
+                <path d="M9 17l6 0"></path>
+             </svg>
+           <strong>Uso: </strong> ${rodal_data[0].fields.campo.toString()}
+          </div>
+
+
+          <div class="mb-2">
+          <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+              <path d="M12 7v5l3 3"></path>
+           </svg>
+         <strong>Certificado: </strong> ${rodal_data[0].fields.is_certificado ? 'Si' : 'No'}
+        </div>
+
+        <div class="mb-2">
+            <!-- Download SVG icon from http://tabler-icons.io/i/book -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                <path d="M12 7v5l3 3"></path>
+            </svg>
+             <strong>Finalizado: </strong> ${rodal_data[0].fields.is_finish ? 'Si' : 'No'}
+        
+        
+        </div>
+    
+        </div>`;
+
+
+        /*this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
+            '<b>' + 6 + '</b><br />' + 6 + ' people / mi<sup>2</sup>'
+            : 'Hover over a state');*/
+    };
+    
+
+    info.addTo(map);
+
+}
+
+function createInfoRodalAllData(rodal_data)
+{
+
+    let info = L.control({'position' : 'topleft'});
+
+      info.onAdd = function (map) {
+          this._div = L.DomUtil.create('div', 'card bg-dark text-dark-fg'); // create a div with a class "info"
+          this.update();
+          return this._div;
+      };
+
+
 
       info.update = function () {
 

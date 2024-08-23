@@ -5,6 +5,7 @@ from login.models import Users
 from empresas.models import Empresas
 
 
+
 # Create your models here.
 
 class Rodales(models.Model):
@@ -22,6 +23,7 @@ class Rodales(models.Model):
     usos_rodales = models.ForeignKey(Usosrodales, related_name='usos_rodales_category', blank=True, null=True, on_delete=models.SET_NULL)
     user = models.ForeignKey(Users, related_name='user_created_rodales', blank=False, null=True, on_delete=models.SET_NULL)
     empresa = models.ForeignKey(Empresas, related_name='empresas_rodales', blank=False, null=True, on_delete=models.SET_NULL)
+    
 
 
     

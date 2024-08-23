@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     'planificacion',
     'api',
     'sap',
-    'home'
+    'home',
+    'catastro'
 
 ]
 

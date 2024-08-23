@@ -16,7 +16,9 @@ from sagpyas.utility import get_sagpyas_by_empresa
 
 from rodales_gis.utility import get_area_rodal_gis_by_empresa, get_area_rodal_state_gis_by_empresa
 
-from plantaciones.serializers import getSuperficiePlantacionForestalByEmpresa
+from plantaciones.serializers import getSuperficiePlantacionForestalByEmpresa, getSuperficiePlantacionOnlyValueByEmpresa
+
+from rodales.models import Rodales
 
 
 # Create your views here.
@@ -27,8 +29,7 @@ from general_utility import getEmpresasApiSap
 def index(request):
 
     empresas = Empresas.objects.all()
-    print(empresas)
-
+  
     context = {'empresas' : empresas, 
                'category' : 'Empresas',
                 'action' : 'Administración de Empresas'}
@@ -223,14 +224,25 @@ def viewEmpresa(request, id):
     try:
         empresa = Empresas.objects.get(pk = id)
 
-        rodales = Empresas.objects.get(pk = id).empresas_rodales.filter(usos_rodales__name__icontains = 'Forestal')
-       
+        rodales = Empresas.objects.get(pk = id).empresas_rodales.filter(usos_rodales__name__icontains = 'Forestal') \
+        .values('pk', 'name', 'cod_sap', 'sap_id', 'campo', 'is_certificado', 'is_finish', 'is_sap', 'created', 'usos_rodales__name', 
+                'empresa__name', 'rodales_rodales_gis__superficie', 'user__first_name', 'user__last_name', 'rodales_plantaciones',
+                'rodales_plantaciones__plantacion_plantaciongis')
+        
+        
+        
+
         context.update({
             'empresa_current' : empresa,
             'rodales' : rodales
         });
     
-        rodales_bop = Empresas.objects.get(pk = id).empresas_rodales.filter(usos_rodales__name__icontains = 'Conservación')
+        rodales_bop = Empresas.objects.get(pk = id).empresas_rodales.filter(usos_rodales__name__icontains = 'Conservación') \
+        .values('pk', 'name', 'cod_sap', 'sap_id', 'campo', 'is_certificado', 'is_finish', 'is_sap', 'created', 'usos_rodales__name', 
+                'empresa__pk', 'empresa__name', 'rodales_rodales_gis', 'rodales_rodales_gis__superficie', 'user__first_name', 'user__last_name')
+        
+      
+        
        
         context.update({
            
@@ -245,24 +257,38 @@ def viewEmpresa(request, id):
            
             'sagpyas' : sagpyas
         });
+
+      
         
 
-        superficie_total = round(float(get_area_rodal_gis_by_empresa(idempresa=id)['area_'].sq_m / 10000), 2)
-
+        sup_t = get_area_rodal_gis_by_empresa(idempresa=id)
+      
+        superficie_total = round(float((sup_t['area_'].sq_m / 10000)), 2) if sup_t != False else 0
+        
+        #superficie plantada
+        sum_plantacion = getSuperficiePlantacionOnlyValueByEmpresa(id)
+        
+        
+        res_area = get_area_rodal_state_gis_by_empresa(idempresa=id)
+        
         #superficie plantada
         sum_plantacion = getSuperficiePlantacionForestalByEmpresa(id)
 
-        superficie_actual = round(float(get_area_rodal_state_gis_by_empresa(idempresa=id) / 10000), 2)
+        sup_ = res_area['area_'] if res_area['area_'] is not None else 0
 
+        superficie_actual = round(float((sup_ / 10000)), 2) if res_area != False else 0
 
+        #superficie_actual = round(float(get_area_rodal_state_gis_by_empresa(idempresa=id) / 10000), 2)
+        sum_plan = sum_plantacion['suma_superficie'] if sum_plantacion['suma_superficie'] != None else 0
     
+
         #traigo los resultados resumen
         context.update({
            
             'total_rodales' : len(rodales),
             'total_rodales_bop' : len(rodales_bop),
             'superficie_total' : superficie_total,
-            'superficie_plantacion' : sum_plantacion['suma_superficie'],
+            'superficie_plantacion' : sum_plan,
             'superficie_actual': superficie_actual
         });
     

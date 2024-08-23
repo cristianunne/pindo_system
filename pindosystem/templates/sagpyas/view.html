@@ -41,7 +41,7 @@
             </div>
           </div>
 
-            <div class="col-xxl-4 col-lg-6 col-md-6 col-sm-12">
+            <div class="col-xxl-3 col-lg-6 col-md-6 col-sm-12">
               <div class="card bg-primary-lt">
                 <div class="card-body">
                   <div class="row align-items-center">
@@ -140,7 +140,7 @@
               </div>
             </div>
 
-            <div class="col-xxl-8 col-lg-12 col-md-12 col-sm-12">
+            <div class="col-xxl-9 col-lg-12 col-md-12 col-sm-12">
 
               <div class="row row-cards col-lg-12 col-md-12 col-sm-12 mb-5 lg-mt-3 md-mt-3 sm-mt-3">
                 <div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12 d-xxl-none d-lg-block">
@@ -238,6 +238,9 @@
                           <th class="dt-center align-middle"></th>
                           <th class="dt-center align-middle">Código SAP</th>
                           <th class="dt-center align-middle">Campo</th>
+                          <th class="dt-center align-middle">Sup./Apro</th>
+                          <th class="dt-center align-middle">Turno</th>
+                          <th class="dt-center align-middle">Tarea</th>
                           <th class="dt-center align-middle">¿Certificado?</th>
                           <th class="dt-center align-middle">¿Finalizado?</th>
                           <th class="dt-center align-middle">Uso</th>
@@ -252,7 +255,7 @@
                       
                                 <td class="dt-center align-middle"> 
                                     <div class="mr-3">
-                                      <a href="{% url 'rodales-view' idrodal=rodal.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{rodal.pk}}">
+                                      <a href="{% url 'rodales-view' idrodal=rodal.rodales.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{rodal.pk}}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                           <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
@@ -263,15 +266,37 @@
                                       </a>
                                     </div>
                                 </td>
-                                <td class="dt-center align-middle"> {{ rodal.cod_sap }}</td>
-                                <td class="dt-center align-middle">{{ rodal.campo }}</td>
-                                <td class="dt-center align-middle"> {{ rodal.is_certificado|yesno:"Si,No" }}</td>
-                                <td class="dt-center align-middle"> {{ rodal.is_finish|yesno:"Si,No" }}</td>
-                                <td class="dt-center align-middle">{{ rodal.usos_rodales.name }}</td>
-                                <td class="dt-center align-middle">{{ rodal.empresa.name }}</td>
+                                <td class="dt-center align-middle"> {{ rodal.rodales.cod_sap }}</td>
+                                <td class="dt-center align-middle">{{ rodal.rodales.campo }}</td>
+                                <td class="dt-center align-middle">{{ rodal.superficie_aprobada }}</td>
+                                <td class="dt-center align-middle">{{ rodal.turno }}</td>
+                                <td class="dt-center align-middle">{{ rodal.tarea }}</td>
+                                <td class="dt-center align-middle"> {{ rodal.rodales.is_certificado|yesno:"Si,No" }}</td>
+                                <td class="dt-center align-middle"> {{ rodal.rodales.is_finish|yesno:"Si,No" }}</td>
+                                <td class="dt-center align-middle">{{ rodal.rodales.usos_rodales.name }}</td>
+
+                                <td class="dt-center align-middle">
+                                  <a href="{% url 'empresas-view'  id=rodal.rodales.empresa.pk %}">
+                                    {{ rodal.rodales.empresa.name }}
+      
+                                  </a>
+                                </td>
+                               
                               
                                 <td>
                                     <div class="d-flex justify-content-center">
+
+                                      <div class="mr-3">
+                                        <a href="{% url 'sagpyas-rodales-edit' idsagpyarodal=rodal.pk %}" class="btn btn-rss btn-icon" 
+                                        aria-label="Button" attr="{{rodal.pk}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                                <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                                <path d="M16 5l3 3"></path>
+                                             </svg>
+                                        </a>
+                                    </div>
     
                                         <div>
                                             <a onclick="deleteInformation(this)" attr="{{sagpyas_data.pk}}" attr2="{{rodal.pk}}" 

@@ -33,6 +33,21 @@ function deleteInformation(element){
     let message = 'Si acepta se borrará toda la información del Rodal';
     
     dialogDeleteConfirm(element, title, message, URLS_DELETE.RODALES_DELETE);
+
+  } else if(controller === 'rodales_close') {
+
+    let title = '¿Desea Cerrar el Rodal?';
+    let message = 'La información del Rodal quedara almacenada en el historial';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.RODALES_CLOSE, 'Cerrar');
+  }
+
+  else if(controller === 'rodales_open') {
+
+    let title = '¿Desea Abrir el Rodal?';
+    let message = 'La información del Rodal se recuperara nuevamente';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.RODALES_OPEN, 'Aceptar');
   }
   
   else if(controller === 'users') {
@@ -146,7 +161,7 @@ function deleteInformation(element){
     let title = '¿Desea Eliminar el Rodal del Sagpya Actual?';
     let message = 'Si acepta se borrará toda la información de la Capa';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.SAGPYAS_RODALES_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.SAGPYAS_RODALES_DELETE, 'Eliminar');
   }
 
   else if(controller === 'planificacion') {
@@ -165,13 +180,45 @@ function deleteInformation(element){
     dialogDeleteConfirm(element, title, message, URLS_DELETE.MAQUINAS_EMSEFOR_DELETE);
   }
 
+  else if(controller === 'movimientos_expe') {
+
+    let title = '¿Desea Eliminar el Movimiento?';
+    let message = 'Si acepta se borrará toda la información del mismo';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.MOVIMIENTO_EXPE_DELETE, 'Eliminar');
+  }
+
+  else if(controller === 'movimientos_sagpya') {
+
+    let title = '¿Desea Eliminar el Movimiento?';
+    let message = 'Si acepta se borrará toda la información del mismo';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.MOVIMIENTO_DELETE, 'Eliminar');
+  }
+
+  else if(controller === 'sagpyas_files_delete') {
+
+    let title = '¿Desea Eliminar el Archivo Movimiento?';
+    let message = 'Si acepta se borrará toda la información del mismo';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.MOVIMIENTO_SAGPYA_DELETE, 'Eliminar');
+  }
+
+  else if(controller === 'catastro_parcela_delete') {
+
+    let title = '¿Desea Eliminar la Parcela?';
+    let message = 'Si acepta se borrará toda la información del mismo';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.CATASTRO_PARCELA_DELETE, 'Eliminar');
+  }
+
 
 
 
 }
 
 
-function dialogDeleteConfirm(element, title, message, url) {
+function dialogDeleteConfirm(element, title, message, url, txt_button) {
 
     console.log(title);
 
@@ -192,6 +239,9 @@ function dialogDeleteConfirm(element, title, message, url) {
         '<path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>'+
         '</svg>';
 
+    
+    let open_icon = '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>'
+
 
 
     let info_icon = '<svg xmlns="http://www.w3.org/2000/svg" class="icon text-red" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">'+ 
@@ -201,6 +251,7 @@ function dialogDeleteConfirm(element, title, message, url) {
 
     let id = element.getAttribute('attr');
     let id2 = element.getAttribute('attr2');
+   
 
 
     let modal = document.createElement("div");
@@ -253,7 +304,12 @@ function dialogDeleteConfirm(element, title, message, url) {
 
     let btn_aceptar = document.createElement('button');
     btn_aceptar.classList.add('btn', 'btn-danger');
-    btn_aceptar.innerHTML = trash_icon + ' Eliminar';
+
+
+    texto_ = (txt_button.toString() == null || txt_button.toString() == undefined) ? ' Eliminar' : txt_button.toString();
+    
+
+    btn_aceptar.innerHTML = trash_icon +  texto_ 
 
     btn_aceptar.addEventListener('click', function(){
         modal.style.display = 'none';

@@ -3,6 +3,7 @@
 {% extends "../layout/base.html" %}
 
 {% load static %}
+{% load humanize %}
 
 
 {% block sidebar %}
@@ -91,22 +92,24 @@
                   <thead>
                     <tr>
                       <th class="dt-center align-middle"></th>
+                      <th class="dt-center align-middle">ID</th>
                       <th class="dt-center align-middle">Código SAP/Nombre</th>
                       <th class="dt-center align-middle">Campo</th>
                       <th class="dt-center align-middle">¿Certificado?</th>
                       <th class="dt-center align-middle">¿Finalizado?</th>
                       <th class="dt-center align-middle">Uso</th>
+                      <th class="dt-center align-middle">Plantado?</th>
                       <th class="dt-center align-middle">Empresa</th>
                       <th class="dt-center align-middle">Fecha de Registro</th>
-                      <th class="dt-center align-middle">Fecha de Modificación</th>
                       <th class="dt-center align-middle">Usuario</th>
                       <th class="dt-center align-middle">Acciones</th>
+                      <th class="dt-center align-middle">Cerrar</th>
                     </tr>
                   </thead>
                   <tbody class="table-tbody">
                     {% for rodal in rodales %}
                         <tr> 
-                  
+                
                             <td class="dt-center align-middle"> 
                                 <div class="mr-3">
                                   <a href="{% url 'rodales-view' idrodal=rodal.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{rodal.pk}}">
@@ -120,6 +123,7 @@
                                   </a>
                                 </div>
                             </td>
+                            <td class="dt-center align-middle">{{ rodal.pk }}</td>
 
                             {% if rodal.is_sap%}
                               <td class="dt-center align-middle"> {{ rodal.cod_sap }}</td>
@@ -129,12 +133,37 @@
 
                             <td class="dt-center align-middle">{{ rodal.campo }}</td>
                             <td class="dt-center align-middle"> {{ rodal.is_certificado|yesno:"Si,No" }}</td>
-                            <td class="dt-center align-middle"> {{ rodal.is_finish|yesno:"Si,No" }}</td>
-                            <td class="dt-center align-middle">{{ rodal.usos_rodales.name }}</td>
-                            <td class="dt-center align-middle">{{ rodal.empresa.name }}</td>
+                            <td class="dt-center align-middle text-red"> {{ rodal.is_finish|yesno:"Si,No" }}</td>
+                            <td class="dt-center align-middle">{{ rodal.usos_rodales__name }}</td>
+
+
+                            {% if rodal.rodales_plantaciones__plantacion_plantaciongis %}
+                            <td class="dt-center align-middle text-green">
+                             <div class="mr-3">
+                               <a href="{% url 'plantaciones-view'  id_plantacion=rodal.rodales_plantaciones %}" class="btn btn-lime btn-icon" aria-label="Button" attr="{{empresa.pk}}">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                   <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                   <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                </svg>
+                               </a>
+                             </div>
+
+                            </td>
+                          {% else %}
+                          <td class="dt-center align-middle text-red">{{ 'No' }}</td>
+                          {% endif%}
+
+                            <td class="dt-center align-middle">
+                              <a href="{% url 'empresas-view'  id=rodal.empresa__pk %}">
+                                {{ rodal.empresa__name }}
+
+                              </a>
+                            </td>
+                             
                             <td class="dt-center align-middle">{{ rodal.created }}</td>
-                            <td class="dt-center align-middle">{{ rodal.modified }}</td>
-                            <td class="dt-center align-middle">{{ rodal.user }}</td>
+                           
+                            <td class="dt-center align-middle">{{ rodal.user__first_name }} {{' '}}{{ rodal.user__last_name}}</td>
                             <td>
                                 <div class="d-flex justify-content-center">
 
@@ -173,6 +202,175 @@
                                     </div>
                                   </div>
                                 
+                            </td>
+
+                            <td class="dt-center align-middle">
+
+                              <div class="d-flex justify-content-center">
+
+                        
+
+                                  <div>
+                                      <a href="#" onclick="deleteInformation(this)" attr="{{rodal.pk}}" class="btn btn-youtube btn-icon" controller="rodales_close">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-square-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" /><path d="M9 9l6 6m0 -6l-6 6" /></svg>
+                                      </a>
+
+                                  </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    
+                    {% endfor %}
+
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mt-7">
+
+            <div class="card-header">
+              <h3 class="card-title">Rodales Cerrados</h3>
+            </div>
+            <div class="card-body">
+             
+
+            
+              <div id="" class="table-responsive">
+                <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text">
+                  <thead>
+                    <tr>
+                      <th class="dt-center align-middle"></th>
+                      <th class="dt-center align-middle">ID</th>
+                      <th class="dt-center align-middle">Código SAP/Nombre</th>
+                      <th class="dt-center align-middle">Campo</th>
+                      <th class="dt-center align-middle">¿Certificado?</th>
+                      <th class="dt-center align-middle">¿Finalizado?</th>
+                      <th class="dt-center align-middle">Uso</th>
+                      <th class="dt-center align-middle">Plantado?</th>
+                      <th class="dt-center align-middle">Empresa</th>
+                      <th class="dt-center align-middle">Fecha de Registro</th>
+                      <th class="dt-center align-middle">Usuario</th>
+                      <th class="dt-center align-middle">Acciones</th>
+                      <th class="dt-center align-middle">Reactivar</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-tbody">
+                    {% for rodal in rodales_close %}
+                        <tr> 
+                
+                            <td class="dt-center align-middle"> 
+                                <div class="mr-3">
+                                  <a href="{% url 'rodales-view' idrodal=rodal.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{rodal.pk}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                                      <path d="M12 4v16" /><path d="M4 15h8" />
+                                      <path d="M12 12h8" /><path d="M16 12v8" />
+                                      <path d="M16 16h4" />
+                                   </svg>
+                                  </a>
+                                </div>
+                            </td>
+                            <td class="dt-center align-middle">{{ rodal.pk }}</td>
+
+                            {% if rodal.is_sap%}
+                              <td class="dt-center align-middle"> {{ rodal.cod_sap }}</td>
+                            {% else %}
+                              <td class="dt-center align-middle"> {{ rodal.name }}</td>
+                            {% endif%}
+
+                            <td class="dt-center align-middle">{{ rodal.campo }}</td>
+                            <td class="dt-center align-middle"> {{ rodal.is_certificado|yesno:"Si,No" }}</td>
+                            <td class="dt-center align-middle text-green"> {{ rodal.is_finish|yesno:"Si,No" }}</td>
+                            <td class="dt-center align-middle">{{ rodal.usos_rodales__name }}</td>
+
+                            {% if rodal.rodales_plantaciones__plantacion_plantaciongis %}
+                            <td class="dt-center align-middle text-green">
+                             <div class="mr-3">
+                               <a href="{% url 'plantaciones-view'  id_plantacion=rodal.rodales_plantaciones %}" class="btn btn-lime btn-icon" aria-label="Button" attr="{{empresa.pk}}">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                   <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                   <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                </svg>
+                               </a>
+                             </div>
+
+                            </td>
+                          {% else %}
+                          <td class="dt-center align-middle text-red">{{ 'No' }}</td>
+                          {% endif%}
+                          <td class="dt-center align-middle">
+                            <a href="{% url 'empresas-view'  id=rodal.empresa__pk %}">
+                              {{ rodal.empresa__name }}
+
+                            </a>
+                          </td>
+                            <td class="dt-center align-middle">{{ rodal.created }}</td>
+                           
+                            <td class="dt-center align-middle">{{ rodal.user__first_name }} {{' '}}{{ rodal.user__last_name}}</td>
+                            <td>
+                                <div class="d-flex justify-content-center">
+
+                                  <div class="mr-3">
+                                    <a href="{% url 'rodales-config' id=rodal.pk %}" class="btn btn-purple btn-icon" aria-label="Button" attr="{{rodal.pk}}">
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                                        <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
+                                    </a>
+                                  </div>
+                                
+                                    <div class="mr-3">
+                                        <a href="{% url 'rodales-edit' id=rodal.pk %}" class="btn btn-rss btn-icon" 
+                                        aria-label="Button" attr="{{rodal.pk}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                                <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                                <path d="M16 5l3 3"></path>
+                                             </svg>
+                                        </a>
+                                    </div>
+
+                                    <div>
+                                        <a href="#" onclick="deleteInformation(this)" attr="{{rodal.pk}}" 
+                                        class="btn btn-youtube btn-icon" controller="rodales">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M4 7l16 0"></path>
+                                            <path d="M10 11l0 6"></path>
+                                            <path d="M14 11l0 6"></path>
+                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                         </svg>
+                                        </a>
+
+                                    </div>
+                                  </div>
+                                
+                            </td>
+
+                            <td class="dt-center align-middle">
+
+                              <div class="d-flex justify-content-center">
+
+                        
+
+                                  <div>
+                                      <a href="#" onclick="deleteInformation(this)" attr="{{rodal.pk}}" 
+                                      class="btn btn-lime btn-icon" controller="rodales_open">
+
+                                      <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+                                         </a>
+
+                                  </div>
+                                </div>
+
                             </td>
                         </tr>
                     

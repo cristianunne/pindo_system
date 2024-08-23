@@ -57,12 +57,14 @@
                         {% csrf_token %}
                         <div class="mb-4">
                           <label class="form-label required">Operaciones:</label>
-                          <input type="text" class="form-control" placeholder="Operaciones" name="operaciones" id="operaciones" value="{{sagpyas.operaciones}}" required/>
+                          <input type="text" class="form-control" placeholder="Operaciones" name="operaciones" 
+                          id="operaciones" value="{{sagpyas.operaciones}}" required/>
                         </div>
                         <div class="mb-4">
                         <label class="form-label required">Fecha:</label>
                         <div class="input-icon mb-3">
-                          <input class="form-control " placeholder="Select a date" id="fecha" name="fecha" value="{{sagpyas.fecha}}">
+                          <input class="form-control " placeholder="Select a date" id="fecha" name="fecha" 
+                          value="{{ sagpyas.fecha|date:'Y-m-d' }}">
                           <span class="input-icon-addon"><!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path><path d="M16 3v4"></path><path d="M8 3v4"></path><path d="M4 11h16"></path><path d="M11 15h1"></path><path d="M12 15v3"></path></svg>
                           </span>
@@ -71,18 +73,30 @@
 
                         <div class="mb-4">
                           <label class="form-label required">Superficie Aprobada:</label>
-                          <input type="number" step="0.01" class="form-control" placeholder="Superficie Aprobada" name="sup_aprobada" id="sup_aprobada" 
+                          <input class="form-control" placeholder="Superficie Aprobada" 
+                          name="sup_aprobada" id="sup_aprobada" 
                           value="{{sagpyas.sup_aprobada}}"/>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label required">Expediente:</label>
+                          <input class="form-control" 
+                          placeholder="Expediente" name="expediente" id="expediente" 
+                          value="{{sagpyas.expediente}}"/>
                         </div>
                        
                         <div class="mb-4">
-                          <label class="form-label required">Expediente:</label>
-                          <input type="text" class="form-control" placeholder="Expediente" name="expediente" id="expediente" value="{{sagpyas.expediente}}"/>
+                          <label class="form-label required">Expediente (NETAD):</label>
+                          <input type="text" class="form-control" placeholder="Expediente" name="netad" 
+                          id="netad" value="{{sagpyas.expedientes.name}}"/>
                         </div>
+
                         <div class="mb-4">
-                          <label class="form-label required">Turno Mimino:</label>
-                          <input type="text" class="form-control" placeholder="Turno Mimino" name="turno_minimo" id="turno_minimo" value="{{sagpyas.turno_minimo}}"/>
+                          <label class="form-label required">N° de Res. Pago:</label>
+                          <input type="text" class="form-control" placeholder="resolucion" 
+                          name="resolucion" id="resolucion" value="{{sagpyas.resolucion}}"/>
                         </div>
+                   
 
                        
 
@@ -92,12 +106,14 @@
                               <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                               <path d="M9.586 4l-6.586 6.586a2 2 0 0 0 0 2.828l6.586 6.586a2 2 0 0 0 2.18 .434l.145 -.068a2 2 0 0 0 1.089 -1.78v-2.586h7a2 2 0 0 0 2 -2v-4l-.005 -.15a2 2 0 0 0 -1.995 -1.85l-7 -.001v-2.585a2 2 0 0 0 -3.414 -1.414z" stroke-width="0" fill="currentColor" />
                             </svg> Volver</a>
-                          <button type="submit" class="btn btn-primary pull-right"> 
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <path d="M12 5l0 14"></path>
-                              <path d="M5 12l14 0"></path>
-                           </svg> Nuevo</button>
+                            <button type="submit" class="btn btn-warning pull-right"> 
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                <path d="M16 5l3 3"></path>
+                             </svg>
+                             Editar</button>
                         </div>
                       </form>
                     </div>

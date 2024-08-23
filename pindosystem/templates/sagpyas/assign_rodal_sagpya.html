@@ -48,7 +48,7 @@
               <div class="card">
                 <div class="card-status-top bg-blue"></div>
                 <div class="card-header">
-                  <h3 class="card-title">Aignar Rodales al Expediente Sagpya</h3>
+                  <h3 class="card-title">Asignar Rodales al Expediente Sagpya</h3>
                 </div>
                 <div class="card-body">
                   <div class="row justify-content-center flex-column align-items-center">
@@ -64,7 +64,25 @@
                                 <option value="{{ index }}">{{ value }}</option>
                               {% endfor %}
                             </select>
-                          </div>
+                        </div>
+
+                        <div class="mb-5">
+                          <label class="form-label required">Superficie Aprobada:</label>
+                          <input type="number" step="0.01" class="form-control" 
+                           placeholder="Superficie Aprobada" name="sup_aprobada" id="sup_aprobada" value="{{sup_aprobada}}"/>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label">Turno:</label>
+                          <input type="number" step="0.01" class="form-control" 
+                          placeholder="Turno Minimo" name="turno" id="turno" value="{{turno}}"/>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label">Tarea:</label>
+                          <input type="text" class="form-control" 
+                          placeholder="Tarea" name="tarea" id="tarea" value="{{tarea}}"/>
+                        </div>
 
 
 

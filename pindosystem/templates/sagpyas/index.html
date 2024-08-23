@@ -82,14 +82,15 @@
                 <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text">
                   <thead>
                     <tr>
-                      <th class="dt-center align-middle"></button></th>
-                      <th class="dt-center align-middle">Operaciones</button></th>
-                      <th class="dt-center align-middle">Fecha</button></th>
-                      <th class="dt-center align-middle">Superficie Aprobada</button></th>
-                      <th class="dt-center align-middle">Expediente</button></th>
-                      <th class="dt-center align-middle">Turno Mínimo</button></th>
-                      <th class="dt-center align-middle">Fecha de Registro</button></th>
-                      <th class="dt-center align-middle">Acciones</button></th>
+                      <th class="dt-center align-middle"></th>
+                      <th class="dt-center align-middle">Operaciones</th>
+                      <th class="dt-center align-middle">Fecha</th>
+                      <th class="dt-center align-middle">Superficie Aprobada</th>
+                      <th class="dt-center align-middle">Expediente </th>
+                      <th class="dt-center align-middle">NETAD</th>
+                      <th class="dt-center align-middle">N° de Res. Pago</th>
+                      <th class="dt-center align-middle">Fecha de Registro</th>
+                      <th class="dt-center align-middle">Acciones</th>
                     </tr>
                   </thead>
                   <tbody class="table-tbody">
@@ -111,8 +112,25 @@
                             <td class="dt-center align-middle"> {{ sagpya.operaciones }}</td>
                             <td class="dt-center align-middle">{{ sagpya.fecha }}</td>
                             <td class="dt-center align-middle">{{ sagpya.sup_aprobada }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.expediente }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.turno_minimo }}</td>
+                            <td class="dt-center align-middle">
+                              
+                              <a href="{% url 'movimientos-view' idsagpya=sagpya.pk %}" class="hover-pindo">
+                                {{ sagpya.expediente }}
+                              </a>
+                              
+                             
+                            <td class="dt-center align-middle">
+
+                              {% if sagpya.expedientes != None  %}
+
+                              {{ sagpya.expedientes.name }}
+                             
+                              {% endif %}
+
+                             
+                  
+                              </td>
+                              <td class="dt-center align-middle">{{ sagpya.resolucion }}</td>
                             <td class="dt-center align-middle">{{ sagpya.created }}</td>
                             <td>
                                 <div class="d-flex justify-content-center">

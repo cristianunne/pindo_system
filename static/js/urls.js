@@ -2,6 +2,8 @@
 
 const URLS_DELETE = {
     RODALES_DELETE: 'rodales-delete/',
+    RODALES_CLOSE: 'rodales-close/',
+    RODALES_OPEN: 'rodales-open/',
     EMPRESA_DELETE: 'empresas-delete/',
     USUARIOS_DELETE: 'delete-user/',
     EMSEFOR_DELETE: 'emsefor-delete/',
@@ -26,7 +28,15 @@ const URLS_DELETE = {
 
     PLANIFICACION_DELETE: '../../planificacion-delete/',
 
-    MAQUINAS_EMSEFOR_DELETE: '../../emsefor-maquina-delete/'
+    MAQUINAS_EMSEFOR_DELETE: '../../emsefor-maquina-delete/',
+
+    MOVIMIENTO_EXPE_DELETE: '../../delete-files-movimientos/',
+
+    MOVIMIENTO_DELETE: '../../movimientos-delete/',
+
+    MOVIMIENTO_SAGPYA_DELETE: '../../movimientos-delete-file/',
+
+    CATASTRO_PARCELA_DELETE: 'catastros-delete/',
 
 
 }

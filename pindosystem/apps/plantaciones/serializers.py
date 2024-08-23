@@ -57,9 +57,61 @@ def getSuperficiePlantacionByEmpresa(id_empresa):
     .filter(rodales__in = rodales_ids) \
     .annotate(uso = F('rodales__usos_rodales__name')) \
     .values('uso') \
-    .annotate(suma_superficie = Sum('superficie')) 
+    .annotate(suma_superficie = Sum('superficie'))
 
-    return list(plantaciones)
+
+    #puedo traer la superficie de aquellos que no tengan plantaciones xq no son de uso forestal o yerba mate
+    otros_usos = Rodales.objects.filter(rodales_id__in = rodales_ids).exclude(usos_rodales__name__in = ['Forestal', 'Yerba mate']) \
+    .values('usos_rodales__name').annotate(rodales_rodales_gis__superficie = Sum('rodales_rodales_gis__superficie'))
+
+   
+
+    plan_list = list(plantaciones)
+    
+    for us in otros_usos:
+        plan_list.append({'uso' : us['usos_rodales__name'], 'suma_superficie' : us['rodales_rodales_gis__superficie']})
+
+
+    return plan_list
+
+
+def getSuperficiePlantacionOnlyValueByEmpresa(id_empresa):
+    
+    #filtro los rodales por empresas
+    rodales = Rodales.objects.filter(empresa = id_empresa)
+
+    #traigo solo los ids
+    rodales_ids = getPkFromData(rodales)
+
+
+    plantaciones = Plantaciones.objects.select_related('rodales', 'rodales__usos_rodales') \
+    .filter(rodales__in = rodales_ids) \
+    .annotate(uso = F('rodales__usos_rodales__name')) \
+    .values('uso') \
+    .annotate(suma_superficie = Sum('superficie'))
+
+
+    #puedo traer la superficie de aquellos que no tengan plantaciones xq no son de uso forestal o yerba mate
+    otros_usos = Rodales.objects.filter(rodales_id__in = rodales_ids).exclude(usos_rodales__name__in = ['Forestal', 'Yerba mate']) \
+    .values('usos_rodales__name', 'rodales_rodales_gis__superficie')
+
+   
+
+    plan_list = list(plantaciones)
+    
+    for us in otros_usos:
+        plan_list.append({'uso' : us['usos_rodales__name'], 'suma_superficie' : us['rodales_rodales_gis__superficie']})
+
+
+    result = 0
+   
+
+    for sup in plan_list:
+        
+        result = result + sup['suma_superficie']
+       
+    
+    return result
 
 def getSuperficiePlantacionForestalByEmpresa(id_empresa):
     
@@ -71,8 +123,27 @@ def getSuperficiePlantacionForestalByEmpresa(id_empresa):
 
 
     plantaciones = Plantaciones.objects.select_related('rodales', 'rodales__usos_rodales') \
-    .filter(rodales__in = rodales_ids, rodales__usos_rodales__name__icontains = 'Forestal') \
+    .filter(rodales__in = rodales_ids, rodales__usos_rodales__name__icontains = 'Forestal', rodales__is_finish = False) \
     .aggregate(suma_superficie = Sum('superficie'))
+   
+
+    return plantaciones
+
+
+def getSuperficiePlantacionByEmpresaUsos(id_empresa):
+    
+    #filtro los rodales por empresas
+    rodales = Rodales.objects.filter(empresa = id_empresa)
+
+    #traigo solo los ids
+    rodales_ids = getPkFromData(rodales)
+
+
+    plantaciones = Plantaciones.objects.select_related('rodales', 'rodales__usos_rodales') \
+    .filter(rodales__in = rodales_ids, rodales__is_finish = False) \
+    .aggregate(suma_superficie = Sum('superficie'))
+
+    #tego que agregar lo de BO y agregar al total
    
 
     return plantaciones
@@ -80,7 +151,7 @@ def getSuperficiePlantacionForestalByEmpresa(id_empresa):
 def getSuperficiePlantacionYearsByEmpresa(id_empresa):
 
      #filtro los rodales por empresas
-    rodales = Rodales.objects.select_related('usos_rodales').filter(empresa = id_empresa, usos_rodales__name__contains = 'Forestal')
+    rodales = Rodales.objects.select_related('usos_rodales').filter(empresa = id_empresa)
 
     #traigo solo los ids
     rodales_ids = getPkFromData(rodales)
@@ -100,19 +171,7 @@ def getSuperficiePlantacionYearsByEmpresa(id_empresa):
 
 
 
-def getSagpyasByEmpresaSerializer(idempresa):
- 
-    try:
 
-        sagpyas = Sagpyas.objects\
-        .filter(rodales__empresa__pk = idempresa, rodales__usos_rodales__name__contains = 'Forestal') \
-        .values() \
-        .annotate(cantidad_rodales = Count('rodales'))
-        
-        return list(sagpyas)
-    
-    except Exception as e:
-        return False
     
 
         

@@ -7,7 +7,7 @@ getTalarazaByRodal, getTalarazaGis
 
 from django.core.serializers import serialize
 
-from rodales_gis.utility import get_rodal_gis_state, get_extent_rodalstate_gis, get_rodales_gis, get_extent_rodalgis
+from rodales_gis.utility import get_rodal_gis_state, get_extent_rodalstate_gis, get_rodales_gis, get_extent_rodalgis, get_rodal_gis
 
 
 def IntervencionesByRodalSerializer(idrodal):
@@ -189,6 +189,7 @@ def getPodaByRodalSerializer(idrodal):
     
     poda = getPodaByRodal(idrodal)
 
+
     return list(poda)
 
 
@@ -199,10 +200,13 @@ def getPodaWithGisDetailsByRodalSerializer(idrodal):
         #traigo los ids de las intervenciones del rodal
         ids_intervencion = Intervenciones.objects.filter(rodales__pk = idrodal)
 
+
         ids_inter = []
 
         for ids in ids_intervencion:
             ids_inter.append(ids.pk)
+
+        
 
         poda_gis = getPodaGis(ids_inter)
 
@@ -215,7 +219,7 @@ def getPodaWithGisDetailsByRodalSerializer(idrodal):
 
         result.append({'poda_gis': poda_gis, 
                        'config': extent,
-                       'rodal' : get_rodales_gis(idrodal)
+                       'rodal' : get_rodal_gis(idrodal)
                        })
         
         

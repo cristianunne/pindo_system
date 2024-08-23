@@ -82,6 +82,10 @@
                 <span class="nav-link-title">
                     Empresas
                 </span>
+                <div >
+                    <span class="badge badge-sm bg-green-lt text-uppercase ms-auto" style="transform: unset !important;top: 0.5rem;">
+                        {{ empresas_count }}</span>
+                </div>
                 </a>
             </li>
 
@@ -181,6 +185,36 @@
                     </div>
                     <div >
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto" style="transform: unset !important;top: 0.5rem;">{{ rodales_count }}</span>
+                    </div>
+
+               
+                </a>
+              
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'catastros-index' %}" >
+                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                    
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  
+                        viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  
+                        stroke-linecap="round"  stroke-linejoin="round"  
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-box-padding">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                        <path d="M8 16v.01" /><path d="M8 12v.01" /><path d="M8 8v.01" /><path d="M16 16v.01" />
+                        <path d="M16 12v.01" /><path d="M16 8v.01" /><path d="M12 8v.01" /><path d="M12 16v.01" /></svg>
+                  
+                </span>
+              
+                    <div >
+                        Catastros
+                       
+                    </div>
+                    <div >
+                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto" style="transform: unset !important;top: 0.5rem;">
+                            {{ rodales_count }}</span>
                     </div>
 
                

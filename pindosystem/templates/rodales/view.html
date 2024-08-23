@@ -53,9 +53,16 @@
                         </li>
                         <li class="nav-item">
                           <a href="#tabs-costos" class="nav-link" data-bs-toggle="tab">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-currency-dollar" width="24" height="24" viewBox="0 0 24 24" 
-                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                              <path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg> Costos
+                            
+                            <svg  xmlns="http://www.w3.org/2000/svg" 
+                            viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  width="24" height="24" 
+                            stroke-linecap="round"  stroke-linejoin="round"  >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                            <path d="M8 16v.01" /><path d="M8 12v.01" /><path d="M8 8v.01" /><path d="M16 16v.01" />
+                            <path d="M16 12v.01" /><path d="M16 8v.01" /><path d="M12 8v.01" /><path d="M12 16v.01" /></svg>
+                            
+                            Catastro
                           </a>
                         </li>
                         <li class="nav-item">
@@ -82,9 +89,94 @@
                         </div>
                       
 
-                        <div class="tab-pane" id="tabs-costos">
-                          <h4>Intervenciones</h4>
-                          <div>Donec ac vitae diam amet vel leo egestas consequat rhoncus in luctus amet, facilisi sit mauris accumsan nibh habitant senectus</div>
+                        <div class="tab-pane min-vh-95 max-vh-95 pt-5 pl-5" id="tabs-costos">
+                          <h4 class="text-center text-blue">Información Catastral del Rodal</h4>
+                          <div>
+
+                            <div class="card">
+                              <div class="card-body">
+                               
+                                <div id="" class="table-responsive">
+                                  <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text">
+                                    <thead>
+                                      <tr>
+                                        <th class="dt-center align-middle"></th>
+                                        <th class="dt-center align-middle">ID</th>
+                                        <th class="dt-center align-middle">Empresa</th>
+                                        <th class="dt-center align-middle">Campo/Empresa</th>
+                                        <th class="dt-center align-middle">Lote</th>
+                                        <th class="dt-center align-middle">Parcela</th>
+                                        <th class="dt-center align-middle">Partida</th>
+                                        <th class="dt-center align-middle">Matricula</th>
+                                        <th class="dt-center align-middle">Municipio</th>
+                                        <th class="dt-center align-middle">Superficie</th>
+                                        <th class="dt-center align-middle">Certificado</th>
+                    
+                                      
+                                      </tr>
+                                    </thead>
+                                    <tbody class="table-tbody">
+                                      {% for catast in catastros %}
+                                          <tr> 
+                                  
+                                              <td class="dt-center align-middle"> 
+                                                  <div class="mr-3">
+                                                    <a href="{% url 'catastros-view' idcatastro=catast.pk %}" class="btn btn-twitter btn-icon" aria-label="Button" attr="{{rodal.pk}}">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                                        <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                                     </svg>
+                                                    </a>
+                                                  </div>
+                                              </td>
+                                              <td class="dt-center align-middle">{{ catast.pk }}</td>
+                  
+                                              <td class="dt-center align-middle">
+                                                {% if catast.empresa is not None %}
+                                                <a href="{% url 'empresas-view'  id=catast.empresa.pk %}">
+                                                  {{ catast.empresa.name }}
+                  
+                                                </a>
+                                                {% endif%}
+                  
+                                              </td>
+                  
+                                              <td class="dt-center align-middle"> {{ catast.campo_empresa }}</td>
+                                              <td class="dt-center align-middle"> {{ catast.lote }}</td>
+                  
+                                              <td class="dt-center align-middle">{{ catast.parcela }}</td>
+                                              <td class="dt-center align-middle">{{ catast.partida }}</td>
+                  
+                                              <td class="dt-center align-middle">{{ catast.matricula }}</td>
+                  
+                                            
+                                              <td class="dt-center align-middle">{{ catast.municipio }}</td>
+                                              <td class="dt-center align-middle">{{ catast.superficie |floatformat:2 }}</td>
+                  
+                                             
+                                              {% if catast.certificado %}
+                                              <td class="dt-center align-middle text-green">{{ 'Si' }}</td>
+                                            {% else %}
+                                              <td class="dt-center align-middle text-red">{{ 'No' }}</td>
+                                            {% endif%}
+                                      
+                           
+                                             
+                  
+                                          </tr>
+                                      
+                                      {% endfor %}
+                  
+                  
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+
+
+                          </div>
                         </div>
 
                         <div class="tab-pane min-vh-95 max-vh-95 pt-5 pl-5" id="tabs-planificacion">
