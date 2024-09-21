@@ -107,8 +107,10 @@ def getSuperficiePlantacionOnlyValueByEmpresa(id_empresa):
    
 
     for sup in plan_list:
+
+        sup_ = sup['suma_superficie'] if sup['suma_superficie'] != None else 0
         
-        result = result + sup['suma_superficie']
+        result = result + sup_
        
     
     return result

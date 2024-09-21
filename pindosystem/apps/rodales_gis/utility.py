@@ -124,8 +124,17 @@ def get_area_rodal_state_gis(idrodal):
 def get_area_rodal_gis_by_empresa(idempresa):
      #traigo los datos resumen de superficie de todos los rodales de esta empresa
     try:
-        area = list(Rodalesgis.objects.filter(rodales__empresa_id=idempresa).annotate(area_ = Area( Transform('geom_4326', 22177))).values('area_'))[0]
-        return area
+        area = list(Rodalesgis.objects.filter(rodales__empresa_id=idempresa)\
+                    .annotate(area_ = Area( Transform('geom_4326', 22177))).values('area_'))
+        
+        
+        sum_area = 0
+        for a_ in area:
+            sum_area = sum_area + a_['area_'].sq_m
+
+        
+
+        return sum_area
     
     except Exception as e:
         return False

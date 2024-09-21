@@ -212,6 +212,24 @@ function deleteInformation(element){
     dialogDeleteConfirm(element, title, message, URLS_DELETE.CATASTRO_PARCELA_DELETE, 'Eliminar');
   }
 
+  else if(controller === 'relevamiento_delete') {
+
+    let title = '¿Desea Eliminar el Relevamiento?';
+    let message = 'Si acepta se borrará toda la información del mismo';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.RELEVAMIENTO_DELETE, 'Eliminar');
+  }
+
+  else if(controller === 'arbol_poda_delete') {
+
+    let title = '¿Desea Eliminar el Arbol?';
+    let message = 'Si acepta se borrará toda la información del mismo';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.ARBOL_PODA_DELETE, 'Eliminar');
+  }
+
+
+
 
 
 

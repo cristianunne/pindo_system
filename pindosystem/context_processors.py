@@ -17,6 +17,8 @@ def global_data(request):
 
     empresas_count = len(Empresas.objects.all())
 
+    
+
 
   
 

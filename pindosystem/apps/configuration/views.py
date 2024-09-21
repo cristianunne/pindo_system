@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from configuration.models import Usosrodales, IntervencionesTypes, InventariosTypes, MapConfigGis, CapasBases, \
     CapasBasesDefault, CategoriasCapas, ServiciosIDEConfig, TileLayerWMS, CategoriasMateriales, SubCategoriasMateriales, MaterialesSAP
 from login.models import Users
+
+from inventario.models import InventariosCategories, InventariosObservaciones, InventariosDamages, InventariosRelevamientos, TYPES_RELEVAMIENTO, \
+ArbolesRelevamientoPoda
+from rodales.models import Rodales
+
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse, Http404, HttpResponseRedirect
@@ -17,6 +22,10 @@ from django.core import serializers
 
 from pindosystem.apps.general_utility import getMaterialessApiSap
 from configuration.utility import filter_materiales, get_maktx_from_datasap
+
+from django.views.decorators.cache import cache_control
+
+
 
 
 
@@ -1065,3 +1074,261 @@ def addMateriales(request):
             return HttpResponseRedirect(reverse("index-categorias-materiales"))
     
     return render(request, 'configuration/materiales/add.html', context)
+
+
+
+
+@login_required
+def indexInventariosCategories(request):
+    
+    inventarios_cat = InventariosCategories.objects.all()
+    context = {'inventarios_types' : inventarios_cat, 
+               'category' : 'Categorias de Inventarios',
+                'action' : 'Administración de Categorías de Inventarios'}
+
+    return render(request, 'configuration/inventarios/categorias/index.html', context)
+
+
+@login_required
+def addInventarioCategories(request):
+    context = {
+               'category' : 'Tipos de Inventarios',
+                'action' : 'Crea una Categoría de Inventario'}
+
+    if request.method == 'POST':
+        try:
+        
+            name = request.POST.get('name')
+       
+            user_entity = Users.objects.get(pk=request.user.pk)
+
+            #creo el objeto
+            inventario = InventariosCategories.objects.create(name = name.capitalize(), user = user_entity)
+        
+
+            messages.success(request, "La Categoría ha sido agregado con éxito!.")
+            return redirect('inventarios-categories-index')
+    
+        except IntegrityError as e:
+            messages.error(request, str('Ya existe una Categoría con el nombre sugerido. Considere elegir un nombre alternativo!'))
+            return render(request, 'configuration/inventarios/categorias/add.html', context)
+        except Exception as e:
+            messages.error(request, str(e))
+            return render(request, 'configuration/inventarios/categorias/add.html', context)
+  
+
+    else:
+    
+        return render(request, 'configuration/inventarios/categorias/add.html', context)
+    
+
+@login_required
+def editInventarioCategories(request, id):
+    context = {}
+
+    try:
+        inventario = InventariosCategories.objects.get(pk = id)
+        
+        context.update({'inventario' : inventario})
+
+        if (request.method == 'POST'):
+           
+            name = request.POST.get('name')
+            inventario.name = name.capitalize()
+
+            try:
+                inventario.save()
+                messages.success(request, "La categoría se ha editado con éxito")
+                return redirect('inventarios-categories-index')
+                
+            
+            except IntegrityError as e:
+                messages.error(request, str('Ya existe una Categoría con el nombre sugerido. Considere elegir un nombre alternativo!'))
+                return HttpResponseRedirect(reverse("inventarios-categories-edit", args=[id])) 
+            except Exception as e:
+                messages.error(request, str(e))
+
+                return HttpResponseRedirect(reverse("inventarios-categories-edit", args=[id]))          
+          
+        else:
+            return render(request, 'configuration/inventarios/categorias/edit.html', context)
+    
+    except OSError as error: 
+        print(error) 
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('inventarios-categories-index')
+    
+
+
+
+@login_required
+def indexInventariosObservaciones(request):
+    
+    observaciones_types = InventariosObservaciones.objects.all()
+    context = {'observaciones_types' : observaciones_types, 
+               'category' : 'Categorias de Observaciones',
+                'action' : 'Administración de Categorías de Observaciones de Inventarios'}
+
+    return render(request, 'configuration/inventarios/observaciones/index.html', context)
+
+@login_required
+def addInventarioObservaciones(request):
+    context = {
+               'category' : 'Tipos de Observaciones',
+                'action' : 'Crea una Categoría de Observación de Inventario'}
+
+    if request.method == 'POST':
+        try:
+        
+            name = request.POST.get('name')
+       
+            user_entity = Users.objects.get(pk=request.user.pk)
+
+            #creo el objeto
+            inventario = InventariosObservaciones.objects.create(name = name, user = user_entity)
+        
+
+            messages.success(request, "La Categoría ha sido agregado con éxito!.")
+            return redirect('inventarios-observaciones-index')
+    
+        except IntegrityError as e:
+            messages.error(request, str('Ya existe una Categoría con el nombre sugerido. Considere elegir un nombre alternativo!'))
+            return render(request, 'configuration/inventarios/observaciones/add.html', context)
+        except Exception as e:
+            messages.error(request, str(e))
+            return render(request, 'configuration/inventarios/observaciones/add.html', context)
+  
+
+    else:
+    
+        return render(request, 'configuration/inventarios/observaciones/add.html', context)
+    
+
+
+@login_required
+def editInventarioObservaciones(request, id):
+    context = {}
+
+    try:
+        inventario = InventariosObservaciones.objects.get(pk = id)
+        
+        context.update({'inventario' : inventario})
+
+        if (request.method == 'POST'):
+           
+            name = request.POST.get('name')
+            inventario.name = name
+
+            try:
+                inventario.save()
+                messages.success(request, "La categoría se ha editado con éxito")
+                return redirect('inventarios-observaciones-index')
+                
+            
+            except IntegrityError as e:
+                messages.error(request, str('Ya existe una Categoría con el nombre sugerido. Considere elegir un nombre alternativo!'))
+                return HttpResponseRedirect(reverse("inventarios-observaciones-edit", args=[id])) 
+            except Exception as e:
+                messages.error(request, str(e))
+
+                return HttpResponseRedirect(reverse("inventarios-observaciones-edit", args=[id]))          
+          
+        else:
+            return render(request, 'configuration/inventarios/observaciones/edit.html', context)
+    
+    except OSError as error: 
+        print(error) 
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('inventarios-observaciones-index')
+    
+
+
+@login_required
+def indexInventariosDamages(request):
+    
+    damages_types = InventariosDamages.objects.all()
+    context = {'damages_types' : damages_types, 
+               'category' : 'Categorias de Daños',
+                'action' : 'Administración de Categorías de Daños de Inventarios'}
+
+    return render(request, 'configuration/inventarios/damages/index.html', context)
+
+@login_required
+def addInventarioDamages(request):
+    context = {
+               'category' : 'Tipos de Daños',
+                'action' : 'Crea una Categoría de Daños de Inventario'}
+
+    if request.method == 'POST':
+        try:
+        
+            name = request.POST.get('name')
+       
+            user_entity = Users.objects.get(pk=request.user.pk)
+
+            #creo el objeto
+            inventario = InventariosDamages.objects.create(name = name, user = user_entity)
+        
+
+            messages.success(request, "La Categoría ha sido agregado con éxito!.")
+            return redirect('inventarios-damages-index')
+    
+        except IntegrityError as e:
+            messages.error(request, str('Ya existe una Categoría con el nombre sugerido. Considere elegir un nombre alternativo!'))
+            return render(request, 'configuration/inventarios/damages/add.html', context)
+        except Exception as e:
+            messages.error(request, str(e))
+            return render(request, 'configuration/inventarios/damages/add.html', context)
+  
+
+    else:
+    
+        return render(request, 'configuration/inventarios/damages/add.html', context)
+    
+
+
+
+@login_required
+def editInventarioDamages(request, id):
+    context = {}
+
+    try:
+        inventario = InventariosDamages.objects.get(pk = id)
+        
+        context.update({'inventario' : inventario})
+
+        if (request.method == 'POST'):
+           
+            name = request.POST.get('name')
+            inventario.name = name
+
+            try:
+                inventario.save()
+                messages.success(request, "La categoría se ha editado con éxito")
+                return redirect('inventarios-damages-index')
+                
+            
+            except IntegrityError as e:
+                messages.error(request, str('Ya existe una Categoría con el nombre sugerido. Considere elegir un nombre alternativo!'))
+                return HttpResponseRedirect(reverse("inventarios-damages-edit", args=[id])) 
+            except Exception as e:
+                messages.error(request, str(e))
+
+                return HttpResponseRedirect(reverse("inventarios-damages-edit", args=[id]))          
+          
+        else:
+            return render(request, 'configuration/inventarios/damages/edit.html', context)
+    
+    except OSError as error: 
+        print(error) 
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('inventarios-observaciones-index')
+    
+
+
+
+
+

@@ -38,6 +38,10 @@ const URLS_DELETE = {
 
     CATASTRO_PARCELA_DELETE: 'catastros-delete/',
 
+    RELEVAMIENTO_DELETE: 'relevamientos-delete/',
+
+    ARBOL_PODA_DELETE: '../../arbol-poda-delete/',
+
 
 }
 

@@ -78,6 +78,14 @@ def getPlanificacionRodales():
 
     min_year = list(PlanificacionIntervenciones.objects.filter().aggregate(min_year = Min('date_start__year')).values())[0]
     max_year = list(PlanificacionIntervenciones.objects.filter().aggregate(max_year = Max('date_end__year')).values())[0]
+
+
+    #traigo las categorias
+
+    plani_categorias = list(PlanificacionIntervenciones.objects.select_related('intervencion_planificacion')\
+                            .exclude(intervenciones_types__name__exact = None) \
+                 .annotate(year = F('date_start__year')) \
+                           .values('pk', 'intervenciones_types__name').distinct('intervenciones_types__name'))
     
 
 
@@ -86,7 +94,7 @@ def getPlanificacionRodales():
     data_export.append(
         {
             'rodal' : rodal,
-            'data': {'years' : {'min_year' : min_year, 'max_year' : max_year}, 'planificacion' : plani}
+            'data': {'years' : {'min_year' : min_year, 'max_year' : max_year}, 'planificacion' : plani, 'plan_cat' : plani_categorias}
         }
     )
 

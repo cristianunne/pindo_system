@@ -14,6 +14,8 @@ from django.core.serializers import serialize
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 
+from django.contrib.gis.db.models.functions import Area, Intersection, Transform
+
 # Create your views here.
 
 def index(request):
@@ -47,16 +49,25 @@ def view(request, idcatastro):
         .values('pk', 'name', 'cod_sap', 'sap_id', 'campo', 'is_certificado', 'is_finish', 'is_sap', 'created', 'usos_rodales__name', 
                 'empresa__name', 'empresa__pk', 'user__first_name', 'user__last_name', 'rodales_plantaciones',
                 'rodales_plantaciones__plantacion_plantaciongis').distinct('cod_sap')
+        
 
+        rodales_with_sup = Rodales.objects.prefetch_related('rodales_plantaciones')\
+            .filter(is_finish = False, rodales_rodales_gis__geom_4326__intersects = catastro.geom_4326) \
+            .annotate(touch_sup = (Area(Transform(Intersection('rodales_rodales_gis__geom_4326', catastro.geom_4326), 22177))) / 10000) \
+        .values('pk', 'name', 'cod_sap', 'sap_id', 'campo', 'is_certificado', 'is_finish', 'is_sap', 'created', 'usos_rodales__name', 
+                'empresa__name', 'empresa__pk', 'user__first_name', 'user__last_name', 'rodales_plantaciones',
+                'rodales_plantaciones__plantacion_plantaciongis', 'touch_sup').distinct('cod_sap')
+        
+    
         
         context.update({
-            'rodales' : rodales
+            'rodales' : rodales_with_sup,
         });
 
         #Rodalesgis.objects.filter(geom_4326__intersects = catastro.geom_4326)
         #traigo el catastro gis
         catastro_gis = serialize('geojson', Catastrogis.objects
-                                     .filter(geom_4326__intersects = catastro.geom_4326), 
+                                     .filter(pk = idcatastro), 
                                      geometry_field='geom_4326' )
         
         
@@ -86,8 +97,9 @@ def view(request, idcatastro):
         #rodal_ser = serialize('json', rodales, many=True)
   
         context.update({'rodales_data' : rodal_ser})
-      
-      
+
+    
+
        
 
     except Catastrogis.DoesNotExist as e:
@@ -146,7 +158,7 @@ def edit(request, idcatastro):
             if empresa_object is not None:
                 catastro.empresa = empresa_object
             
-            catastro.superficie = superficie
+            catastro.superficie = superficie if superficie != '' else None
             catastro.lote = lote
             catastro.parcela = parcela
             catastro.partida = partida
@@ -155,7 +167,7 @@ def edit(request, idcatastro):
             catastro.municipio = municipio
             catastro.departamento = departamento
             catastro.certificado = True if str(certificado) == 'SI' else False
-            catastro.superficie_empresa = superficie_empresa
+            catastro.superficie_empresa = superficie_empresa if superficie_empresa != '' else None
             catastro.trat_especial = trat_especial
             catastro.observaciones = observaciones
 

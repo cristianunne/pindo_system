@@ -212,14 +212,46 @@
                         Catastros
                        
                     </div>
-                    <div >
-                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto" style="transform: unset !important;top: 0.5rem;">
-                            {{ rodales_count }}</span>
-                    </div>
+                   
 
                
                 </a>
               
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false" >
+                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                            <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
+                    </span>
+                    <span class="nav-link-title">
+                        Inventarios
+                    </span>
+                </a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-menu-columns">
+                        <div class="dropdown-menu-column">
+                            <a class="dropdown-item" href="{% url 'inventarios-relevamientos-index' %}">
+                            
+                                <span class="nav-link-title">
+                                    Relevamientos
+                                </span>
+                            </a>
+
+                            <a class="dropdown-item" href="{% url 'usos-rodales-index' %}">
+                            
+                                <span class="nav-link-title">
+                                    Rel. por Rodales
+                                </span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+    
             </li>
 
             {% if user.role == 'AG' %}
@@ -298,6 +330,31 @@
                                     </a>
                                     <a href="{% url 'inventarios-types-index' %}" class="dropdown-item">
                                         Categorías de Capas
+                                        
+                                    </a>
+
+                                
+                                    </div>
+                                </div>
+
+
+                                <div class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" href="#sidebar-cards" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false" >
+                                    Inventarios
+                                
+                                    </a>
+                                    <div class="dropdown-menu">
+                                    <a href="{% url 'inventarios-categories-index' %}" class="dropdown-item">
+                                        Categorias
+                                        
+                                    </a>
+                                    <a href="{% url 'inventarios-observaciones-index' %}" class="dropdown-item">
+                                        Observaciones
+                                        
+                                    </a>
+
+                                    <a href="{% url 'inventarios-damages-index' %}" class="dropdown-item">
+                                        Daños
                                         
                                     </a>
 

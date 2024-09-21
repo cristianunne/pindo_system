@@ -227,7 +227,7 @@ def viewEmpresa(request, id):
         rodales = Empresas.objects.get(pk = id).empresas_rodales.filter(usos_rodales__name__icontains = 'Forestal') \
         .values('pk', 'name', 'cod_sap', 'sap_id', 'campo', 'is_certificado', 'is_finish', 'is_sap', 'created', 'usos_rodales__name', 
                 'empresa__name', 'rodales_rodales_gis__superficie', 'user__first_name', 'user__last_name', 'rodales_plantaciones',
-                'rodales_plantaciones__plantacion_plantaciongis')
+                'rodales_plantaciones__plantacion_plantaciongis').distinct('cod_sap')
         
         
         
@@ -239,7 +239,8 @@ def viewEmpresa(request, id):
     
         rodales_bop = Empresas.objects.get(pk = id).empresas_rodales.filter(usos_rodales__name__icontains = 'Conservación') \
         .values('pk', 'name', 'cod_sap', 'sap_id', 'campo', 'is_certificado', 'is_finish', 'is_sap', 'created', 'usos_rodales__name', 
-                'empresa__pk', 'empresa__name', 'rodales_rodales_gis', 'rodales_rodales_gis__superficie', 'user__first_name', 'user__last_name')
+                'empresa__pk', 'empresa__name', 'rodales_rodales_gis', 'rodales_rodales_gis__superficie', 
+                'user__first_name', 'user__last_name').distinct('cod_sap')
         
       
         
@@ -262,8 +263,9 @@ def viewEmpresa(request, id):
         
 
         sup_t = get_area_rodal_gis_by_empresa(idempresa=id)
+
       
-        superficie_total = round(float((sup_t['area_'].sq_m / 10000)), 2) if sup_t != False else 0
+        superficie_total = round(float((sup_t / 10000)), 2) if sup_t != False else 0
         
         #superficie plantada
         sum_plantacion = getSuperficiePlantacionOnlyValueByEmpresa(id)

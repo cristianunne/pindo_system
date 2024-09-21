@@ -78,8 +78,8 @@
 
                                 <div class="mb-4">
                                     <label class="form-label required">Superficie:</label>
-                                    <input type="number" class="form-control" placeholder="Superficie" 
-                                    name="superficie" id="superficie" value="{{catastro.superficie}}"/>
+                                    <input type="number" step="0.01" class="form-control" placeholder="Superficie" 
+                                    name="superficie" id="superficie" value="{{catastro.superficie|floatformat:2}}" />
                                 </div>
 
                                 <div class="mb-4">
@@ -148,8 +148,8 @@
 
                                 <div class="mb-4">
                                     <label class="form-label required">Superficie/Empresa:</label>
-                                    <input type="number" class="form-control" placeholder="Superficie/Empresa" 
-                                    name="superficie_empresa" id="superficie_empresa" value="{{catastro.superficie_empresa}}"/>
+                                    <input type="number" step="0.01" class="form-control" placeholder="Superficie/Empresa" 
+                                    name="superficie_empresa" id="superficie_empresa" value="{{catastro.superficie_empresa |floatformat:2}}"/>
                                 </div>
 
                                 <div class="mb-4">

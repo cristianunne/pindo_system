@@ -241,7 +241,7 @@
                       <th class="dt-center align-middle">Uso</th>
                       <th class="dt-center align-middle">Plantado?</th>
                       <th class="dt-center align-middle">Empresa</th>
-                      <th class="dt-center align-middle">Fecha de Registro</th>
+                      <th class="dt-center align-middle">Sup. en la Parcela</th>
                       <th class="dt-center align-middle">Usuario</th>
                       <th class="dt-center align-middle">Acciones</th>
                       <th class="dt-center align-middle">Cerrar</th>
@@ -298,9 +298,10 @@
                           <a href="{% url 'empresas-view' id=rodal.empresa__pk %}">{{ rodal.empresa__name }}</a>
                         </td>
 
-                        <td class="dt-center align-middle">{{ rodal.created }}</td>
 
-                        <td class="dt-center align-middle">{{ rodal.user__first_name }} {{ ' ' }}{{ rodal.user__last_name }}</td>
+                        <td class="dt-center align-middle">{{ rodal.touch_sup |floatformat:2 }}</td>
+
+                        <td class="dt-center align-middle">{{ rodal.user__first_name }} {{' '}}{{ rodal.user__last_name}}</td>
                         <td>
                           <div class="d-flex justify-content-center">
                             <div class="mr-3">

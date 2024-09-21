@@ -136,3 +136,6 @@ class MaterialesSAP(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(Users, related_name='matsap_users', blank=True, null=True, on_delete=models.SET_NULL)
+
+
+

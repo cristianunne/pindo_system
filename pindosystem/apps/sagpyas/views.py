@@ -19,6 +19,7 @@ from django.urls import reverse
 from django.http import JsonResponse, Http404, HttpResponseRedirect
 
 
+
 # Create your views here.
 
 

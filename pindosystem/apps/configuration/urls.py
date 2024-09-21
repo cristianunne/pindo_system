@@ -51,4 +51,17 @@ urlpatterns = [
     path('configuration/materiales/add-subcategoria-material', views.addSubCategoriaMaterial, name='add-subcategoria-material'),
      path('configuration/materiales/index-materiales', views.indexMateriales, name='index-materiales'),
     path('configuration/materiales/add-material', views.addMateriales, name='add-material'),
+
+    path('configuration/inventarios-categories/index', views.indexInventariosCategories, name='inventarios-categories-index'),
+    path('configuration/inventarios-categories/add', views.addInventarioCategories, name='inventarios-categories-add'),
+    path('configuration/inventarios-categories/edit/<int:id>/', views.editInventarioCategories, name='inventarios-categories-edit'),
+
+    path('configuration/inventarios-observaciones/index', views.indexInventariosObservaciones, name='inventarios-observaciones-index'),
+    path('configuration/inventarios-observaciones/add', views.addInventarioObservaciones, name='inventarios-observaciones-add'),
+    path('configuration/inventarios-observaciones/edit/<int:id>/', views.editInventarioObservaciones, name='inventarios-observaciones-edit'),
+
+    path('configuration/inventarios-damages/index', views.indexInventariosDamages, name='inventarios-damages-index'),
+    path('configuration/inventarios-damages/add', views.addInventarioDamages, name='inventarios-damages-add'),
+    path('configuration/inventarios-damages/edit/<int:id>/', views.editInventarioDamages, name='inventarios-damages-edit'),
+
 ]

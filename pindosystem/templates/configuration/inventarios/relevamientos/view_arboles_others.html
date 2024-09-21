@@ -1,0 +1,394 @@
+<!doctype html>
+
+{% extends "../../../layout/base.html" %}
+
+{% load static %}
+
+
+{% block sidebar %}
+
+{% include "../../../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../../../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../../../element/pageheader.html" %}
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+          
+            {% if messages %}
+
+            {% include "../../../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row row-cards mb-5">
+
+                <div class="col-md-3 col-lg-3">
+                    <div class="card bg-primary-lt">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 col-sm-2">
+                         
+                              <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  
+                              fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                              stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
+                                <path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>
+                            
+                    
+                            </div>
+                            <div class="col-md-8">
+                                <h3 class="card-title">Sección de Administración de los Relevamientos de Inventarios</h3>
+                                <p class="text-muted">En esta sección puede visualizar la información de los Árboles de 
+                                  Relevamientos de Inventarios</p>
+                             
+                            </div>
+                        </div>
+
+                        
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9">
+
+                    <div class="card">
+                        <div class="card-header justify-content-between">
+                          <h3 class="card-title">Información del Relevamiento</h3>
+
+                         
+                        </div>
+
+                        
+                        <div class="card-body">
+
+                            <div class="datagrid">
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Relevamiento N°:</div>
+                                <div class="datagrid-content">{{ relevamiento.number }}</div>
+                                </div>
+
+                                <div class="datagrid-item">
+                                  <div class="datagrid-title">Responsable:</div>
+                                  <div class="datagrid-content">
+                                    {% if relevamiento.user_relevador %}
+                                      {{ relevamiento.user_relevador }}
+
+                                    {% else %}
+                                      {{'Sin Responsable'}}
+                                    {% endif %}
+                                
+                                  </div>
+                                  </div>
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Tipo de Relevamiento:</div>
+                                <div class="datagrid-content">{{ relevamiento.type }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Altura deseada:</div>
+                                <div class="datagrid-content">{{ relevamiento.h_deseada }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Altura de última Poda</div>
+                                <div class="datagrid-content">{{ relevamiento.h_last_poda }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                <div class="datagrid-title">Fecha de Relevamiento</div>
+                                <div class="datagrid-content">
+                                    {{ relevamiento.fecha}}
+                                </div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Finalizado?:</div>
+                                    <div class="datagrid-content">{{ relevamiento.is_finish|yesno:"Si,No"}}</div>
+                                </div>
+                           
+                               
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Rodal:</div>
+                                    <div class="datagrid-content">
+                                        {% if relevamiento.rodales %}
+                                        <a href="{% url 'rodales-view'  idrodal=relevamiento.rodales_id %}">
+                                        {{ relevamiento.rodales.cod_sap }}
+                                        </a>
+                                        {% endif%}
+                                    </div>
+                                </div>
+
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Categoria de Relevamiento:</div>
+                                    <div class="datagrid-content">{{ relevamiento.categorias.name}}</div>
+                                </div>
+
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Cantidad de Árboles:</div>
+                                    <div class="datagrid-content">{{ cant_arboles }}</div>
+                                </div>
+
+                            </div>
+                
+                        </div>
+
+
+                        <div class="card-footer d-flex justify-content-end">
+                            <a href="{% url 'inventarios-relevamientos-stats' idrelevamiento=relevamiento.pk %}" class="btn btn-lime" aria-label="Button">
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-chart-infographic"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M7 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M7 3v4h4" /><path d="M9 17l0 4" /><path d="M17 14l0 7" />
+                                <path d="M13 13l0 8" /><path d="M21 12l0 9" /></svg> Estadísticas</a>
+                        </div>
+
+                    
+                
+                    </div>
+            
+                </div>
+
+                <div class="col-md-12 col-lg-12">
+                  <div class="card">
+                    <div class="card-header justify-content-between">
+                      <h3 class="card-title">Parcelas del Relevamiento</h3>
+
+                    </div>
+                    <div class="card-body">
+                      <div class="d-flex justify-content-end mb-3">
+                          <a href="{% url 'inventarios-relevamientos-add-parcela' idrelevamiento=relevamiento.pk %}" class="btn btn-success" aria-label="Button">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 5l0 14"></path>
+                            <path d="M5 12l14 0"></path>
+                         </svg> Nuevo</a>
+                      </div>
+                      <div id="" class="table-responsive">
+                        <table id="tabladata" class="table table-bordered table-hover dataTable">
+                          <thead>
+                            <tr>
+                                <th class="dt-center align-middle">ID</th>
+                                <th class="dt-center align-middle">N°</th>
+                                <th class="dt-center align-middle">Tipo</th>
+                                <th class="dt-center align-middle">Tamaño</th>
+                                <th class="dt-center align-middle">N° de Árboles</th>
+                                <th class="dt-center align-middle">Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody class="table-tbody">
+                            {% for rel in parcelas %}
+                                <tr>
+                                    <td class="dt-center align-middle"> {{ rel.pk }}</td>
+                                    <td class="dt-center align-middle"> {{ rel.number_parcela }}</td>
+                                    <td class="dt-center align-middle"> {{ rel.type }}</td>
+                                    <td class="dt-center align-middle"> {{ rel.size_parcela }}</td>
+                                    <td class="dt-center align-middle"> {{ rel.number_trees }}</td>
+                                   
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+
+                                          <div class="d-flex justify-content-center">
+
+                                            <div class="mr-3">
+                                              <a href="{% url 'inventarios-relevamientos-add-arboles-parcela-others' idrelevamiento=relevamiento.pk idparcela=rel.pk %}" 
+                                              class="btn btn-lime btn-icon" aria-label="Button" attr="{{rel.pk}}">
+                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  
+                                                fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                                                stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-christmas-tree">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l4 4l-2 1l4 4l-3 1l4 4h-14l4 -4l-3 -1l4 -4l-2 -1z" /><path d="M14 17v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-3" /></svg>
+                                              </a>
+                                          </div>
+
+                                            <div class="mr-3">
+                                              <a href="{% url 'inventarios-relevamientos-edit-parcela' idrelevamiento=relevamiento.pk idparcela=rel.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{rel.pk}}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                                        <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                                        <path d="M16 5l3 3"></path>
+                                                     </svg>
+                                                </a>
+                                            </div>
+
+                                            
+      
+                                            <div>
+                                                <a href="#" onclick="deleteInformation(this)" attr="{{rel.pk}}" class="btn btn-youtube btn-icon"
+                                                controller="arbol_poda_delete">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M4 7l16 0"></path>
+                                                    <path d="M10 11l0 6"></path>
+                                                    <path d="M14 11l0 6"></path>
+                                                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                                 </svg>
+                                                </a>
+        
+                                            </div>
+                                          </div>
+                                        
+                                    </td>
+                                    
+                                </tr>
+                            
+                            {% endfor %}
+        
+        
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 col-lg-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-end mb-3">
+                          <a href="{% url 'inventarios-relevamientos-add' %}" class="btn btn-success" aria-label="Button">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 5l0 14"></path>
+                            <path d="M5 12l14 0"></path>
+                         </svg> Nuevo</a>
+                      </div>
+                      <div id="" class="table-responsive">
+                        <table id="tabladata2" class="table table-bordered table-hover dataTable">
+                          <thead>
+                            <tr>
+                                <th class="dt-center align-middle">Parcela</th>
+                                <th class="dt-center align-middle">N°</th>
+                                <th class="dt-center align-middle">DAP</th>
+                                <th class="dt-center align-middle">DMSM</th>
+                                <th class="dt-center align-middle">h Poda</th>
+                                <th class="dt-center align-middle">h Total</th>
+                                <th class="dt-center align-middle">Podado?</th>
+                                <th class="dt-center align-middle">Observaciones</th>
+                                <th class="dt-center align-middle">Daños</th>
+                                <th class="dt-center align-middle">Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody class="table-tbody">
+                            {% for rel in arboles %}
+                                <tr>
+                                    <td class="dt-center align-middle"> {{ rel.parcela.number_parcela }}</td>
+                                    <td class="dt-center align-middle"> {{ rel.number_tree }}</td>
+                                    <td class="dt-center align-middle"> {{ rel.dap }}</td>
+                                    <td class="dt-center align-middle"> {{ rel.dmsm }}</td>
+                                    <td class="dt-center align-middle"> {{ rel.h_poda }}</td>
+                                    <td class="dt-center align-middle">{{ rel.h_total }}</td>
+                                    <td class="dt-center align-middle">{{ rel.is_poda|yesno:"Si,No" }}</td>
+                                    <td class="dt-center align-middle">{{ rel.observaciones.name }}</td>
+                                    <td class="dt-center align-middle">{{ rel.damages.name }}</td>
+
+                                    <td>
+                                      <div class="d-flex justify-content-center">
+
+                                          <div class="mr-3">
+                                              <a href="{% url 'inventarios-relevamientos-edit-trees-poda' idrelevamiento=relevamiento.pk idarbol=rel.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{rel.pk}}">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                      <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                                      <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                                      <path d="M16 5l3 3"></path>
+                                                   </svg>
+                                              </a>
+                                          </div>
+
+                                          
+    
+                                          <div>
+                                              <a href="#" onclick="deleteInformation(this)" attr="{{rel.pk}}" class="btn btn-youtube btn-icon"
+                                              controller="arbol_poda_delete">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                  <path d="M4 7l16 0"></path>
+                                                  <path d="M10 11l0 6"></path>
+                                                  <path d="M14 11l0 6"></path>
+                                                  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                               </svg>
+                                              </a>
+      
+                                          </div>
+                                        </div>
+                                      
+                                  </td>
+                                    
+                                </tr>
+                            
+                            {% endfor %}
+        
+        
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                
+            
+            </div>
+
+         
+        </div>
+      </div>
+
+      
+    {% endblock main_content %}
+
+    <script>
+        $(function () {
+            $('#tabladata').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": false,
+                "pageLength": 10,
+                order: [[0, 'asc']],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                }
+            });
+    
+        })
+
+        $(function () {
+          $('#tabladata2').DataTable({
+              "paging": true,
+              "lengthChange": false,
+              "searching": true,
+              "ordering": true,
+              "info": true,
+              "autoWidth": false,
+              "responsive": false,
+              "pageLength": 10,
+              order: [[0, 'asc']],
+              language: {
+                  url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+              }
+          });
+  
+      })
+
+      
+    </script>
+    
+  </div>
+
+{% endblock  %}
