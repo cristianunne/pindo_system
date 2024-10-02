@@ -129,11 +129,9 @@
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Emsefor:</div>
                                     <div class="datagrid-content">
-                                        {% if relevamiento.rodales %}
-                                        <a href="{% url 'rodales-view'  idrodal=relevamiento.rodales_id %}">
-                                        {{ relevamiento.rodales.cod_sap }}
-                                        </a>
-                                        {% endif%}
+                                      
+                                        {{ relevamiento.emsefor.name }}
+                                        
                                     </div>
                                 </div>
 
@@ -237,7 +235,9 @@
                                 <table id="tabladata" class="table table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
-                                        <th class="dt-center align-middle">Parcela</th>
+                                        {% if relevamiento.type != 'Preexistente' %}
+                                            <th class="dt-center align-middle">Parcela</th>
+                                        {% endif %}
                                         <th class="dt-center align-middle">N° Arb./ha</th>
                                         {% if relevamiento.categorias.name == 'Poda' %}
                                         <th class="dt-center align-middle">Arboles Podados</th>
@@ -252,7 +252,9 @@
                                         <th class="dt-center align-middle">DMSM (cm)</th>
                                         {% endif %}
                                         <th class="dt-center align-middle">Área basal (m2)</th>
+                                        {% if relevamiento.categorias.name == 'Poda' %}
                                         <th class="dt-center align-middle">Copa Removida (%)</th>
+                                        {% endif %}
                                         
                                        
     
@@ -261,95 +263,88 @@
                                     </tr>
                                 </thead>
                                 <tbody class="table-tbody">
-                                
-                                    {% for data in data_resumen %}
-                                    <tr>
+
+
+                                    {% if relevamiento.type == 'Preexistente' %}
+
+                                        <tr style="background-color: #f3f3f3; font-weight: bold;">
+                  
+                                            <td class="dt-center align-middle"> {{ resumen_general.arb_ha | floatformat:0}}</td>
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.arb_podados | floatformat:0}}</td>
+                                            
+                                            
+                                            <td class="dt-center align-middle"> {{ resumen_general.arb_h_deseada | floatformat:0}}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.arb_no_podados | floatformat:0}}</td>
+                                            {% endif %}
+
+                                            <td class="dt-center align-middle"> {{ resumen_general.dap | floatformat:2}}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.h_total | floatformat:2}}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.h_poda | floatformat:2}}</td>
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.dmsm | floatformat:2}}</td>
+                                            {% endif %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.area_basal | floatformat:2 }}</td>
+                                            
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.copa_rem | floatformat:2 }}</td>
+                                            {% endif %}
+                                        
+                                        </tr>
+                                    {% else %}
+
+                                        <tr style="background-color: #f3f3f3; font-weight: bold;">
+                                            <td class="dt-center align-middle"> {{ '' }}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.n_arb_ha | floatformat:0}}</td>
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.arboles_podados | floatformat:0}}</td>
+                                            
+                                            
+                                            <td class="dt-center align-middle"> {{ resumen_general.arb_h_deseada | floatformat:0}}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.arb_no_podados | floatformat:0}}</td>
+                                            {% endif %}
+
+                                            <td class="dt-center align-middle"> {{ resumen_general.dap | floatformat:2}}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.h_total | floatformat:2}}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.h_poda | floatformat:2}}</td>
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.dmsm | floatformat:2}}</td>
+                                            {% endif %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.area_basal | floatformat:2 }}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.porc_remo | floatformat:2 }}</td>
+                                        </tr>
+
+                                        {% for data in data_resumen %}
+                                        <tr>
+                                        
+                                            <td class="dt-center align-middle"> {{ data.number_parcela }}</td>
+                                            <td class="dt-center align-middle"> {{ data.n_arb_ha | floatformat:0}}</td>
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ data.arboles_podados | floatformat:0}}</td>
+                                            
+                                            
+                                            <td class="dt-center align-middle"> {{ data.arb_h_deseada | floatformat:0}}</td>
+                                            <td class="dt-center align-middle"> {{ data.arb_no_podados | floatformat:0}}</td>
+                                            {% endif %}
+    
+                                            <td class="dt-center align-middle"> {{ data.dap_ | floatformat:2}}</td>
+                                            <td class="dt-center align-middle"> {{ data.h_total_ | floatformat:2}}</td>
+                                            <td class="dt-center align-middle"> {{ data.h_poda_ | floatformat:2}}</td>
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ data.dmsm_ | floatformat:2}}</td>
+                                            {% endif %}
+                                            <td class="dt-center align-middle"> {{ data.area_basal | floatformat:2 }}</td>
+                                            <td class="dt-center align-middle"> {{ data.porc_remo | floatformat:2 }}</td>
+                                        </tr>
+                                        {% endfor %}
+                    
+
+
+                                    {% endif %}
+
                                     
-                                        <td class="dt-center align-middle"> {{ data.number_parcela }}</td>
-                                        <td class="dt-center align-middle"> {{ data.n_arb_ha | floatformat:0}}</td>
-                                        {% if relevamiento.categorias.name == 'Poda' %}
-                                        <td class="dt-center align-middle"> {{ data.arboles_podados | floatformat:0}}</td>
-                                        
-                                        
-                                        <td class="dt-center align-middle"> {{ data.arb_h_deseada | floatformat:0}}</td>
-                                        <td class="dt-center align-middle"> {{ data.arb_no_podados | floatformat:0}}</td>
-                                        {% endif %}
-
-                                        <td class="dt-center align-middle"> {{ data.dap_ | floatformat:2}}</td>
-                                        <td class="dt-center align-middle"> {{ data.h_total_ | floatformat:2}}</td>
-                                        <td class="dt-center align-middle"> {{ data.h_poda_ | floatformat:2}}</td>
-                                        {% if relevamiento.categorias.name == 'Poda' %}
-                                        <td class="dt-center align-middle"> {{ data.dmsm_ | floatformat:2}}</td>
-                                        {% endif %}
-                                        <td class="dt-center align-middle"> {{ data.area_basal | floatformat:2 }}</td>
-                                        <td class="dt-center align-middle"> {{ data.porc_remo | floatformat:2 }}</td>
-                                    </tr>
-                                    {% endfor %}
-                
-                                </tbody>
-                                </table>
-                            </div>
-    
-                        
-                
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3">
-                    <div class="card">
-                        <div class="card-header justify-content-between">
-                        <h3 class="card-title">Resumen de Calidad</h3>
-                        </div>
-    
-                        
-                        <div class="card-body">
-    
-                            <div id="" class="table-responsive">
-                                <table id="tabladata_2" class="table table-bordered table-hover dataTable">
-                                <thead>
-                                    <tr>
-                                        <th class="dt-center align-middle">Parcela</th>
-                                        {% for obs in observaciones %}
-                                            <th class="dt-center align-middle">{{obs.name}}</th>
-                                        {% endfor%}
-                                      
-
-                                    </tr>
-                                </thead>
-                                <tbody class="table-tbody">
-
-                                    {% for dat_obs in data_observaciones %}
-                                        <tr>
-                                            <td class="dt-center align-middle"> {{ dat_obs.parcela }}</td>
-                                            {% for dat_obs_aux in dat_obs.observaciones %}
-
-                                                    {% for key, value in dat_obs_aux.items %}
-
-                                                        {% if value == '' %}
-
-                                                            <td class="dt-center align-middle"> {{ '--'}}</td>
-
-                                                        {%  else  %}
-
-                                                            <td class="dt-center align-middle"> {{ value | floatformat:2 }}</td>
-
-                                                        {% endif %}
-
-                                                    {% endfor%}
-
-
-                                            {% endfor%}
-
-                                        </tr>
-                                            
-                                    {% endfor%}
-
+                                
                                    
-                                
-                                  
-                
                                 </tbody>
                                 </table>
                             </div>
@@ -360,75 +355,143 @@
                     </div>
                 </div>
 
-
-                
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3">
-                    <div class="card">
-                        <div class="card-header justify-content-between">
-                        <h3 class="card-title">Resumen de Daños</h3>
-                        </div>
-    
-                        
-                        <div class="card-body">
-    
-                            <div id="" class="table-responsive">
-                                <table id="tabladata_3" class="table table-bordered table-hover dataTable">
-                                <thead>
-                                    <tr>
-                                        <th class="dt-center align-middle">Parcela</th>
-                                        {% for dam in damages %}
-                                            <th class="dt-center align-middle">{{dam.name}}</th>
-                                        {% endfor%}
-                                      
-
-                                    </tr>
-                                </thead>
-                                <tbody class="table-tbody">
-
-                                    {% for dat_dam in data_damages %}
+                {% if relevamiento.type != 'Preexistente' %}
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3">
+                        <div class="card">
+                            <div class="card-header justify-content-between">
+                            <h3 class="card-title">Resumen de Calidad</h3>
+                            </div>
+        
+                            
+                            <div class="card-body">
+        
+                                <div id="" class="table-responsive">
+                                    <table id="tabladata_2" class="table table-bordered table-hover dataTable">
+                                    <thead>
                                         <tr>
-                                            <td class="dt-center align-middle"> {{ dat_dam.parcela }}</td>
-                                            {% for dat_dam_aux in dat_dam.damages %}
-
-                                                    {% for key, value in dat_dam_aux.items %}
-
-                                                        {% if value == '' %}
-
-                                                            <td class="dt-center align-middle"> {{ '--'}}</td>
-
-                                                        {%  else  %}
-
-                                                            <td class="dt-center align-middle"> {{ value | floatformat:2 }}</td>
-
-                                                        {% endif %}
-
-                                            
-                                                  
-                                            
-
-                                                    {% endfor%}
-
-
+                                            <th class="dt-center align-middle">Parcela</th>
+                                            {% for obs in observaciones %}
+                                                <th class="dt-center align-middle">{{obs.name}}</th>
                                             {% endfor%}
-                                          
-                                         
-                                           
-                                
+                                        
+
                                         </tr>
-                                            
-                                    {% endfor%}
-                                
-                                  
-                
-                                </tbody>
-                                </table>
+                                    </thead>
+                                    <tbody class="table-tbody">
+
+                                        {% for dat_obs in data_observaciones %}
+                                            <tr>
+                                                <td class="dt-center align-middle"> {{ dat_obs.parcela }}</td>
+                                                {% for dat_obs_aux in dat_obs.observaciones %}
+
+                                                        {% for key, value in dat_obs_aux.items %}
+
+                                                            {% if value == '' %}
+
+                                                                <td class="dt-center align-middle"> {{ '--'}}</td>
+
+                                                            {%  else  %}
+
+                                                                <td class="dt-center align-middle"> {{ value | floatformat:2 }}</td>
+
+                                                            {% endif %}
+
+                                                        {% endfor%}
+
+
+                                                {% endfor%}
+
+                                            </tr>
+                                                
+                                        {% endfor%}
+
+                                    
+                                    
+                                    
+                    
+                                    </tbody>
+                                    </table>
+                                </div>
+        
+                            
+                    
                             </div>
-    
-                        
-                
                         </div>
                     </div>
-                </div>
+
+
+                    
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3">
+                        <div class="card">
+                            <div class="card-header justify-content-between">
+                            <h3 class="card-title">Resumen de Daños</h3>
+                            </div>
+        
+                            
+                            <div class="card-body">
+        
+                                <div id="" class="table-responsive">
+                                    <table id="tabladata_3" class="table table-bordered table-hover dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="dt-center align-middle">Parcela</th>
+                                            {% for dam in damages %}
+                                                <th class="dt-center align-middle">{{dam.name}}</th>
+                                            {% endfor%}
+                                        
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-tbody">
+
+                                        {% for dat_dam in data_damages %}
+                                            <tr>
+                                                <td class="dt-center align-middle"> {{ dat_dam.parcela }}</td>
+                                                {% for dat_dam_aux in dat_dam.damages %}
+
+                                                        {% for key, value in dat_dam_aux.items %}
+
+                                                            {% if value == '' %}
+
+                                                                <td class="dt-center align-middle"> {{ '--'}}</td>
+
+                                                            {%  else  %}
+
+                                                                <td class="dt-center align-middle"> {{ value | floatformat:2 }}</td>
+
+                                                            {% endif %}
+
+                                                
+                                                    
+                                                
+
+                                                        {% endfor%}
+
+
+                                                {% endfor%}
+                                            
+                                            
+                                            
+                                    
+                                            </tr>
+                                                
+                                        {% endfor%}
+                                    
+                                    
+                    
+                                    </tbody>
+                                    </table>
+                                </div>
+        
+                            
+                    
+                            </div>
+                        </div>
+                    </div>
+               
+                {% endif %}
+
+              
 
 
             

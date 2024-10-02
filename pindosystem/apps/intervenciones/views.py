@@ -22,6 +22,8 @@ from django.db import transaction
 from intervenciones.models import INTERVENCIONES_DICT
 import json
 
+from login.decorators import admin_access_only
+
 # Create your views here.
 @login_required
 def indexIntervencion(request, idrodal):
@@ -282,6 +284,7 @@ def viewIntervencionPoda(request, idpoda):
 
 @login_required
 @csrf_exempt
+@admin_access_only
 def deleteIntervencionPoda(request, idpoda):
     try:
         obj = Intervenciones.objects.get(pk=idpoda)
@@ -506,6 +509,7 @@ def viewIntervencionSobrevivencia(request, idsobrevivencia):
     
 
 @login_required
+@admin_access_only
 def deleteIntervencionSobrevivencia(request, idsobrevivencia):
     try:
         obj = Intervenciones.objects.get(pk=idsobrevivencia)
@@ -689,7 +693,7 @@ def editIntervencionRaleo(request, idraleo):
         messages.error(request, str(e))
         return HttpResponseRedirect(reverse('intervenciones-index', args=[idrodal]))
     
-
+@login_required
 def viewIntervencionRaleo(request, idraleo):
     
     context = {'category' : 'Intervenciones',
@@ -734,6 +738,7 @@ def viewIntervencionRaleo(request, idraleo):
 
 
 @login_required
+@admin_access_only
 def deleteIntervencionRaleo(request, idraleo):
     try:
         obj = Intervenciones.objects.get(pk=idraleo)
@@ -958,6 +963,7 @@ def viewIntervencionTalaraza(request, idtalaraza):
         return HttpResponseRedirect(reverse('intervenciones-index', args=[idrodal]))
     
 @login_required
+@admin_access_only
 def deleteIntervencionTalaraza(request, idtalaraza):
     try:
         obj = Intervenciones.objects.get(pk=idtalaraza)

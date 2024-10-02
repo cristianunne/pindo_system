@@ -148,6 +148,21 @@
                     </div>
 
                     <div class="mb-5">
+                      <label class="form-label required">Emsefor:</label>
+                      <select type="text" class="form-select" name="select-emsefor" id="select-emsefor" required value="">
+                        <option value="">{{ 'Seleccione una Opcion' }}</option>
+                        {% for index, value in emsefors %}
+
+                        {% if relevamiento.emsefor.pk == index %}
+                          <option selected value="{{ index }}">{{ value }}</option>
+                        {% else %}
+                          <option value="{{ index }}">{{ value }}</option>
+                        {% endif %}
+                      {% endfor %}
+                      </select>
+                    </div>
+
+                    <div class="mb-5">
                       <label class="form-check form-switch">
                         <input class="form-check-input" type="checkbox"  
                         {% if relevamiento.is_finish%}
@@ -306,6 +321,31 @@
                 }
               })
           })
+
+          document.addEventListener('DOMContentLoaded', function () {
+            var el
+            window.TomSelect &&
+              new TomSelect((el = document.getElementById('select-emsefor')), {
+                copyClassesToDropdown: false,
+                dropdownParent: 'body',
+                controlInput: '<input>',
+                render: {
+                  item: function (data, escape) {
+                    if (data.customProperties) {
+                      return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                    }
+                    return '<div>' + escape(data.text) + '</div>'
+                  },
+                  option: function (data, escape) {
+                    if (data.customProperties) {
+                      return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                    }
+                    return '<div>' + escape(data.text) + '</div>'
+                  }
+                }
+              })
+          })
+
 
            // @formatter:off
         document.addEventListener("DOMContentLoaded", function () {

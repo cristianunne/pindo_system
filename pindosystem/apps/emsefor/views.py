@@ -22,8 +22,10 @@ get_rodales_by_type_intervencion_by_emsefor
 from maquinas.models import Maquinas
 from django.db.models import Sum, F, Count
 
-# Create your views here.
+from login.decorators import admin_access_only
 
+# Create your views here.
+@login_required
 def index(request):
 
     emsefor = Emsefor.objects.all()
@@ -32,6 +34,8 @@ def index(request):
     context = {'emsefors' : emsefor, 
                'category' : 'Emsefor',
                 'action' : 'Administración de Emsefor'}
+    
+    context.update({'user' : request.user})
 
     return render(request, 'emsefor/index.html', context)
 
@@ -43,11 +47,14 @@ def addEmsefor(request):
     data_sap = getEmseforsApiSap(request)
 
     if data_sap:
-        
+           
         emsefor_sap = filterEmsefor(data_sap)
-       
         context.update({'emsefor_sap' : list(emsefor_sap.items())})
         
+    else:
+        messages.error(request, str('No se ha podido conectar a SAP'))
+        return redirect('emsefor-index')
+
        
 
     if request.method == 'POST':
@@ -92,6 +99,7 @@ def addEmsefor(request):
     return render(request, 'emsefor/add.html', context)
 
 @login_required
+@admin_access_only
 def editEmsefor(request,id):
     context = {}
 
@@ -106,10 +114,15 @@ def editEmsefor(request,id):
         data_sap = getEmseforsApiSap(request)
 
         if data_sap:
-        
+           
             emsefor_sap = filterEmseforWithId(data_sap, emsefor.sap_id)
-        
             context.update({'emsefor_sap' : list(emsefor_sap.items())})
+        
+        else:
+            messages.error(request, str('No se ha podido conectar a SAP'))
+            return redirect('emsefor-index')
+
+       
 
         if request.method == 'POST':
             
@@ -152,7 +165,8 @@ def editEmsefor(request,id):
         messages.error(request, str(e))
         return redirect('emsefor-index')
     
-
+@admin_access_only
+@login_required
 def deleteEmsefor(request, id):
     try:
         obj = Emsefor.objects.get(pk=id)
@@ -166,7 +180,8 @@ def deleteEmsefor(request, id):
     except Exception as e:
         raise Http404(str(e))
     
-
+@admin_access_only
+@login_required
 def modifiedLogoEmsefor(request, id):
       try:
         context = {
@@ -395,7 +410,7 @@ def editCantidadMaquinasEmsefor(request, idmaquina_ems):
         messages.error(request, str(e))
         return redirect('emsefor-index')
     
-
+@login_required
 def deleteMaquinaEmsefor(request, id):
     try:
         obj = EmseforMaquinas.objects.get(pk=id)

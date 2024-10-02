@@ -60,8 +60,8 @@
                       
                               </div>
                               <div class="col-md-8">
-                                  <h3 class="card-title text-center">Sección de Administración de Plantaciones</h3>
-                                  <p class="text-muted">En esta sección puede realizar las ediciones de las Plantaciones </p>
+                                  <h3 class="card-title text-center">Sección de Administración de las Intervenciones</h3>
+                                  <p class="text-muted">En esta sección puede realizar las ediciones de las Intervenciones.</p>
                                
                               </div>
                           </div>
@@ -335,22 +335,22 @@
                                                      </svg>
                                                 </a>
                                             </div>
-        
+                                            {% if user.role == 'AG' %}
                                             <div>
 
                                               {% if inter.type == 'Sobrevivencia' %}
                                               <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="sobrevivencia">
                                        
-                                            {% elif inter.type == 'Poda' %}
-                                            <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="poda">
+                                              {% elif inter.type == 'Poda' %}
+                                              <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="poda">
+                                              
+                                              {% elif inter.type == 'Raleo' %}
+                                              <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="raleo">
                                             
-                                            {% elif inter.type == 'Raleo' %}
-                                            <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="raleo">
-                                           
-                                            {% elif inter.type == 'Talaraza' %}
-                                            <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="talaraza">
+                                              {% elif inter.type == 'Talaraza' %}
+                                              <a href="#" onclick="deleteInformation(this)" attr="{{inter.pk}}" class="btn btn-youtube btn-icon" controller="talaraza">
 
-                                            {% endif %}
+                                              {% endif %}
                                                 
                                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -363,6 +363,7 @@
                                                 </a>
         
                                             </div>
+                                            {% endif %}
                                           </div>
                                         
                                     </td>

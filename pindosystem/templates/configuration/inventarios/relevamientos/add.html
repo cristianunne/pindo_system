@@ -126,14 +126,22 @@
                     </div>
 
                     <div class="mb-5">
+                      <label class="form-label required">Emsefor:</label>
+                      <select type="text" class="form-select" name="select-emsefor" id="select-emsefor" required value="">
+                        <option value="">{{ 'Seleccione una Opcion' }}</option>
+                        {% for index, value in emsefors %}
+                          <option value="{{ index }}">{{ value }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+
+                    <div class="mb-5">
                       <label class="form-check form-switch">
                         <input class="form-check-input" type="checkbox"  
-                        {% if is_finish == 'SI' %}
-                          checked
-                        {% else %}
-                            unchecked
-                        {% endif %}
-                        value="{{is_finish}}" name="is_finish" id="is_finish" onclick="setCheckedControl(this)" />
+                  
+                       checked
+                       
+                         name="is_finish" id="is_finish" onclick="setCheckedControl(this)" />
                         <span class="form-check-label">Finalizado?</span>
                       </label>
                     </div>
@@ -263,6 +271,31 @@
             var el
             window.TomSelect &&
               new TomSelect((el = document.getElementById('select-responsable')), {
+                copyClassesToDropdown: false,
+                dropdownParent: 'body',
+                controlInput: '<input>',
+                render: {
+                  item: function (data, escape) {
+                    if (data.customProperties) {
+                      return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                    }
+                    return '<div>' + escape(data.text) + '</div>'
+                  },
+                  option: function (data, escape) {
+                    if (data.customProperties) {
+                      return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                    }
+                    return '<div>' + escape(data.text) + '</div>'
+                  }
+                }
+              })
+          })
+
+
+          document.addEventListener('DOMContentLoaded', function () {
+            var el
+            window.TomSelect &&
+              new TomSelect((el = document.getElementById('select-emsefor')), {
                 copyClassesToDropdown: false,
                 dropdownParent: 'body',
                 controlInput: '<input>',

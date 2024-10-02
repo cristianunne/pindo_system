@@ -165,14 +165,29 @@
 
                     </div>
                     <div class="card-body">
-                      <div class="d-flex justify-content-end mb-3">
+                      <div class="d-flex justify-content-end mb-3  gap-2">
+                        <div>
                           <a href="{% url 'inventarios-relevamientos-add-parcela' idrelevamiento=relevamiento.pk %}" class="btn btn-success" aria-label="Button">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <path d="M12 5l0 14"></path>
                             <path d="M5 12l14 0"></path>
                          </svg> Nuevo</a>
+                        </div>
+
+                         <div> 
+                          <a href="{% url 'inventarios-relevamientos-add-parcela-gis' idrelevamiento=relevamiento.pk %}" 
+                          class="btn btn-purple" aria-label="Button">
+                          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24" 
+                          viewBox="0 0 24 24"  fill="currentColor"  
+                          class="icon icon-tabler icons-tabler-filled icon-tabler-map-pin">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                          <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" /></svg>
+                       Localización</a>
+                        </div>
                       </div>
+
+                      
                       <div id="" class="table-responsive">
                         <table id="tabladata" class="table table-bordered table-hover dataTable">
                           <thead>
@@ -182,6 +197,7 @@
                                 <th class="dt-center align-middle">Tipo</th>
                                 <th class="dt-center align-middle">Tamaño</th>
                                 <th class="dt-center align-middle">N° de Árboles</th>
+                                <th class="dt-center align-middle">Localizado?</th>
                                 <th class="dt-center align-middle">Acciones</th>
                             </tr>
                           </thead>
@@ -193,6 +209,24 @@
                                     <td class="dt-center align-middle"> {{ rel.type }}</td>
                                     <td class="dt-center align-middle"> {{ rel.size_parcela }}</td>
                                     <td class="dt-center align-middle"> {{ rel.number_trees }}</td>
+
+                                    <td class="dt-center align-middle"> 
+
+                                      {% if rel.geom_4326 is not None %}
+                                        <div class="mr-3">
+                                          <a  
+                                          class="btn btn-purple btn-icon" aria-label="Button" attr="{{rel.pk}}">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24" 
+                                            viewBox="0 0 24 24"  fill="currentColor"  
+                                            class="icon icon-tabler icons-tabler-filled icon-tabler-map-pin">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" /></svg>
+                                          </a>
+                                        </div>
+                                    
+                                    {% endif %}
+  
+                                    </td>
                                    
                                     <td>
                                         <div class="d-flex justify-content-center">
@@ -252,17 +286,14 @@
                   </div>
                 </div>
 
-                <div class="col-md-12 col-lg-12">
+                <div class="col-md-12 col-lg-12 mt-7">
                   <div class="card">
+                    <div class="card-header justify-content-between">
+                      <h3 class="card-title">Árboles del Relevamiento</h3>
+
+                    </div>
                     <div class="card-body">
-                      <div class="d-flex justify-content-end mb-3">
-                          <a href="{% url 'inventarios-relevamientos-add' %}" class="btn btn-success" aria-label="Button">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M12 5l0 14"></path>
-                            <path d="M5 12l14 0"></path>
-                         </svg> Nuevo</a>
-                      </div>
+                     
                       <div id="" class="table-responsive">
                         <table id="tabladata2" class="table table-bordered table-hover dataTable">
                           <thead>
@@ -270,10 +301,10 @@
                                 <th class="dt-center align-middle">Parcela</th>
                                 <th class="dt-center align-middle">N°</th>
                                 <th class="dt-center align-middle">DAP</th>
-                                <th class="dt-center align-middle">DMSM</th>
+      
                                 <th class="dt-center align-middle">h Poda</th>
                                 <th class="dt-center align-middle">h Total</th>
-                                <th class="dt-center align-middle">Podado?</th>
+
                                 <th class="dt-center align-middle">Observaciones</th>
                                 <th class="dt-center align-middle">Daños</th>
                                 <th class="dt-center align-middle">Acciones</th>
@@ -284,11 +315,30 @@
                                 <tr>
                                     <td class="dt-center align-middle"> {{ rel.parcela.number_parcela }}</td>
                                     <td class="dt-center align-middle"> {{ rel.number_tree }}</td>
-                                    <td class="dt-center align-middle"> {{ rel.dap }}</td>
-                                    <td class="dt-center align-middle"> {{ rel.dmsm }}</td>
-                                    <td class="dt-center align-middle"> {{ rel.h_poda }}</td>
-                                    <td class="dt-center align-middle">{{ rel.h_total }}</td>
-                                    <td class="dt-center align-middle">{{ rel.is_poda|yesno:"Si,No" }}</td>
+                                 
+                 
+                                    <td class="dt-center align-middle"> 
+                                      {% if rel.dap is not None %}
+                                        {{ rel.dap }}
+                                      {% endif %}
+                                      </td>
+
+                                    <td class="dt-center align-middle"> 
+                                      {% if rel.h_poda is not None %}
+                                      {{ rel.h_poda }}
+                                    {% endif %}
+                                      
+                                    
+                                    </td>
+                                   
+
+                                    <td class="dt-center align-middle">
+
+                                      {% if rel.h_total is not None %}
+                                      {{ rel.h_total }}
+                                    {% endif %}
+                                    </td>
+                     
                                     <td class="dt-center align-middle">{{ rel.observaciones.name }}</td>
                                     <td class="dt-center align-middle">{{ rel.damages.name }}</td>
 
@@ -296,7 +346,7 @@
                                       <div class="d-flex justify-content-center">
 
                                           <div class="mr-3">
-                                              <a href="{% url 'inventarios-relevamientos-edit-trees-poda' idrelevamiento=relevamiento.pk idarbol=rel.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{rel.pk}}">
+                                              <a href="{% url 'inventarios-relevamientos-edit-trees-others' idrelevamiento=relevamiento.pk idarbol=rel.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{rel.pk}}">
                                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                       <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
@@ -310,7 +360,7 @@
     
                                           <div>
                                               <a href="#" onclick="deleteInformation(this)" attr="{{rel.pk}}" class="btn btn-youtube btn-icon"
-                                              controller="arbol_poda_delete">
+                                              controller="arbol_others_delete">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                   <path d="M4 7l16 0"></path>

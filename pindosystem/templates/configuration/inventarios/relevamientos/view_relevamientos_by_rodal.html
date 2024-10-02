@@ -1,0 +1,296 @@
+<!doctype html>
+
+{% extends "../../../layout/base.html" %}
+
+{% load static %}
+
+
+{% block sidebar %}
+
+{% include "../../../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../../../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../../../element/pageheader.html" %}
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+          
+            {% if messages %}
+
+            {% include "../../../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row row-cards mb-5">
+
+                <div class="col-md-3 col-lg-3">
+                    <div class="card bg-primary-lt">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 col-sm-2">
+                         
+                              <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  
+                              fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                              stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
+                                <path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>
+                            
+                    
+                            </div>
+                            <div class="col-md-8">
+                                <h3 class="card-title">Sección de Administración de los Relevamientos de Inventarios</h3>
+                                <p class="text-muted">En esta sección puede realizar las ediciones de la información de los 
+                                  Relevamientos de Inventarios</p>
+                             
+                            </div>
+                        </div>
+
+                        
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-lg-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-end mb-3">
+                          <a href="{% url 'inventarios-relevamientos-add' %}" class="btn btn-success" aria-label="Button">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 5l0 14"></path>
+                            <path d="M5 12l14 0"></path>
+                         </svg> Nuevo</a>
+                      </div>
+                      <div id="" class="table-responsive">
+                        <table id="tabladata" class="table table-bordered table-hover dataTable">
+                          <thead>
+                            <tr>
+                    
+                              <th class="dt-center align-middle">N°</th>
+                              <th class="dt-center align-middle">Relevado por</th>
+                              <th class="dt-center align-middle">Tipo</th>
+                              <th class="dt-center align-middle">Categoria</th>
+                              <th class="dt-center align-middle">h Deseada</th>
+                              <th class="dt-center align-middle">h Última Poda</th>
+                              <th class="dt-center align-middle">Rodal</th>
+                              <th class="dt-center align-middle">N° de Parcelas</th>
+                              <th class="dt-center align-middle">N° de Árboles</th>
+                              <th class="dt-center align-middle">Fecha</th>
+                              <th class="dt-center align-middle">Emsefor</th>
+                              <th class="dt-center align-middle">Creado por</th>
+                              <th class="dt-center align-middle">Finalizado?</th>
+                              <th class="dt-center align-middle">Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody class="table-tbody">
+                            {% for rel in relevamientos %}
+                                <tr>
+                                
+                                    <td class="dt-center align-middle"> {{ rel.number }}</td>
+                                    <td class="dt-center align-middle">
+
+                                      {% if rel.user_relevador %}
+                                      {{ rel.user_relevador__first_name }} {{ ' ' }} {{ rel.user_relevador__last_name }}
+
+                                    {% else %}
+                                      {{'Sin Responsable'}}
+                                    {% endif %}
+                                      
+                                      
+                                    </td>
+                                    <td class="dt-center align-middle"> {{ rel.type }}</td>
+                                    <td class="dt-center align-middle">
+                                      {% if rel.categorias__name %}
+                                      {{ rel.categorias__name }}
+                                      
+                                      {% endif%}
+                                    </td>
+                                    <td class="dt-center align-middle"> {{ rel.h_deseada }}</td>
+                                    <td class="dt-center align-middle"> {{ rel.h_last_poda }}</td>
+
+                                    <td class="dt-center align-middle">
+                                      {% if rel.rodales_id %}
+                                      <a href="{% url 'rodales-view'  idrodal=rel.rodales_id %}">
+                                        {{ rel.rodales__cod_sap }}
+          
+                                      </a>
+
+                      
+
+                                      {% endif %}
+                                      
+                                    </td>
+                                    <td class="dt-center align-middle">{{ rel.cant_parcelas }}</td>
+                                    <td class="dt-center align-middle">
+                                      {% if rel.cant_arboles %}
+                                        {{ rel.cant_arboles }}
+                                      {% else %}
+                                      {{ 0 }}
+                                      {% endif %}
+                                    </td>
+
+                                    <td class="dt-center align-middle">{{ rel.fecha }}</td>
+                                    <td class="dt-center align-middle">
+                                      {% if rel.emsefor__name %}
+                                        {{ rel.emsefor__name }}
+                                 
+                                      {% endif %}
+                                     
+                                    </td>
+                                    <td class="dt-center align-middle">{{ rel.user__first_name }} {{ ' ' }} {{ rel.user__last_name }}</td>
+                         
+                                    <td class="dt-center align-middle"> {{ rel.is_finish|yesno:"Si,No" }}</td>
+                                    <td>
+                                      <div class="d-flex justify-content-center">
+
+                                      {% if rel.type == 'Preexistente'%}
+
+                                        {% if rel.cant_res > 0 %}
+
+                                            <div class="mr-3">
+                                              <a href="{% url 'inventarios-relevamientos-view-resumen-preexistente' idrelevamiento=rel.pk %}" 
+                                              class="btn btn-primary btn-icon" aria-label="Button" attr="{{rel.pk}}">
+
+                                              <svg  xmlns="http://www.w3.org/2000/svg" width="24"  height="24"  viewBox="0 0 24 24"  
+                                              fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                                              stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-christmas-tree">
+                                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
+                                                <path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>
+                                        
+                                              
+                                                </a>
+                                          </div>
+
+                                        {% else %}
+
+                                        <div class="mr-3">
+                                          <a href="{% url 'inventarios-relevamientos-add-resumen-preexistente' idrelevamiento=rel.pk %}" 
+                                          class="btn btn-purple btn-icon" aria-label="Button" attr="{{rel.pk}}">
+
+                                          <svg  xmlns="http://www.w3.org/2000/svg" width="24"  height="24"  viewBox="0 0 24 24"  
+                                          fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                                          stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-christmas-tree">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
+                                            <path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>
+                                    
+                                          
+                                            </a>
+                                      </div>
+
+
+                                        {% endif %}
+
+                                      
+
+                                      {% else %}
+
+                                      
+
+                                          <div class="mr-3">
+                                            <a href="{% url 'inventarios-relevamientos-add-arboles' idrelevamiento=rel.pk %}" 
+                                            class="btn btn-lime btn-icon" aria-label="Button" attr="{{rel.pk}}">
+                                              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  
+                                              fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                                              stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-christmas-tree">
+                                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l4 4l-2 1l4 4l-3 1l4 4h-14l4 -4l-3 -1l4 -4l-2 -1z" /><path d="M14 17v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-3" /></svg>
+                                            </a>
+                                        </div>
+
+                                      {% endif %}
+
+                                       
+                          
+                                            <div class="mr-3">
+                                                <a href="{% url 'inventarios-relevamientos-edit' idrelevamiento=rel.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{rel.pk}}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                                        <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                                        <path d="M16 5l3 3"></path>
+                                                     </svg>
+                                                </a>
+                                            </div>
+
+                                            {% if user.pk == rel.user__pk %}
+
+                                            <div>
+                                              <a href="#" onclick="deleteInformation(this)" attr="{{rel.pk}}" class="btn btn-youtube btn-icon"
+                                              controller="relevamiento_delete">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                  <path d="M4 7l16 0"></path>
+                                                  <path d="M10 11l0 6"></path>
+                                                  <path d="M14 11l0 6"></path>
+                                                  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                               </svg>
+                                              </a>
+      
+                                          </div>
+                                            
+                                            {% endif %}
+      
+                                           
+                                          </div>
+                                        
+                                    </td>
+                                </tr>
+                            
+                            {% endfor %}
+        
+        
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            
+            </div>
+
+         
+        </div>
+      </div>
+
+      
+    {% endblock main_content %}
+
+    <script>
+        $(function () {
+            $('#tabladata').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": false,
+                "pageLength": 10,
+                order: [[0, 'asc']],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                }
+            });
+    
+        })
+
+      
+    </script>
+    
+  </div>
+
+{% endblock  %}

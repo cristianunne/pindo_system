@@ -90,7 +90,9 @@
                       <th class="dt-center align-middle">NETAD</th>
                       <th class="dt-center align-middle">N° de Res. Pago</th>
                       <th class="dt-center align-middle">Fecha de Registro</th>
+                    
                       <th class="dt-center align-middle">Acciones</th>
+   
                     </tr>
                   </thead>
                   <tbody class="table-tbody">
@@ -111,7 +113,7 @@
                             </td>
                             <td class="dt-center align-middle"> {{ sagpya.operaciones }}</td>
                             <td class="dt-center align-middle">{{ sagpya.fecha }}</td>
-                            <td class="dt-center align-middle">{{ sagpya.sup_aprobada }}</td>
+                            <td class="dt-center align-middle">{{ sagpya.sup_aprobada | floatformat:2 }}</td>
                             <td class="dt-center align-middle">
                               
                               <a href="{% url 'movimientos-view' idsagpya=sagpya.pk %}" class="hover-pindo">
@@ -132,9 +134,10 @@
                               </td>
                               <td class="dt-center align-middle">{{ sagpya.resolucion }}</td>
                             <td class="dt-center align-middle">{{ sagpya.created }}</td>
+                       
                             <td>
                                 <div class="d-flex justify-content-center">
-                  
+                                  
                                     <div class="mr-3">
                                         <a href="{% url 'sagpyas-edit' id=sagpya.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{sagpya.pk}}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -145,7 +148,7 @@
                                              </svg>
                                         </a>
                                     </div>
-
+                                    {% if user.role == 'AG' %}
                                     <div>
                                         <a href="#" onclick="deleteInformation(this)" attr="{{sagpya.pk}}" class="btn btn-youtube btn-icon" controller="sagpyas">
                                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -157,11 +160,12 @@
                                             <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
                                          </svg>
                                         </a>
-
                                     </div>
+                                    {% endif %}
                                   </div>
                                 
                             </td>
+                            
                         </tr>
                     
                     {% endfor %}

@@ -41,7 +41,7 @@ const URLS_DELETE = {
     RELEVAMIENTO_DELETE: 'relevamientos-delete/',
 
     ARBOL_PODA_DELETE: '../../arbol-poda-delete/',
-
+    ARBOL_OTHERS_DELETE: '../../arbol-others-delete/',
 
 }
 

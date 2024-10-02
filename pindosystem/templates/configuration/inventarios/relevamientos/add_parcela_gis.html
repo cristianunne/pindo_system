@@ -1,0 +1,139 @@
+<!doctype html>
+
+{% extends "../../../layout/base.html" %}
+
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+{% load l10n %}
+
+{% block sidebar %}
+
+{% include "../../../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../../../element/header.html" %}
+
+
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+
+    
+  
+    {% block main_content %}
+
+    <div class="page-body" style="margin-top: unset; margin-bottom: unset;">
+                
+        <div class="container-xl" style="padding-left: 0px; padding-right: 15px !important;">
+          
+            {% if messages %}
+
+            {% include "../../../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row" style="margin-right: -15px;">
+                <div class="col-xxl-12 pe-0" >
+                    <div style="height: 93.5vh; width: 100%;">
+                        <div id="map" style="width: 100%; height: 100%;">
+                                        
+                        </div>
+    
+                    </div>
+
+                </div>
+                
+            
+               
+                
+            </div>
+
+         
+        </div>
+      </div>
+
+      <link rel="stylesheet" type="text/css" href="{% static 'css/gis/localization/localization.css' %}">
+      <script src="{% static 'js/gantt/timelines-chart.min.js' %}"></script>
+      <script src="{% static 'js/d3/d3.js' %}"></script>
+      <script src="{% static 'js/planificacion/planificacion.js' %}"></script>
+     
+
+
+      
+    {% endblock main_content %}
+
+    <script>
+        $(function () {
+            $('#tabladata').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": false,
+                "pageLength": 10,
+                order: [[0, 'asc']],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                }
+            });
+        })
+
+    </script>
+
+
+    <script src="{% static 'js/gis/localizacion/parcels_localization.js' %}"></script>
+    <script src="{% static 'js/gis/querys/querys_gis.js' %}"></script>
+    
+    
+
+
+    <script>
+      var map = new L.map('map');
+      
+      var layerControl = null;
+      
+      //controlo que no sean null
+      let rodal_gis ="{{rodales_gis|escapejs}}";
+      var rodaldata = "{{rodaldata|escapejs}}";
+
+      var parcelasdata = "{{parcelasdata|escapejs}}";
+      let parcelas_gis ="{{parcelas_gis|escapejs}}";
+
+      var idrelevamiento = "{{idrelevamiento|escapejs}}";
+     
+
+
+      var rodal_gis_serializer_json = JSON.parse(rodal_gis != '' ? rodal_gis : null);
+     
+      var rodaldata_serializer_json = JSON.parse(rodaldata != '' ? rodaldata : null);
+
+      let parcelasdata_serializer_json = JSON.parse(parcelasdata != '' ? parcelasdata : null);
+      let parcelasgis_serializer_json = JSON.parse(parcelas_gis != '' ? parcelas_gis : null);
+    
+
+     
+     
+      createInfoRodal(rodaldata_serializer_json);
+
+      initParcelasGis(parcelasgis_serializer_json, parcelasdata_serializer_json);
+
+
+      
+    </script>
+
+
+
+
+
+    
+  </div>
+
+{% endblock  %}

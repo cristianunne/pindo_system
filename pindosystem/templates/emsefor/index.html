@@ -87,15 +87,17 @@
                   <thead>
                     <tr>
                       <th class="dt-center align-middle"></th>
-                      <th class="dt-center align-middle"></button></th>
-                      <th class="dt-center align-middle">Nombres</button></th>
-                      <th class="dt-center align-middle">Dirección</button></th>
-                      <th class="dt-center align-middle">Teléfono</button></th>
-                      <th class="dt-center align-middle">Email</button></th>
-                      <th class="dt-center align-middle">Contratista</button></th>
-                      <th class="dt-center align-middle">CUIT</button></th>
-                      <th class="dt-center align-middle">Fecha de Registro</button></th>
-                      <th class="dt-center align-middle">Acciones</button></th>
+                      <th class="dt-center align-middle"></th>
+                      <th class="dt-center align-middle">Nombres</th>
+                      <th class="dt-center align-middle">Dirección</th>
+                      <th class="dt-center align-middle">Teléfono</th>
+                      <th class="dt-center align-middle">Email</th>
+                      <th class="dt-center align-middle">Contratista</th>
+                      <th class="dt-center align-middle">CUIT</th>
+                      <th class="dt-center align-middle">Fecha de Registro</th>
+                      {% if user.role == 'AG' %}
+                      <th class="dt-center align-middle">Acciones</th>
+                      {% endif %}
                     </tr>
                   </thead>
                   <tbody class="table-tbody">
@@ -123,6 +125,7 @@
                             <td class="dt-center align-middle">{{ emsefor.contratista }}</td>
                             <td class="dt-center align-middle">{{ emsefor.cuit }}</td>
                             <td class="dt-center align-middle">{{ emsefor.created }}</td>
+                            {% if user.role == 'AG' %}
                             <td class="dt-center align-middle">
                                 <div class="d-flex justify-content-center">
                                   <div class="mr-3">
@@ -137,6 +140,7 @@
                                        </svg>
                                     </a>
                                 </div>
+                                
                                     <div class="mr-3">
                                         <a href="{% url 'emsefor-edit' id=emsefor.pk %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{emsefor.pk}}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -148,22 +152,26 @@
                                         </a>
                                     </div>
 
-                                    <div>
-                                        <a href="#" onclick="deleteInformation(this)" attr="{{emsefor.pk}}" class="btn btn-youtube btn-icon" controller="emsefor">
-                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M4 7l16 0"></path>
-                                            <path d="M10 11l0 6"></path>
-                                            <path d="M14 11l0 6"></path>
-                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
-                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
-                                         </svg>
-                                        </a>
+                          
 
-                                    </div>
+                                      <div>
+                                          <a href="#" onclick="deleteInformation(this)" attr="{{emsefor.pk}}" class="btn btn-youtube btn-icon" controller="emsefor">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                              <path d="M4 7l16 0"></path>
+                                              <path d="M10 11l0 6"></path>
+                                              <path d="M14 11l0 6"></path>
+                                              <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                              <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                          </svg>
+                                          </a>
+
+                                      </div>
+                                    
                                   </div>
                                 
                             </td>
+                            {% endif %}
                         </tr>
                     
                     {% endfor %}

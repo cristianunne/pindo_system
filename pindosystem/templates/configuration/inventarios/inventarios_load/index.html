@@ -1,0 +1,123 @@
+<!doctype html>
+
+{% extends "../../../layout/base.html" %}
+
+{% load static %}
+
+
+
+{% block sidebar %}
+
+{% include "../../../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../../../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../../../element/pageheader.html" %}
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+
+    <link rel="stylesheet" href="{% static '/staticconfiguration/css/configuration.css' %}">
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+          
+            {% if messages %}
+
+            {% include "../../../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row row-cards mb-5">
+
+                <div class="col-md-3 col-lg-3">
+                    <div class="card bg-primary-lt">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 col-sm-2">
+                         
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13" /><path d="M9 4v13" /><path d="M15 7v13" /></svg>
+                                          
+                            </div>
+                            <div class="col-md-8">
+                                <h3 class="card-title">Sección de Administración de las Configuraciones del Mapa</h3>
+                                <p class="text-muted">En esta sección puede configurar las opciones del Mapa Principal</p>
+                             
+                            </div>
+                        </div>
+
+                        
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9 col-lg-9">
+                
+
+                      <div class="row row-gap-3 justify-content-center">
+
+                        <div class="col-xxl-3 col-xl-3 col-md-3 col-sm-3 d-flex flex-column" style="height: 250px; min-height: 250px; max-height: 250px; overflow: hidden;">
+                          <a href="{% url 'map-view-config' %}" class="hover-pindo">
+                          <div class="card d-flex p-2" style="flex: 1; align-items: center; height: 100%;">
+                            <div class="card-body p-2 pt-3 text-center" style="flex: 0.4;">
+                              <span class="avatar avatar-lg mb-1 rounded" style="background-image: url({% static 'img/icons/mapa_config.png' %})"></span>
+                            </div>
+                            <h4 class="text-center" style="flex: 0.2;">Inventarios de Poda</h4>
+                            <p class="text-description text-justify">Configuraciones Generales del Mapa principal. Configure el centro de inicio, el zoom, el SRC, etc.</p>
+                          </div>
+                        </a>
+                        </div>
+
+                        
+                        <div class="col-xxl-3 col-xl-3 col-md-3 col-sm-3 d-flex flex-column" style="height: 250px; min-height: 250px; max-height: 250px; overflow: hidden;">
+                          <a href="{% url 'index-basemaps' %}" class="hover-pindo">
+                          <div class="card p-2" style="flex: 1; align-items: center; height: 100%">
+                            <div class="card-body p-2 pt-3 text-center" style="flex: 0.4;">
+                              <span class="avatar avatar-lg mb-1 rounded" style="background-image: url({% static 'img/icons/baselayer.png' %})"></span>
+                            </div>
+                            <h4 class="text-center" style="flex: 0.2;">Inventarios Tradicionales</h4>
+                            <p class="text-description text-justify">
+                              Configuraciones de las Capas que se utilizan como base del mapa. Puede optar por capas de 
+                                OpenStreetMap, Google, ESRI, IGN Argentina, etc.
+                             
+                            </p>
+                           
+                       
+                        </div>
+                        </a>
+                        </div>
+
+                     
+                      </div>
+                     
+                    </div>
+              
+                </div>
+            
+            </div>
+
+         
+        </div>
+      </div>
+
+      
+    {% endblock main_content %}
+
+    
+  </div>
+
+{% endblock  %}

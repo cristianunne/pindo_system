@@ -90,7 +90,9 @@
                       <th class="dt-center align-middle">Email</th>
                       <th class="dt-center align-middle">CUIT</th>
                       <th class="dt-center align-middle">Fecha de Registro</th>
-                      <th class="dt-center align-middle">Acciones</th>
+                      {% if user.role == 'AG' %}
+                        <th class="dt-center align-middle">Acciones</th>
+                      {% endif %}
                     </tr>
                   </thead>
                   <tbody class="table-tbody">
@@ -117,6 +119,7 @@
                             <td class="dt-center align-middle">{{ empresa.email }}</td>
                             <td class="dt-center align-middle">{{ empresa.cuit }}</td>
                             <td class="dt-center align-middle">{{ empresa.created }}</td>
+                            {% if user.role == 'AG' %}
                             <td>
                                 <div class="d-flex justify-content-center">
                                   <div class="mr-3">
@@ -132,6 +135,8 @@
                                        </svg>
                                     </a>
                                 </div>
+
+                              
                                     <div class="mr-3">
                                         <a href="{% url 'empresas-edit' id=empresa.empresas_id %}" class="btn btn-rss btn-icon" aria-label="Button" attr="{{empresa.empresas_id}}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -142,6 +147,8 @@
                                              </svg>
                                         </a>
                                     </div>
+
+                                 
 
                                     <div>
                                         <a href="#" onclick="deleteInformation(this)" attr="{{empresa.pk}}" class="btn btn-youtube btn-icon" controller="empresas">
@@ -156,9 +163,12 @@
                                         </a>
 
                                     </div>
+
+                                  
                                   </div>
                                 
                             </td>
+                            {% endif %}
                         </tr>
                     
                     {% endfor %}

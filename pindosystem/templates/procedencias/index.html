@@ -91,7 +91,9 @@
                       <th class="dt-center align-middle">Vivero</th>
                       <th class="dt-center align-middle">Material</th>
                       <th class="dt-center align-middle">Fecha de Registro</th>
+                      {% if user.role == 'AG' %}
                       <th class="dt-center align-middle">Acciones</th>
+                      {% endif %}
                     </tr>
                   </thead>
                   <tbody class="table-tbody">
@@ -118,6 +120,7 @@
                             <td class="dt-center align-middle">{{ procedencia.vivero }}</td>
                             <td class="dt-center align-middle">{{ procedencia.material }}</td>
                             <td class="dt-center align-middle">{{ procedencia.created }}</td>
+                            {% if user.role == 'AG' %}
                             <td class="dt-center align-middle">
                                 <div class="d-flex justify-content-center">
                                   <div class="mr-3">
@@ -160,6 +163,7 @@
                                   </div>
                                 
                             </td>
+                            {% endif %}
                         </tr>
                     
                     {% endfor %}

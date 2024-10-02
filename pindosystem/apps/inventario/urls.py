@@ -24,12 +24,21 @@ urlpatterns = [
      path('inventarios/inventarios-relevamientos/addtreesothers/<int:idrelevamiento>/<int:number_arboles>/', 
          views.addArbolesToInventarioRelevamientosOthers, name='inventarios-relevamientos-addtrees-others'),
 
+         #me falta el edit
+
      path('inventarios/inventarios-relevamientos/relevamientos-delete/<int:idrelevamiento>/', views.deleteRelevamiento, name='relevamientos-delete'),
        path('inventarios/inventarios-relevamientos/edit-treespoda/<int:idrelevamiento>/<int:idarbol>/', 
          views.editArbolesRelevamientoPoda, name='inventarios-relevamientos-edit-trees-poda'),
+
+     path('inventarios/inventarios-relevamientos/edit-treesothers/<int:idrelevamiento>/<int:idarbol>/', 
+         views.editArbolesRelevamientoOthers, name='inventarios-relevamientos-edit-trees-others'),
+     
      
       path('inventarios/inventarios-relevamientos/arbol-poda-delete/<int:idarbol>/', 
            views.deleteArbolPoda, name='arbol-poda-delete'),
+          
+     path('inventarios/inventarios-relevamientos/arbol-others-delete/<int:idarbol>/', 
+           views.deleteArbolOthers, name='arbol-others-delete'),
           
      path('inventarios/inventarios-relevamientos/add-parcela/<int:idrelevamiento>/', 
          views.addParcela, name='inventarios-relevamientos-add-parcela'),
@@ -45,4 +54,21 @@ urlpatterns = [
 
      path('inventarios/inventarios-relevamientos/relevamiento-stats-print/<int:idrelevamiento>/', 
           views.printStatistics, name='inventarios-relevamientos-stats-print'),
+
+    
+    path('inventarios/inventarios-relevamientos/add-resumen-preexistente/<int:idrelevamiento>/', 
+         views.addResumenRelevamientoPreexistente, name='inventarios-relevamientos-add-resumen-preexistente'),
+    path('inventarios/inventarios-relevamientos/view-resumen-preexistente/<int:idrelevamiento>/', 
+         views.viewResumenRelevamientoPreexistente, name='inventarios-relevamientos-view-resumen-preexistente'),
+
+     path('inventarios/inventarios-relevamientos/view-relevamientos-by-rodal/<int:idrodal>/', 
+          views.viewRelevamientosByRodal, name='inventarios-relevamientos-by-rodal-view'),
+     
+     path('inventarios/inventarios-relevamientos/add-parcela-gis/<int:idrelevamiento>/', 
+          views.addParcelaGis, name='inventarios-relevamientos-add-parcela-gis'),
+
+
+     path('inventarios/inventarios-relevamientos/load-index/', 
+          views.loadRelevamientosByExceIndex, name='inventarios-relevamientos-load-index'),
+   
 ]

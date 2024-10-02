@@ -25,7 +25,9 @@ from rodales.models import Rodales
 
 from general_utility import getEmpresasApiSap
 
+from login.decorators import admin_access_only
 
+@login_required
 def index(request):
 
     empresas = Empresas.objects.all()
@@ -33,6 +35,9 @@ def index(request):
     context = {'empresas' : empresas, 
                'category' : 'Empresas',
                 'action' : 'Administración de Empresas'}
+    
+
+    context.update({'user' : request.user})
 
     return render(request, 'empresas/index.html', context)
 
@@ -89,23 +94,28 @@ def add(request):
     
     return render(request, 'empresas/add.html', context)
 
-
+@admin_access_only
 def editEmpresa(request, id):
     context = {}
 
   
-    
-
     try:
         empresa = Empresas.objects.get(empresas_id = id)
         context.update({'empresa_data' : empresa})
 
         #traigo los datos de las empresas
         data_sap = getEmpresasApiSap(request)
+       
   
         if data_sap:
+            print(data_sap)
             empresa_sap = filterEmpresasWithId(data_sap, empresa.sap_id)
             context.update({'empresa_sap' : list(empresa_sap.items())})
+        
+        else:
+            messages.error(request, str('No se ha podido conectar a SAP'))
+            return redirect('empresas-index')
+             
       
 
         if request.method == 'POST':
@@ -151,6 +161,7 @@ def editEmpresa(request, id):
 
 @login_required
 @csrf_exempt
+@admin_access_only
 def deleteEmpresa(request, id):
 
     try:
@@ -164,8 +175,9 @@ def deleteEmpresa(request, id):
         raise Http404("error")
     except Exception as e:
         raise Http404(str(e))
-        
 
+@login_required       
+@admin_access_only
 def modifiedLogoEmpresa(request, id):
       try:
         context = {

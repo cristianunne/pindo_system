@@ -1,0 +1,367 @@
+<!doctype html>
+
+{% extends "../../../layout/base.html" %}
+
+{% load static %}
+
+
+{% block sidebar %}
+
+{% include "../../../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../../../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../../../element/pageheader.html" %}
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+          
+            {% if messages %}
+
+            {% include "../../../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row row-cards mb-5 justify-content-between">
+
+                <div class="col-xxl-4 col-md-5 col-lg-5">
+                    <div class="card bg-primary-lt">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-xxl-3 col-lg-4 col-md-4 col-sm-12">
+                         
+                                <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  
+                                fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                                stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
+                                  <path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>
+                            
+                    
+                            </div>
+                            <div class="col-md-8">
+                                <h3 class="card-title">Sección de Administración de los Relevamientos de Inventarios</h3>
+                                <p class="text-muted">En esta sección puede visualizar la información de los Árboles de 
+                                  Relevamientos de Inventarios</p>
+                             
+                            </div>
+                        </div>
+
+                        
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5 col-lg-5">
+
+                  
+
+
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="{% url 'inventarios-relevamientos-stats-print' idrelevamiento=relevamiento.pk %}" 
+                        class="btn btn-primary" aria-label="Button" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
+               
+                       </svg> Imprimir Informe</a>
+
+                       
+                    </div>
+
+                </div>
+
+            
+            </div>
+
+            <div class="row row-cards mb-5 justify-content-center">
+
+                <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">
+
+                    <div class="card">
+                        <div class="card-header justify-content-between">
+                          <h3 class="card-title">Datos del Relevamiento</h3>
+                        </div>
+
+                        
+                        <div class="card-body">
+
+                            <div class="datagrid">
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Relevamiento N°:</div>
+                                    <div class="datagrid-content">{{ relevamiento.number }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Actividad:</div>
+                                    <div class="datagrid-content">{{ relevamiento.categorias.name }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Tamaño de Parcela:</div>
+                                    <div class="datagrid-content">{{ relevamiento.h_deseada }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Año de Plantación</div>
+                                    <div class="datagrid-content">{{ plantacion.fecha }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Sup. del Rodal</div>
+                                    <div class="datagrid-content">
+                                        {{ rodales_gis.superficie|floatformat:2 }}
+                    
+                                    </div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Intensidad de Muestreo:</div>
+                                    <div class="datagrid-content">{{ relevamiento.is_finish|yesno:"Si,No"}}</div>
+                                </div>
+                           
+                               
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Emsefor:</div>
+                                    <div class="datagrid-content">
+                                        {% if relevamiento.rodales %}
+                                        <a href="{% url 'rodales-view'  idrodal=relevamiento.rodales_id %}">
+                                        {{ relevamiento.rodales.cod_sap }}
+                                        </a>
+                                        {% endif%}
+                                    </div>
+                                </div>
+
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Promedio Raleo:</div>
+                                    <div class="datagrid-content">{{ ''}}</div>
+                                </div>
+
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Distancia Plantación:</div>
+                                    <div class="datagrid-content">{{ plantacion.dist_lineas}} {{'x'}} {{plantacion.dist_plantas}}</div>
+                                </div>
+
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Altura Deseada:</div>
+                                    <div class="datagrid-content">{{ relevamiento.h_deseada}}</div>
+                                </div>
+
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Altura de Última Poda:</div>
+                                    <div class="datagrid-content">{{ relevamiento.h_last_poda}}</div>
+                                </div>
+
+                            </div>
+                
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12">
+
+                    <div class="card">
+                        <div class="card-header justify-content-between">
+                          <h3 class="card-title">Información de contexto</h3>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="datagrid">
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Propietario del Rodal:</div>
+                                    <div class="datagrid-content">
+                                        {% if relevamiento.rodales %}
+                                            <a href="{% url 'empresas-view'  id=relevamiento.rodales.empresa.pk %}">
+                                                {{ relevamiento.rodales.empresa.name }}
+                                            </a>
+                                        {% endif%}
+                                    </div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Rodal:</div>
+                                    <div class="datagrid-content">
+                                        {% if relevamiento.rodales %}
+                                        <a href="{% url 'rodales-view'  idrodal=relevamiento.rodales_id %}">
+                                        {{ relevamiento.rodales.cod_sap }}
+                                        </a>
+                                        {% endif%}
+                                    </div>
+                                </div>
+
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">N° de Parcelas:</div>
+                                    <div class="datagrid-content">{{ relevamiento.categorias.name }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Fecha de Intervención:</div>
+                                    <div class="datagrid-content">{{ relevamiento.fecha }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Especie</div>
+                                    
+                                    <div class="datagrid-content">
+                                        {% if relevamiento.rodales %}
+                                        <a href="{% url 'procedencias-view'  idprocedencia=plantacion.procedencias_id %}">
+                                        {{ plantacion.procedencias.name }}
+                                        </a>
+                                        {% endif%}
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                
+                        </div>
+
+                    </div>
+            
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header justify-content-between">
+                        <h3 class="card-title">Resumen del Relevamiento</h3>
+                        </div>
+    
+                        
+                        <div class="card-body">
+    
+                            <div id="" class="table-responsive">
+                                <table id="tabladata" class="table table-bordered table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th class="dt-center align-middle">Parcela</th>
+                                        <th class="dt-center align-middle">N° Arb./ha</th>
+                                        {% if relevamiento.categorias.name == 'Poda' %}
+                                        <th class="dt-center align-middle">Arboles Podados</th>
+                                      
+                                        <th class="dt-center align-middle">Arb.con la h Deseada</th>
+                                        <th class="dt-center align-middle">Arboles No Podados</th>
+                                        {% endif %}
+                                        <th class="dt-center align-middle">DAP (cm)</th>
+                                        <th class="dt-center align-middle">Altura Total (m)</th>
+                                        <th class="dt-center align-middle">Altura de Poda (m)</th>
+                                        {% if relevamiento.categorias.name == 'Poda' %}
+                                        <th class="dt-center align-middle">DMSM (cm)</th>
+                                        {% endif %}
+                                        <th class="dt-center align-middle">Área basal (m2)</th>
+                                        <th class="dt-center align-middle">Copa Removida (%)</th>
+                                        
+                                       
+    
+                            
+                        
+                                    </tr>
+                                </thead>
+                                <tbody class="table-tbody">
+                                    <tr style="background-color: #f3f3f3; font-weight: bold;">
+                                        <td class="dt-center align-middle"> {{ '' }}</td>
+                                        <td class="dt-center align-middle"> {{ resumen_general.n_arb_ha | floatformat:0}}</td>
+                                        {% if relevamiento.categorias.name == 'Poda' %}
+                                        <td class="dt-center align-middle"> {{ resumen_general.arboles_podados | floatformat:0}}</td>
+                                        
+                                        
+                                        <td class="dt-center align-middle"> {{ resumen_general.arb_h_deseada | floatformat:0}}</td>
+                                        <td class="dt-center align-middle"> {{ resumen_general.arb_no_podados | floatformat:0}}</td>
+                                        {% endif %}
+
+                                        <td class="dt-center align-middle"> {{ resumen_general.dap | floatformat:2}}</td>
+                                        <td class="dt-center align-middle"> {{ resumen_general.h_total | floatformat:2}}</td>
+                                        <td class="dt-center align-middle"> {{ resumen_general.h_poda | floatformat:2}}</td>
+                                        {% if relevamiento.categorias.name == 'Poda' %}
+                                        <td class="dt-center align-middle"> {{ resumen_general.dmsm | floatformat:2}}</td>
+                                        {% endif %}
+                                        <td class="dt-center align-middle"> {{ resumen_general.area_basal | floatformat:2 }}</td>
+                                        <td class="dt-center align-middle"> {{ resumen_general.porc_remo | floatformat:2 }}</td>
+                                    </tr>
+                                
+                                   
+                                </tbody>
+                                </table>
+                            </div>
+    
+                        
+                
+                        </div>
+                    </div>
+                </div>
+
+
+                        
+            </div>
+    
+        </div>
+
+ 
+
+      
+    {% endblock main_content %}
+  </div>
+    <script>
+        $(function () {
+            $('#tabladata').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": false,
+                "info": true,
+                "autoWidth": false,
+                "responsive": false,
+                "pageLength": 1000,
+                order: [[0, 'asc']],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                }
+            });
+    
+        })
+
+        $(function () {
+            $('#tabladata_2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": false,
+                "info": true,
+                "autoWidth": false,
+                "responsive": false,
+                "pageLength": 1000,
+                order: [[0, 'asc']],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                }
+            });
+    
+        })
+
+        $(function () {
+            $('#tabladata_3').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": false,
+                "info": true,
+                "autoWidth": false,
+                "responsive": false,
+                "pageLength": 1000,
+                order: [[0, 'asc']],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                }
+            });
+    
+        })
+
+      
+    </script>
+    
+  </div>
+
+{% endblock  %}

@@ -11,10 +11,11 @@ from django.views.decorators.csrf import csrf_exempt
 import base64
 
 from rodales.utility import get_rodales_by_procedencia
+from login.decorators import admin_access_only
 
 
 # Create your views here.
-
+@login_required
 def index(request):
 
     procedencias = Procedencias.objects.all()
@@ -22,11 +23,13 @@ def index(request):
     context = {'procedencias' : procedencias, 
                'category' : 'Procedencias',
                 'action' : 'Administración de Procedencias'}
+    
+    context.update({'user' : request.user})
 
     return render(request, 'procedencias/index.html', context)
     
 
-
+@login_required
 def addProcedencia(request):
     if (request.method == 'POST'):
         form_procedencia = CreateProcedenciaForm(request.POST)
@@ -40,6 +43,8 @@ def addProcedencia(request):
     return render(request, 'procedencias/add.html')
 
 
+@login_required
+@admin_access_only
 def editProcedencia(request, id):
     
     context = {}
@@ -67,7 +72,8 @@ def editProcedencia(request, id):
         messages.error(request, str(e))
         return redirect('procedencias-index')
     
-
+@login_required
+@admin_access_only
 def deleteProcedencias(request, id):
     try:
         obj = Procedencias.objects.get(pk=id)
@@ -81,6 +87,8 @@ def deleteProcedencias(request, id):
     except Exception as e:
         raise Http404(str(e))
 
+@login_required
+@admin_access_only
 def modifiedLogoProcedencias(request, id):
       try:
         context = {

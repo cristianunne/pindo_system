@@ -18,11 +18,12 @@ from sagpyas.forms import CreateSagpyasForm, EditSagpyasForm
 from django.urls import reverse
 from django.http import JsonResponse, Http404, HttpResponseRedirect
 
-
+from login.decorators import admin_access_only
 
 # Create your views here.
 
 
+@login_required
 def index(request):
 
     sagpyas = Sagpyas.objects.all()
@@ -31,6 +32,8 @@ def index(request):
                'category' : 'Sagpyas',
                 'action' : 'Administración de Sagpyas'}
     
+    context.update({'user' : request.user})
+    
     for sap in sagpyas:
         if sap.expedientes is not None:
             print(sap.expedientes.name)
@@ -38,7 +41,7 @@ def index(request):
 
     return render(request, 'sagpyas/index.html', context)
 
-
+@login_required
 def addSagpyas(request):
 
     if (request.method == 'POST'):
@@ -89,6 +92,7 @@ def addSagpyas(request):
     
     return render(request, 'sagpyas/add.html')
 
+@login_required
 def editSagpyas(request, id):
     context = {}
 
@@ -169,7 +173,7 @@ def editSagpyas(request, id):
     
     return render(request, 'sagpyas/edit.html', context=context)
     
-
+@login_required
 def viewSagpyas(request, id):
     try:
         context = {
@@ -199,6 +203,8 @@ def viewSagpyas(request, id):
         messages.error(request, str(e))
         return redirect('sagpyas-index')
 
+@login_required
+@admin_access_only
 def deleteSagpyas(request, id):
     
    
@@ -215,11 +221,11 @@ def deleteSagpyas(request, id):
         raise Http404(str(e))
 
 
-
+@login_required
 def manageFilesSagpyas(request):
     pass
 
-
+@login_required
 def uploadFilesViewSagpyas(request, id):
     try:
         context = {
@@ -344,7 +350,7 @@ def deleteSagpyasFiles(request, id):
     except Exception as e:
         raise Http404(str(e))
     
-
+@login_required
 def assignRodalToSagpya(request, idsagpya):
 
     try:
@@ -400,7 +406,7 @@ def assignRodalToSagpya(request, idsagpya):
         messages.error(request, str(e))
         return redirect('sagpyas-index')
     
-
+@login_required
 def editRodalSagpya(request, idsagpyarodal):
     
     try:
@@ -444,7 +450,7 @@ def editRodalSagpya(request, idsagpyarodal):
     return render(request, 'sagpyas/edit_rodal_sagpya.html', context=context)
 
 
-
+@login_required
 def deleteRodalesSagpyas(request, idsagpya, idrodalsagpya):
     
    
@@ -463,6 +469,8 @@ def deleteRodalesSagpyas(request, idsagpya, idrodalsagpya):
     except Exception as e:
         raise Http404(str(e))
     
+
+@login_required
 def viewExpediente(request, idexpediente):
     
     
@@ -491,7 +499,7 @@ def viewExpediente(request, idexpediente):
     except Exception as e:
         raise Http404(str(e))
 
-
+@login_required
 def addMovimientoExpediente(request, idexpediente):
     
     context = {
@@ -527,6 +535,7 @@ def addMovimientoExpediente(request, idexpediente):
     
     return render(request, 'sagpyas/expedientes/add.html', context=context)
 
+@login_required
 def editMovimientoExpediente(request, idmovimiento):
     
     context = {
@@ -567,6 +576,7 @@ def editMovimientoExpediente(request, idmovimiento):
     
     return render(request, 'sagpyas/expedientes/edit.html', context=context)
 
+@login_required
 def viewMovimientoDetails(request, idmovimiento, idexpediente):
 
     context = {
@@ -591,7 +601,7 @@ def viewMovimientoDetails(request, idmovimiento, idexpediente):
 
     return render(request, 'sagpyas/expedientes/view_details.html', context=context)
 
-
+@login_required
 def uploadFilesViewMovimientos(request, idmovimiento):
     try:
         context = {
@@ -724,7 +734,7 @@ def deleteFileMovimiento(request, id):
     except Exception as e:
         raise Http404(str(e))
     
-
+@login_required
 def addMovimientoSagpya(request, idsagpya):
 
     context = {
@@ -757,7 +767,7 @@ def addMovimientoSagpya(request, idsagpya):
     
     return render(request, 'sagpyas/movimientos/add.html', context=context)
     
-
+@login_required
 def movimientosView(request, idsagpya):
     try:
         #me trae la lista de movimientos para el expediente
@@ -782,7 +792,7 @@ def movimientosView(request, idsagpya):
     except Exception as e:
         raise Http404(str(e))
     
-
+@login_required
 def viewMovimientosSagpyasDetails(request, idmovimiento):
 
     context = {
@@ -807,6 +817,7 @@ def viewMovimientosSagpyasDetails(request, idmovimiento):
 
     return render(request, 'sagpyas/movimientos/view_details.html', context=context)
 
+@login_required
 def editMovimientoSagpya(request, idmovimiento):
     
     context = {
@@ -840,6 +851,7 @@ def editMovimientoSagpya(request, idmovimiento):
     
     return render(request, 'sagpyas/movimientos/edit.html', context=context)
 
+@login_required
 def deleteMovimientos(request, idmovimiento):
     
     try:
@@ -860,7 +872,7 @@ def deleteMovimientos(request, idmovimiento):
         raise Http404(str(e))
     
 
-
+@login_required
 def uploadFilesViewMovimientosSagpyas(request, idmovimiento):
     try:
         context = {

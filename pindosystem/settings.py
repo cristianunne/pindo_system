@@ -77,7 +77,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-ALLOWED_HOSTS = ["localhost","192.168.36.220", "192.168.36.65", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost","192.168.30.18", "192.168.30.18:8081", "0.0.0.0", "127.0.0.1", 
+                 "correo.pindosa.com.ar", "http://correo.pindosa.com.ar:5050"]
 
 """CORS_ORIGIN_WHITELIST = (
     'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://192.168.36.220:5175'

@@ -38,6 +38,9 @@ from intervenciones.serializers import IntervencionesByRodalSerializer, getSobre
       getRaleoByRodalSerializer, getRaleoWithGisDetailsByRodalSerializer, getTalarazByRodalSerializer, \
       getTalarazaWithGisDetailsByRodalSerializer
 
+from inventario.models import InventariosParcelasgis
+from django.contrib.gis.geos import Point
+
 from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 
@@ -68,7 +71,6 @@ def getPlantacionesByRodal(request):
         
         #plantacion_count = len(Plantacionesgis.objects.filter(plantacion=plantacion)) 
 
-        print(plantacion);
 
 
         return JsonResponse(plantacion)
@@ -101,6 +103,49 @@ def getLayerWMS(request):
         capa = list(TileLayerWMS.objects.filter(pk = layer_id).values())[0]
 
         return JsonResponse(capa, safe=False)
+
+    return JsonResponse(False, safe=False)
+
+@login_required
+@csrf_exempt
+def setPointParcelsPosition(request):
+    
+    if request.method == 'POST':
+        
+       
+
+        #guardo las coordenadas entrante y si esta todo okey devuelvo los datos
+
+        try:
+
+            request_data = json.load(request)
+       
+            layer_id = request_data['parcel_id']
+            coord = request_data['coord']
+
+            print(coord['lat'])
+
+            parcela = InventariosParcelasgis.objects.get(pk=layer_id)
+
+            parcela.geom_4326 = Point(coord['long'], coord['lat'])
+
+            parcela.save()
+
+            #como guardo traigo los datos nuevamente
+
+
+            capa = serialize('geojson', InventariosParcelasgis.objects
+                                     .filter(), 
+                                     geometry_field='geom_4326' )
+            #capa = list(InventariosParcelasgis.objects.filter(pk = layer_id['parcel_id']).values())[0]
+
+            return JsonResponse(capa, safe=False)
+
+        except Exception as e:
+            return JsonResponse(False, safe=False)
+
+
+       
 
     return JsonResponse(False, safe=False)
 

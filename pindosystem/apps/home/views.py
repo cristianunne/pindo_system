@@ -5,6 +5,7 @@ from rodales_gis.models import Rodalesgis
 from django.core.serializers import serialize
 
 from django.db.models import Sum, F, Count, Min
+from login.decorators import admin_access_only
 
 # Create your views here.
 def index(request):

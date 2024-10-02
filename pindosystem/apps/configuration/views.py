@@ -25,12 +25,15 @@ from configuration.utility import filter_materiales, get_maktx_from_datasap
 
 from django.views.decorators.cache import cache_control
 
+from login.decorators import admin_access_only
+
 
 
 
 
 # Create your views here.
 @login_required
+@admin_access_only
 def indexUsosRodales(request):
     
     usos_rodales = Usosrodales.objects.all()

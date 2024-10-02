@@ -9,6 +9,7 @@
 
 {% block content %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/print_pages/print_pages_relevamiento.css' %}">
  
   <div class="page-wrapper">
 
@@ -89,11 +90,9 @@
                                     <div class="datagrid-item">
                                         <div class="datagrid-title">Emsefor:</div>
                                         <div class="datagrid-content">
-                                            {% if relevamiento.rodales %}
-                                            <a href="{% url 'rodales-view'  idrodal=relevamiento.rodales_id %}">
-                                            {{ relevamiento.rodales.cod_sap }}
-                                            </a>
-                                            {% endif%}
+                                          
+                                            {{ relevamiento.emsefor.name }}
+                                            
                                         </div>
                                     </div>
     
@@ -192,15 +191,16 @@
                             
                             <h3 class="card-title fw-bold">Resumen del Relevamiento</h3>
                             
-        
-                            
                             <div class="card-body">
         
                                 <div id="" class="table-responsive" style="font-size: 11px !important;">
                                     <table id="tabladata" class="table table-bordered table-hover dataTable">
                                     <thead style="font-size: 10px !important;"> 
                                         <tr style="font-size: 10px !important;">
+                                            {% if  relevamiento.type != 'Preexistente' %}
                                             <th class="dt-center align-middle" style="font-size: xx-small;">Parc.</th>
+                                            {% endif %}
+                                         
                                             <th class="dt-center align-middle" style="font-size: xx-small;">N° Arb./ha</th>
                                             {% if relevamiento.categorias.name == 'Poda' %}
                                             <th class="dt-center align-middle" style="font-size: xx-small;">Arb. Podados</th>
@@ -215,7 +215,11 @@
                                             <th class="dt-center align-middle" style="font-size: xx-small;">DMSM (cm)</th>
                                             {% endif %}
                                             <th class="dt-center align-middle" style="font-size: xx-small;">Área basal (m2)</th>
+
+                                            {% if relevamiento.categorias.name == 'Poda' %}
                                             <th class="dt-center align-middle" style="font-size: xx-small;">Copa Rem. (%)</th>
+                                            {% endif %}
+                                           
                                             
                                            
         
@@ -224,7 +228,58 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-tbody">
+
+                                        {% if relevamiento.type != 'Preexistente' %}
+                                            <tr style="background-color: #f3f3f3; font-weight: bold;">
+                                                <td class="dt-center align-middle"> {{ '' }}</td>
+                                                <td class="dt-center align-middle"> {{ resumen_general.n_arb_ha | floatformat:0}}</td>
+                                                {% if relevamiento.categorias.name == 'Poda' %}
+                                                <td class="dt-center align-middle"> {{ resumen_general.arboles_podados | floatformat:0}}</td>
+                                                
+                                                
+                                                <td class="dt-center align-middle"> {{ resumen_general.arb_h_deseada | floatformat:0}}</td>
+                                                <td class="dt-center align-middle"> {{ resumen_general.arb_no_podados | floatformat:0}}</td>
+                                                {% endif %}
+        
+                                                <td class="dt-center align-middle"> {{ resumen_general.dap | floatformat:2}}</td>
+                                                <td class="dt-center align-middle"> {{ resumen_general.h_total | floatformat:2}}</td>
+                                                <td class="dt-center align-middle"> {{ resumen_general.h_poda | floatformat:2}}</td>
+                                                {% if relevamiento.categorias.name == 'Poda' %}
+                                                <td class="dt-center align-middle"> {{ resumen_general.dmsm | floatformat:2}}</td>
+                                                {% endif %}
+                                                <td class="dt-center align-middle"> {{ resumen_general.area_basal | floatformat:2 }}</td>
+                                                
+                                                
+                                                <td class="dt-center align-middle"> {{ resumen_general.porc_remo | floatformat:2 }}</td>
+                                            </tr>
                                     
+                                        {% else %}
+                                        <tr style="background-color: #f3f3f3; font-weight: bold;">
+                                            <td class="dt-center align-middle"> {{ resumen_general.arb_ha | floatformat:0}}</td>
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.arb_podados | floatformat:0}}</td>
+                                            
+                                            
+                                            <td class="dt-center align-middle"> {{ resumen_general.arb_h_deseada | floatformat:0}}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.arb_no_podados | floatformat:0}}</td>
+                                            {% endif %}
+
+                                            <td class="dt-center align-middle"> {{ resumen_general.dap | floatformat:2}}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.h_total | floatformat:2}}</td>
+                                            <td class="dt-center align-middle"> {{ resumen_general.h_poda | floatformat:2}}</td>
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.dmsm | floatformat:2}}</td>
+                                            {% endif %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.area_basal | floatformat:2 }}</td>
+
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.copa_rem | floatformat:2 }}</td>
+                                            {% endif %}
+                                        </tr>
+                                    
+                                        {% endif %}
+
+                                        
                                         {% for data in data_resumen %}
                                         <tr>
                                         
@@ -258,7 +313,9 @@
                             </div>
                         </div>
                     </div>
-    
+
+                    {% if relevamiento.type != 'Preexistente' %}
+
                     <hr class="hr">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3">
                         <div class="card">
@@ -392,6 +449,10 @@
                             </div>
                         </div>
                     </div>
+                  
+                    {% endif %}
+    
+                    
     
     
                 

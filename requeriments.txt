@@ -1,1 +1,7 @@
 pip install request
+
+
+# scp view.html laichi@192.168.30.18:/var/www/html/pindo_system/pindosystem/templates/catastro
+
+
+https://pythoncircle.com/post/591/how-to-upload-and-process-the-excel-file-in-django/

@@ -16,6 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from decimal import Decimal
 
+from login.decorators import admin_access_only
+
 
 # Create your views here.
 @login_required
@@ -281,6 +283,7 @@ def viewPlantacion(request, id_plantacion):
 
 @login_required
 @csrf_exempt
+@admin_access_only
 def deletePlantacion(request, id_plantacion):
 
     try:

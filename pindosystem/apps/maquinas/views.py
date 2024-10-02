@@ -11,6 +11,8 @@ from maquinas.forms import EditMaquinasForm
 import os
 from django.conf import settings
 
+from login.decorators import admin_access_only
+
 # Create your views here.
 @login_required
 def index(request):
@@ -56,7 +58,7 @@ def addMaquina(request):
     
         return render(request, 'maquinas/add.html', context)
 
-
+@login_required
 def editMaquina(request, id):
     context = {}
 
@@ -90,7 +92,8 @@ def editMaquina(request, id):
         messages.error(request, str(e))
         return redirect('maquinas-index')
 
-
+@login_required
+@admin_access_only
 def deleteMaquina(request, id):
 
     try:

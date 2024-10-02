@@ -26,6 +26,8 @@ from general_utility import getRodalesApiSap
 
 from catastro.models import Catastrogis
 
+from login.decorators import  admin_access_only
+
 
 # Create your views here.
 @login_required
@@ -189,6 +191,7 @@ def addRodalNoSap(request):
         return render(request, 'rodales/add_no_sap.html', context)
 
 @login_required
+@admin_access_only
 def editRodal(request, id):
 
     context = {
@@ -403,6 +406,7 @@ def viewRodales(request, idrodal):
     return render(request, 'rodales/view.html', context)
 
 @login_required
+@admin_access_only
 def deleteRodal(request, idrodal):
     try:
         obj = Rodales.objects.get(pk=idrodal)

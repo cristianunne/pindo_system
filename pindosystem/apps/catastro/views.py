@@ -17,7 +17,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.gis.db.models.functions import Area, Intersection, Transform
 
 # Create your views here.
-
+@login_required
 def index(request):
     
     catastros = Catastrogis.objects.all().order_by('pk')
@@ -29,7 +29,7 @@ def index(request):
 
     return render(request, 'catastro/index.html', context)
 
-
+@login_required
 def view(request, idcatastro):
 
     context = {'category' : 'Catastros',
@@ -113,7 +113,7 @@ def view(request, idcatastro):
     
     return render(request, 'catastro/view.html', context)
 
-
+@login_required
 def edit(request, idcatastro):
     
     context = {'category' : 'Catastros',

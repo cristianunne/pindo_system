@@ -18,10 +18,19 @@ def getEmpresasApiSap(request):
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
         data_response = requests.get(ULRS['getEmpresas'], headers=headers).json()
 
-        return data_response
+        try:
+
+            if data_response['code'] == 500:
+               
+                return False
+        
+        except TypeError as e:
+        
+            return data_response
     
     except Exception as e:
         messages.error(request, str(e))
+        print('gsdfgdgtyututyutyutyutyutyudsgf')
         return False
 
 
@@ -31,7 +40,16 @@ def getRodalesApiSap(request):
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
         data_response = requests.get(ULRS['getRodales'], headers=headers).json()
 
-        return data_response
+        try:
+
+            if data_response['code'] == 500:
+               
+                return False
+        
+        except TypeError as e:
+        
+            return data_response
+
 
     except Exception as e:
         messages.error(request, str(e))
@@ -42,8 +60,19 @@ def getEmseforsApiSap(request):
     try:
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
         data_response = requests.get(ULRS['getEmsefors'], headers=headers).json()
+        
+        try:
 
-        return data_response
+            if data_response['code'] == 500:
+               
+                return False
+        
+        except TypeError as e:
+        
+            return data_response
+ 
+    
+    
 
     except Exception as e:
         messages.error(request, str(e))

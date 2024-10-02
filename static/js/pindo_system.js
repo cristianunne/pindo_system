@@ -26,13 +26,13 @@ function deleteInformation(element){
     let title = '¿Desea Eliminar la Empresa?';
     let message = 'Si acepta se borrará toda la información de la Empresa';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.EMPRESA_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.EMPRESA_DELETE, 'Eliminar');
   } else if(controller === 'rodales') {
 
     let title = '¿Desea Eliminar el Rodal?';
     let message = 'Si acepta se borrará toda la información del Rodal';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.RODALES_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.RODALES_DELETE, 'Eliminar');
 
   } else if(controller === 'rodales_close') {
 
@@ -55,105 +55,105 @@ function deleteInformation(element){
     let title = '¿Desea Eliminar el Usuario?';
     let message = 'Si acepta se borrará toda la información del Usuario';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.USUARIOS_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.USUARIOS_DELETE, 'Eliminar');
   } else if(controller === 'emsefor') {
 
     let title = '¿Desea Eliminar la Emsefor?';
     let message = 'Si acepta se borrará toda la información del Emsefor';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.EMSEFOR_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.EMSEFOR_DELETE, 'Eliminar');
   } else if(controller === 'procedencias') {
 
     let title = '¿Desea Eliminar la Procedencias?';
     let message = 'Si acepta se borrará toda la información del Procedencias';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.PROCEDENCIAS_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.PROCEDENCIAS_DELETE, 'Eliminar');
   } else if(controller === 'sagpyas_files') {
 
     let title = '¿Desea Eliminar el Archivo?';
     let message = 'Si acepta se borrará toda la información del Procedencias';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.SAGPYAS_FILES_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.SAGPYAS_FILES_DELETE, 'Eliminar');
 
   } else if(controller === 'sagpyas') {
 
     let title = '¿Desea Eliminar el Sagpya?';
     let message = 'Si acepta se borrará toda la información del Sagpya';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.SAGPYAS_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.SAGPYAS_DELETE, 'Eliminar');
   } else if(controller === 'maquinas') {
 
     let title = '¿Desea Eliminar la Máquina?';
     let message = 'Si acepta se borrará toda la información de la Máquina';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.MAQUINAS_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.MAQUINAS_DELETE, 'Eliminar');
 
   } else if(controller === 'usos_rodales') {
 
     let title = '¿Desea Eliminar el Uso?';
     let message = 'Si acepta se borrará toda la información del Uso';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.USOS_RODALES_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.USOS_RODALES_DELETE, 'Eliminar');
   } else if(controller === 'intervencion_type') {
 
     let title = '¿Desea Eliminar el Tipo de Intervención?';
     let message = 'Si acepta se borrará toda la información del Tipo de Intervención';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.INTERVENCIONES_TYPES_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.INTERVENCIONES_TYPES_DELETE, 'Eliminar');
   } else if(controller === 'plantaciones') {
 
     let title = '¿Desea Eliminar la Plantación?';
     let message = 'Si acepta se borrará toda la información de la Plantación';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.PLANTACION_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.PLANTACION_DELETE, 'Eliminar');
   } else if(controller === 'poda') {
 
     let title = '¿Desea Eliminar la Poda?';
     let message = 'Si acepta se borrará toda la información de la Intervención';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.PODA_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.PODA_DELETE, 'Eliminar');
   } else if(controller === 'sobrevivencia') {
 
     let title = '¿Desea Eliminar la Sobrevivencia?';
     let message = 'Si acepta se borrará toda la información de la Intervención';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.PODA_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.PODA_DELETE, 'Eliminar');
   } else if(controller === 'raleo') {
 
     let title = '¿Desea Eliminar el Raleo?';
     let message = 'Si acepta se borrará toda la información de la Intervención';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.RALEO_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.RALEO_DELETE, 'Eliminar');
   } else if(controller === 'talaraza') {
 
     let title = '¿Desea Eliminar la Talaraza?';
     let message = 'Si acepta se borrará toda la información de la Intervención';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.RALEO_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.RALEO_DELETE, 'Eliminar');
   } else if(controller === 'basemaps') {
 
     let title = '¿Desea Eliminar la Capa Base?';
     let message = 'Si acepta se borrará toda la información de la Capa Base';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.BASEMAPS_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.BASEMAPS_DELETE, 'Eliminar');
   } else if(controller === 'categorias_capas') {
 
     let title = '¿Desea Eliminar la Categoría?';
     let message = 'Si acepta se borrará toda la información de la Categoría';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.CATEGORIAS_CAPAS_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.CATEGORIAS_CAPAS_DELETE, 'Eliminar');
   } else if(controller === 'servicios_ide') {
 
     let title = '¿Desea Eliminar el Servicio?';
     let message = 'Si acepta se borrará toda la información del Servicio';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.SERVICIOS_IDE_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.SERVICIOS_IDE_DELETE, 'Eliminar');
   } else if(controller === 'layers') {
 
     let title = '¿Desea Eliminar la Capa?';
     let message = 'Si acepta se borrará toda la información de la Capa';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.LAYERS_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.LAYERS_DELETE, 'Eliminar');
   }
 
   else if(controller === 'sagpyas_rodales') {
@@ -169,7 +169,7 @@ function deleteInformation(element){
     let title = '¿Desea Eliminar la Planificacion?';
     let message = 'Si acepta se borrará toda la información de la Capa';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.PLANIFICACION_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.PLANIFICACION_DELETE, 'Eliminar');
   }
 
   else if(controller === 'maquinas_emsefor') {
@@ -177,7 +177,7 @@ function deleteInformation(element){
     let title = '¿Desea Eliminar la Máquina?';
     let message = 'Si acepta se borrará toda la información de la Capa';
     
-    dialogDeleteConfirm(element, title, message, URLS_DELETE.MAQUINAS_EMSEFOR_DELETE);
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.MAQUINAS_EMSEFOR_DELETE, 'Eliminar');
   }
 
   else if(controller === 'movimientos_expe') {
@@ -228,6 +228,14 @@ function deleteInformation(element){
     dialogDeleteConfirm(element, title, message, URLS_DELETE.ARBOL_PODA_DELETE, 'Eliminar');
   }
 
+  else if(controller === 'arbol_others_delete') {
+
+    let title = '¿Desea Eliminar el Arbol?';
+    let message = 'Si acepta se borrará toda la información del mismo';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.ARBOL_OTHERS_DELETE, 'Eliminar');
+  }
+
 
 
 
@@ -238,9 +246,7 @@ function deleteInformation(element){
 
 function dialogDeleteConfirm(element, title, message, url, txt_button) {
 
-    console.log(title);
-
-
+    
     let volver = '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-left-filled" '+
     'width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">'+
     '<path stroke="none" d="M0 0h24v24H0z" fill="none"/>'+

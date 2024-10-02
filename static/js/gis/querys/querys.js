@@ -84,6 +84,7 @@ const getLayerWMS = async (layer_id) => {
 
     try {
         const content = await data_request.json();
+        
         //console.log(content);
 
         //user = content;
@@ -94,3 +95,6 @@ const getLayerWMS = async (layer_id) => {
     }
 
 }
+
+
+

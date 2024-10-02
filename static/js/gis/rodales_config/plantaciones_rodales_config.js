@@ -1,5 +1,5 @@
 
-function initGis(rodal_gis, plantaciones, clasified) {
+function initGis(rodal_gis, plantaciones, clasified, data_rodal) {
 
 
     let osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -38,7 +38,7 @@ function initGis(rodal_gis, plantaciones, clasified) {
 
 
     overlayMaps = null;
-    let rodal = rodal_gis != null ? loadRodal(rodal_gis, clasified) : null;
+    let rodal = rodal_gis != null ? loadRodal(rodal_gis, clasified, data_rodal) : null;
     //traigo la plantacion
 
 
@@ -61,6 +61,7 @@ function initGis(rodal_gis, plantaciones, clasified) {
     
 
 }
+
 
 
 function loadPlantaciones(plantaciones) {
@@ -246,7 +247,7 @@ function loadIntervenciones(overlays, type_controller)
 
 }
 
-function loadRodal(rodal_gis, clasified)
+function loadRodal(rodal_gis, clasified, data_rodal)
 {
 
     let geoJSON = L.geoJson(rodal_gis, {
@@ -283,17 +284,22 @@ function loadRodal(rodal_gis, clasified)
 
         //aca tengo la lista de rodales, voy a tener que filtrar
         let nombre = '';
-        console.log()
+      
+      
+        
 
-        rodal_data_serializer_json.forEach(element => {
+        data_rodal.forEach(element => {
 
-            if(layer.feature.properties.rodales == element.pk){
-                nombre = element.fields.cod_sap != null ? element.fields.cod_sap : '';
-            }
-           
-            
-            
-        });
+                if(layer.feature.properties.rodales == element.pk){
+                    nombre = element.fields.cod_sap != null ? element.fields.cod_sap : '';
+                }
+               
+                
+                
+            });
+
+        
+       
 
 
 

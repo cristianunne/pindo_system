@@ -39,6 +39,10 @@ urlpatterns = [
      path('api/rodales/getRodalesBySagpya/<int:idsagpya>/', views.getRodalesBySagpya, name='getRodalesBySagpya'),
 
 
+     #RELEVAMIENTOS
+     path('api/relevamientos/set-parcel-position', views.setPointParcelsPosition, name='set-parcel-position'),
+
+
      #GIS REQUEST
      path('api/gis/getRodalesGisById/<int:idrodal>/', views.getRodalgisById, name='getRodalgisById'),
      #path('api/gis/getRodalesGis/', views.getRodalesgis, name='getRodalesGis'),
