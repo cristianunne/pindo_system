@@ -1,0 +1,190 @@
+<!doctype html>
+
+{% extends "../../../layout/base.html" %}
+
+{% load static %}
+
+
+{% block sidebar %}
+
+{% include "../../../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../../../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../../../element/pageheader.html" %}
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+          
+            {% if messages %}
+
+            {% include "../../../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row row-cards mb-5">
+
+                <div class="col-xxl-3 col-lg-6 col-md-7 col-sm-12">
+                    <div class="card bg-primary-lt">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="d-flex justify-content-center col-xxl-4 col-lg-4 col-md-4 col-sm-12">
+                              <svg xmlns="http://www.w3.org/2000/svg" 
+                              class="xxl-svg-icon lg-svg-icon md-svg-icon sm-svg-icon"
+                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                              fill="none" stroke-linecap="round" stroke-linejoin="round" class="img-fluid">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M3 21l18 0"></path>
+                                <path d="M9 8l1 0"></path>
+                                <path d="M9 12l1 0"></path>
+                                <path d="M9 16l1 0"></path>
+                                <path d="M14 8l1 0"></path>
+                                <path d="M14 12l1 0"></path>
+                                <path d="M14 16l1 0"></path>
+                                <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16"></path>
+                             </svg>
+                            
+                    
+                            </div>
+                            <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
+                                <h3 class="card-title h3 text-center">Sección de Administración de Emsefor</h3>
+                                <p class="text-muted">En esta sección puede realizar las ediciones de la información de las Emsefor </p>
+                             
+                            </div>
+                        </div>
+
+                        
+                        </div>
+                    </div>
+                  </div>
+            </div>
+
+          <div class="card">
+            <div class="card-body">
+              
+              <div id="" class="table-responsive">
+                <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text" >
+                  <thead>
+                    <tr>
+                      <th class="dt-center align-middle">Valido</th>
+                      <th class="dt-center align-middle">empresa</th>
+                      <th class="dt-center align-middle">rodal</th>
+                      <th class="dt-center align-middle">fecha</th>
+                      <th class="dt-center align-middle">num_arb</th>
+                      <th class="dt-center align-middle">dap</th>
+                      <th class="dt-center align-middle">h</th>
+                      <th class="dt-center align-middle">area_basal</th>
+                      <th class="dt-center align-middle">vmi_t</th>
+                      <th class="dt-center align-middle">vmi_c</th>
+                      <th class="dt-center align-middle">vol_comercial</th>
+                      <th class="dt-center align-middle">total</th>
+                      <th class="dt-center align-middle">ima</th>
+                      
+                    
+                    </tr>
+                  </thead>
+                  <tbody class="table-tbody">
+                    {% for emsefor in data_tradicional %}
+
+                    {% if emsefor.is_present%}
+
+                        <tr>
+                            <td class="dt-center align-middle">{{ emsefor.is_present|yesno:"Si,No" }}</td>
+                            <td class="dt-center align-middle"> {{ emsefor.empresa }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.rodal }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.fecha }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.num_arb }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.dap }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.h }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.area_basal }}</td>
+
+                            <td class="dt-center align-middle">{{ emsefor.vmi_t }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.vmi_c }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.vol_comercial }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.total }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.ima }}</td>
+                           
+                        
+                        </tr>
+                    
+                    {% else %}
+
+                    <tr style="background-color: red;">
+                      <td class="dt-center align-middle">{{ emsefor.is_present|yesno:"Si,No" }}</td>
+                        <td class="dt-center align-middle"> {{ emsefor.empresa }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.rodal }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.fecha }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.num_arb }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.dap }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.h }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.area_basal }}</td>
+
+                        <td class="dt-center align-middle">{{ emsefor.vmi_t }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.vmi_c }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.vol_comercial }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.total }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.ima }}</td>
+                     
+                    
+                    </tr>
+
+                    {% endif %}
+                    
+                       
+                    
+                    {% endfor %}
+
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card-footer d-flex justify-content-end">
+              <a href="{% url 'inventarios-relevamientos-save-files' %}" class="btn btn-dark" aria-label="Button">
+                 Guardar</a>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    {% endblock main_content %}
+
+    <script>
+        $(function () {
+            $('#tabladata').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "pageLength": 50,
+                order: [[0, 'asc']],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                }
+            });
+    
+        })
+    </script>
+    
+  </div>
+
+{% endblock  %}

@@ -70,5 +70,17 @@ urlpatterns = [
 
      path('inventarios/inventarios-relevamientos/load-index/', 
           views.loadRelevamientosByExceIndex, name='inventarios-relevamientos-load-index'),
+     
+     path('inventarios/inventarios-relevamientos/load-files/<int:mode>/', 
+          views.loadRelevamientosFiles, name='inventarios-relevamientos-load-files'),
+
+     path('inventarios/inventarios-relevamientos/save-files/', 
+          views.saveRelevamientoFiles, name='inventarios-relevamientos-save-files'),
+     
+     path('inventarios/inventarios-relevamientos/resumen-save-files-tradicional/', 
+          views.resumeSaveFileTradicional, name='inventarios-relevamientos-resumen-save-files-tradicional'),
+     
+     path('inventarios/inventarios-relevamientos/resumen-download-errors-tradicional/', 
+          views.downloadExcelWithErrores, name='inventarios-relevamientos-resumen-download-errors-tradicional'),
    
 ]

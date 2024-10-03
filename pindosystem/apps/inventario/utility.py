@@ -1,4 +1,12 @@
 
+import openpyxl
+from rodales.models import Rodales
+
+
+names_sheets_excel_tradicional = [
+    'inventario_base'
+]
+
 
 def calculate_general_resumen_poda(data_resumen):
 
@@ -95,3 +103,77 @@ def calculate_general_resumen_poda(data_resumen):
 
     }]
     return result
+
+
+
+def process_excel_tradicional(excel_file):
+    wb = openpyxl.load_workbook(excel_file)
+  
+    worksheet = wb.get_sheet_by_name(names_sheets_excel_tradicional[0])
+    excel_data = list()
+    # iterating over the rows and
+    # getting value from each cell in row
+
+    data_trad_list = []
+    
+    saps_rodales_idxs = []
+
+    index = 0
+
+    #empresa	rodal	fecha	num_arb	dap	h	area_basal	vmi_t	vmi_c	vol_comercial	total	ima
+
+    for row in worksheet.iter_rows():
+        
+        if index > 0:
+
+            #cargo todos los codigos SAPS
+            saps_rodales_idxs.append(row[1].value)
+
+            data_trad_list.append(
+                {
+                    'empresa' : row[0].value,
+                    'rodal' : row[1].value,
+                    'fecha' : row[2].value,
+                    'num_arb' : row[3].value,
+                    'dap' : row[4].value,
+                    'h' : row[5].value,
+                    'area_basal' : row[6].value,
+                    'vmi_t' : row[7].value,
+                    'vmi_c' : row[8].value,
+                    'vol_comercial' : row[9].value,
+                    'total' : row[10].value,
+                    'ima' : row[11].value,
+
+                }
+            )
+        else:
+            index = index + 1
+
+    rodales_present = get_rodales_by_sap(saps_rodales_idxs)
+   
+
+    for data in data_trad_list:
+
+        is_present = False
+        pk_rodal = None
+
+        #recorro los rodales
+        for rod in rodales_present:
+
+            if data['rodal'] == rod.cod_sap:
+                is_present = True
+                pk_rodal = rod.pk
+
+        data.update({'is_present' : is_present})
+        data.update({'rodal_pk' : pk_rodal})
+   
+    
+    return data_trad_list
+ 
+
+
+def get_rodales_by_sap(idx_saps):
+    
+    rodales = Rodales.objects.filter(cod_sap__in = idx_saps)
+    
+    return rodales

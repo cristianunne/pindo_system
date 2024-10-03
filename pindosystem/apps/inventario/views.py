@@ -1,5 +1,10 @@
 from django.shortcuts import render, redirect
 
+
+
+
+from django.db import transaction
+
 from rodales.models import Rodales
 from rodales_gis.models import Rodalesgis
 from django.contrib import messages
@@ -9,19 +14,21 @@ from emsefor.models import Emsefor
 from inventario.models import InventariosCategories, InventariosObservaciones, InventariosDamages, InventariosRelevamientos, TYPES_RELEVAMIENTO, \
 ArbolesRelevamientoPoda, InventariosParcelasgis, ArbolesRelevamientoOthers, ResumenRelevamientos
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, Http404, HttpResponseRedirect
+from django.http import JsonResponse, Http404, HttpResponseRedirect, HttpResponse
 from django.db import IntegrityError
 from django.urls import reverse
 
 from plantaciones.models import Plantaciones
 
 
-from inventario.utility import calculate_general_resumen_poda
+from inventario.utility import calculate_general_resumen_poda, process_excel_tradicional
 
 from django.db.models import Sum, F, Count, Q, Avg, Value, Max, Func, FloatField
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
 import json
+
+import openpyxl
 
 
 
@@ -1689,7 +1696,7 @@ def viewResumenRelevamientoPreexistente(request, idrelevamiento):
         context.update({'rodales_gis' : rodales_gis})
 
         resumen_general = ResumenRelevamientos.objects.get(relevamientos = relevamiento)
-        print(resumen_general.relevamientos)
+       
         context.update({'resumen_general' : resumen_general})
       
 
@@ -1769,9 +1776,202 @@ def loadRelevamientosByExceIndex(request):
     return render(request, 'configuration/inventarios/inventarios_load/index.html', context=context)
 
 
+
+
 @login_required
-def loadRelevamientosTradicional(request):
-    pass
+def loadRelevamientosFiles(request, mode):
+    context = {
+            'category' : 'Inventarios',
+            'action' : 'Cargar datos de Inventarios a partir de una Hoja de Calculo'}
+    
+    #mode puede ser 1 o 0, 0 tradicional y 1 poda
+
+    context.update({
+        'mode' : mode
+    })
+
+    if request.method == 'POST':
+
+     
+
+        excel_file = request.FILES["excel_file"]
+
+            #controlo con un try catch algun error que pueda surgir y retorno false si algo sucede
+
+        data_tradicional = process_excel_tradicional(excel_file=excel_file)
+
+            #hago un redireccionamiento mostrando en una tabla los datos
+
+        context.update({'data_tradicional' : data_tradicional})
+        request.session["data_tradicional"] = data_tradicional
+
+        return render(request, 'configuration/inventarios/inventarios_load/view_data_tradicional.html', context=context)
+
+     
+        
+    
+    return render(request, 'configuration/inventarios/inventarios_load/load_files.html', context=context)
+
+@login_required
+def saveRelevamientoFiles(request):
+
+    try:
+        #traigo el dato de la sesion
+        data_tradicional = request.session.get("data_tradicional")
+        #traigo la categoria
+        categoria = InventariosCategories.objects.get(name = 'Tradicional')
+       
+        
+        if categoria == None:
+            raise
+                    
+        user_entity = Users.objects.get(pk=request.user.pk)
+
+        #so esta variable para descargar los datos errados
+        data_erroneos = []
+
+        with transaction.atomic():
+            #operaciones en la base de datos a completarse
+            #primero creo el relevamiento y luego cargo el resumen
+            #es crear un rele y a su vez el resumen
+            resumen_rel_objects = []
+
+            for data in data_tradicional:
+
+                if data['is_present'] == True:
+
+                    fecha = (str(data['fecha']) + str('-01-01')) if data['fecha'] != None else '0000-00-00'
+                    rodal = data['rodal_pk'] if data['rodal_pk'] != None else None
+
+                    number = len(InventariosRelevamientos.objects.filter(rodales_id = rodal).values()) + 1
+
+                    #creo el relevamiento
+                    relevamiento = InventariosRelevamientos.objects.create(
+                        number = number, 
+                        type = 'Preexistente',
+                        fecha = fecha,
+                        rodales_id = rodal,
+                        user = user_entity,
+                        user_relevador = user_entity, 
+                        categorias = categoria, 
+                        emsefor = None)
+                    
+
+                    #cargo el resumen inventario
+                    num_arb = data['num_arb'] if data['num_arb'] != None else None
+                    dap = data['dap'] if data['dap'] != None else None
+                    h_total = data['h'] if data['h'] != None else None
+
+                    area_basal = data['area_basal'] if data['area_basal'] != None else None
+                    vmi_t = data['vmi_t'] if data['vmi_t'] != None else None
+                    vmi_c = data['vmi_c'] if data['vmi_c'] != None else None
+
+                    total = data['total'] if data['total'] != None else None
+                    ima = data['ima'] if data['ima'] != None else None
+                    
+                    resumen_rel_objects.append(ResumenRelevamientos(
+                        arb_ha = num_arb,
+                        dap = dap,
+                        h_total = h_total,
+                        area_basal = area_basal,
+                        vmi_t = vmi_t,
+                        vmi_c = vmi_c,
+                        total = total,
+                        ima = ima,
+                        relevamientos = relevamiento,
+                        user = user_entity
+                    ))
+            
+                else:
+
+                    #agrego a una lista
+                    data_erroneos.append(data)
+
+            #almaceno con bulk
+            ResumenRelevamientos.objects.bulk_create(resumen_rel_objects)
+
+            #cargo en la session
+            request.session["data_tradicional"] = None
+            request.session["cant_rel_ok"] = len(resumen_rel_objects)
+            request.session["data_erroneos"] = data_erroneos
+
+            messages.success(request, "Los Relevamientos han sido cargado con éxito!.")
+            #puedo direccionar a ver el resumen
+            return redirect('inventarios-relevamientos-resumen-save-files-tradicional')
+
+
+
+
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('inventarios-relevamientos-index')
+
+    
+
+@login_required
+def resumeSaveFileTradicional(request):
+    context = {
+            'category' : 'Inventarios',
+            'action' : 'Cargar datos de Inventarios a partir de una Hoja de Calculo'}
+    
+
+    #traigo los datos de la session
+    data_erroneos = request.session.get("data_erroneos")
+    cant_rel_ok = request.session.get("cant_rel_ok")
+
+    context.update({
+        'data_erroneos' : data_erroneos
+    })
+
+    return render(request, 'configuration/inventarios/inventarios_load/view_data_tradicional_erroneos.html', context=context)
+
+@login_required
+def downloadExcelWithErrores(request):
+    
+    try:
+        data_erroneos = request.session.get("data_erroneos")
+       
+
+        wb = openpyxl.Workbook()
+        ws = wb.create_sheet(index=1, title="inventario_base")
+        wb.active = wb['inventario_base']
+
+        wb.remove_sheet(wb['Sheet'])
+
+        headers = [
+            'empresa', 'rodal', 'fecha', 'num_arb',	'dap', 'h',	'area_basal', 'vmi_t', 'vmi_c', 'vol_comercial', 
+            'total', 'ima'
+        ]
+
+        data = [headers]
+
+        for da in data_erroneos:
+            data.append([
+                da['empresa'], da['rodal'], da['fecha'], 
+                da['num_arb'],	da['dap'], da['h'],	
+                da['area_basal'], da['vmi_t'], da['vmi_c'], da['vol_comercial'], 
+            da['total'], da['ima']
+            ])
+
+        for line in data:
+            ws.append(line)
+        #creo el libro
+
+
+
+     
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=data_with_errores.xlsx'
+
+        wb.save(response)
+       
+        return response
+
+      
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('sagpyas-index')
+
 
 
 

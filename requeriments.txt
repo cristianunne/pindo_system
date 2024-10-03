@@ -5,3 +5,5 @@ pip install request
 
 
 https://pythoncircle.com/post/591/how-to-upload-and-process-the-excel-file-in-django/
+
+pip install openpyxl==2.5.1
