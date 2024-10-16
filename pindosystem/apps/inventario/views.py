@@ -20,11 +20,16 @@ from django.urls import reverse
 
 from plantaciones.models import Plantaciones
 
+from intervenciones.models import Intervenciones, INTERVENCIONES_DICT, PodaIntervencion
 
-from inventario.utility import calculate_general_resumen_poda, process_excel_tradicional
+from configuration.models import IntervencionesTypes
 
-from django.db.models import Sum, F, Count, Q, Avg, Value, Max, Func, FloatField
+
+from inventario.utility import calculate_general_resumen_poda, process_excel_tradicional, process_excel_poda, calculate_resumen_poda, calculate_resumen_others
+
+from django.db.models import Sum, F, Count, Q, Avg, Value, Max, Func, FloatField, ExpressionWrapper
 from django.db.models.functions import Concat
+from django.db.models.functions.comparison import NullIf
 from django.core.serializers import serialize
 import json
 
@@ -51,7 +56,7 @@ def indexInventariosRelevamientos(request):
         .values(
         'pk', 'number', 'type', 'h_deseada', 'h_last_poda', 'fecha', 'created', 
         'is_finish', 'user__first_name', 'user__last_name', 'user_relevador', 'user_relevador__first_name', 'user_relevador__last_name',
-        'rodales_id', 'rodales__cod_sap', 'categorias_id', 'categorias__name', 'emsefor__name'
+        'rodales_id', 'rodales__cod_sap', 'categorias_id', 'categorias__name', 'emsefor__name', 'invrel_resumen__tam_parcela'
         ).annotate(cant_parcelas = Count('parc_invrel')) \
         .annotate(cant_arboles = Sum('parc_invrel__number_trees'), cant_res = Count('invrel_resumen', filter=Q(type = 'Preexistente'))).order_by('number')
     
@@ -98,44 +103,53 @@ def addInventarioRelevamientos(request):
 
     if request.method == 'POST':
         try:
+
+            #creo que tambien el resumen
+
+            with transaction.atomic():
+
         
-            type = request.POST.get('type_rel')
-            h_deseada = request.POST.get('h_deseada')
-            h_last_poda = request.POST.get('h_last_poda')
-            rodal_id = request.POST.get('select-rodal')
+                type = request.POST.get('type_rel')
+                h_deseada = request.POST.get('h_deseada')
+                h_last_poda = request.POST.get('h_last_poda')
+                rodal_id = request.POST.get('select-rodal')
 
-            fecha = request.POST.get('fecha')
-            categoria = request.POST.get('select-categoria')
+                fecha = request.POST.get('fecha')
+                categoria = request.POST.get('select-categoria')
 
-            responsable = request.POST.get('select-responsable')
+                responsable = request.POST.get('select-responsable')
 
-            user_responsable = Users.objects.get(pk=responsable)
-       
-            user_entity = Users.objects.get(pk=request.user.pk)
-            rodal = Rodales.objects.get(pk=rodal_id)
-
-            #select-emsefor
-            emsefor_id = request.POST.get('select-emsefor')
-
-            is_finish = True if request.POST.get('is_finish') == 'on' else False 
-          
-
-            number = len(InventariosRelevamientos.objects.filter(rodales = rodal).values()) + 1
-  
-
-            #creo el objeto
-            result = InventariosRelevamientos.objects.create(number = number, type = type,
-                                                                  h_deseada = h_deseada, 
-                                                                  h_last_poda = h_last_poda,
-                                                                  user = user_entity,
-                                                                  fecha = fecha,
-                                                                  rodales = rodal, categorias_id = categoria,
-                                                                  user_relevador = user_responsable, 
-                                                                  is_finish = is_finish, emsefor_id = emsefor_id)
+                user_responsable = Users.objects.get(pk=responsable)
         
+                user_entity = Users.objects.get(pk=request.user.pk)
+                rodal = Rodales.objects.get(pk=rodal_id)
 
-            messages.success(request, "El Relevamiento ha sido agregado con éxito!.")
-            return redirect('inventarios-relevamientos-index')
+                #select-emsefor
+                emsefor_id = request.POST.get('select-emsefor')
+
+                is_finish = True if request.POST.get('is_finish') == 'on' else False 
+            
+
+                number = len(InventariosRelevamientos.objects.filter(rodales = rodal).values()) + 1
+    
+
+                #creo el objeto
+                result = InventariosRelevamientos.objects.create(number = number, type = type,
+                                                                    h_deseada = h_deseada, 
+                                                                    h_last_poda = h_last_poda,
+                                                                    user = user_entity,
+                                                                    fecha = fecha,
+                                                                    rodales = rodal, categorias_id = categoria,
+                                                                    user_relevador = user_responsable, 
+                                                                    is_finish = is_finish, emsefor_id = emsefor_id)
+            
+
+                #creo el resumen vacio
+                res_rel = ResumenRelevamientos.objects.create(relevamientos = result, user = user_entity)
+
+
+                messages.success(request, "El Relevamiento ha sido agregado con éxito!.")
+                return redirect('inventarios-relevamientos-index')
     
         except Exception as e:
             messages.error(request, str(e))
@@ -529,7 +543,22 @@ def addArbolesToInventarioRelevamientos(request, idrelevamiento, number_arboles)
                                                 observaciones_id = observacion[n],
                                                 relevamientos_id = idrelevamiento, ))
 
-            ArbolesRelevamientoPoda.objects.bulk_create(lista_objetos)
+            
+            
+            with transaction.atomic():
+            
+                ArbolesRelevamientoPoda.objects.bulk_create(lista_objetos)
+
+                #agregue los arboes, entonces cargo las datas de resumen
+
+                result = calculate_resumen_poda(idrelevamiento)
+
+                if result == False:
+                    raise
+
+
+
+
 
             return HttpResponseRedirect(reverse("inventarios-view-arboles", args=[idrelevamiento]))
     
@@ -597,7 +626,19 @@ def addArbolesToInventarioRelevamientosOthers(request, idrelevamiento, number_ar
                                                 observaciones_id = observacion[n],
                                                 relevamientos_id = idrelevamiento))
 
-            ArbolesRelevamientoOthers.objects.bulk_create(lista_objetos)
+            
+            with transaction.atomic():
+            
+                ArbolesRelevamientoOthers.objects.bulk_create(lista_objetos)
+
+                #agregue los arboes, entonces cargo las datas de resumen
+
+                result = calculate_resumen_others(idrelevamiento)
+
+                if result == False:
+                    raise
+
+
 
             return HttpResponseRedirect(reverse("inventarios-view-arboles", args=[idrelevamiento]))
 
@@ -691,7 +732,8 @@ def viewStatsRelevamiento(request, idrelevamiento):
                 observaciones = InventariosObservaciones.objects.all()
                 context.update({'observaciones' : observaciones})
 
-              
+               
+                #esto dejo porque es el resumen de cada parcela
                 data_resumen = InventariosParcelasgis.objects.filter(relevamiento_id = idrelevamiento) \
                 .values('pk') \
                 .annotate(
@@ -707,17 +749,27 @@ def viewStatsRelevamiento(request, idrelevamiento):
                             dmsm_ = Avg('invrel_parc_arb__dmsm', filter=Q( invrel_parc_arb__dmsm__gt = Value('0'))),
                             area_basal = 10000 * (Sum((3.14 * (F('invrel_parc_arb__dap') * F('invrel_parc_arb__dap'))) / 4) / 10000) 
                             / F('size_parcela'),
-                             porc_remo = ((F('h_poda_') - relevamiento.h_last_poda) / 
-                                          (F('h_total_') - relevamiento.h_last_poda)) * 100
-                            ) \
-                .values()
+                            porc_remo = ExpressionWrapper(((F('h_poda_') - relevamiento.h_last_poda) / 
+                                          NullIf(F('h_total_') - relevamiento.h_last_poda, 0)) * 100, 
+                                          output_field=FloatField()),
+                            tam_parc =  Avg('size_parcela')
+                            ).values()
+                
+                context.update({'data_resumen' : data_resumen})
 
+           
                 #calculo lo mismo de arriba pero sin resumir
-                print(data_resumen)
+                res = ResumenRelevamientos.objects.get(relevamientos = relevamiento)
+  
 
-                res = calculate_general_resumen_poda(data_resumen=data_resumen)
+                #no lo calculo, sino que lo traigo desde la tabla de resumen
+                #res = calculate_general_resumen_poda(data_resumen=data_resumen)
                
-                context.update({'resumen_general' : res[0]})
+                context.update({'resumen_general' : res})
+
+               
+
+              
                
 
 
@@ -728,6 +780,8 @@ def viewStatsRelevamiento(request, idrelevamiento):
              
                 damages = InventariosDamages.objects.all().order_by('pk')
                 context.update({'damages' : damages})
+
+                
                 
                 #data de los damages
                 data_damages = ArbolesRelevamientoPoda.objects.filter(relevamientos_id = idrelevamiento) \
@@ -736,7 +790,8 @@ def viewStatsRelevamiento(request, idrelevamiento):
                  .values('parcela__number_parcela', 'damages_id', 'damages__name', 'parcela__size_parcela', 'res_damage')\
                  .order_by('parcela__number_parcela')
                 
-
+                               
+                
                 
                 #traigo las parcelas
                 parcelas = InventariosParcelasgis.objects.filter(relevamiento_id = idrelevamiento)
@@ -776,20 +831,178 @@ def viewStatsRelevamiento(request, idrelevamiento):
 
               
                 context.update({'data_damages' : data_damages_new})
-
+                
+               
 
                 observaciones = InventariosObservaciones.objects.all().order_by('pk')
                 context.update({'observaciones' : observaciones})
                  #data de los damages
-                
+
                 data_calidad = ArbolesRelevamientoPoda.objects.filter(relevamientos_id = idrelevamiento) \
                  .values('parcela__number_parcela', 'observaciones_id') \
                  .annotate(res_calidad = (Count('pk')  * 10000 / F('parcela__size_parcela')))\
                  .values('parcela__number_parcela', 'observaciones_id', 'observaciones__name', 'parcela__size_parcela', 'res_calidad')\
                  .order_by('parcela__number_parcela')
                 
-
+             
                 data_calidad_new = []
+
+               
+
+
+                for parc in parcelas:
+                   
+                    data_obs_present = []
+                    #cargo los da;os presentes
+                    #recorro los damages completos
+
+                    for obs_ in observaciones:
+                        present = False
+                        #este tiene el dato agreado traido de la tabla
+                        for cal_data in data_calidad:
+
+                            #primero consulto si estoy en la parcela
+
+                            if parc.number_parcela == cal_data['parcela__number_parcela']:
+
+                                  if cal_data['observaciones_id'] == obs_.pk:
+
+                                    present = True
+                                    data_obs_present.append({cal_data['observaciones_id'] : cal_data['res_calidad']})
+                        
+                        #no encontro ese damages, entonces lo cargo vacio
+                        if present == False:
+                            data_obs_present.append({obs_.pk : ''})
+                    
+                    #cargo la parcela tmb
+                    data_calidad_new.append({
+                        'parcela' : parc.number_parcela,
+                        'observaciones' : data_obs_present
+                    })
+
+              
+                context.update({'data_observaciones' : data_calidad_new})
+                
+                
+
+               
+              
+
+                return render(request, 'configuration/inventarios/relevamientos/view_statistics.html', context)
+
+
+            else:
+                #aca traigo los datos para others arboles
+                arboles = relevamiento.invrel_arb_others.all()
+                context.update({'arboles' : arboles})
+                context.update({'cant_arboles' : len(arboles)})
+
+                 #cargo los datos de damages
+                damages = InventariosDamages.objects.all()
+                context.update({'damages' : damages})
+
+                observaciones = InventariosObservaciones.objects.all()
+                context.update({'observaciones' : observaciones})
+
+                #CUANDO VIENEN VALORES VACIOS NO CONSIDERAR EN LOS CALCULOS DE LOS ARBOELS
+
+              
+                data_resumen = InventariosParcelasgis.objects.filter(relevamiento_id = idrelevamiento) \
+                .values('pk') \
+                .annotate(
+                            n_arb_ha = Count('invrel_parc_arb_others'),
+                            arb_h_deseada = Count('invrel_parc_arb_others', 
+                                                  filter=Q(invrel_parc_arb_others__h_total__gte = relevamiento.h_deseada, 
+                                                                 invrel_parc_arb_others__h_total__lt = (relevamiento.h_deseada + 3))), 
+                            dap_ = Avg('invrel_parc_arb_others__dap'),
+                            h_total_ = Avg('invrel_parc_arb_others__h_total'),
+                            h_poda_ = Avg('invrel_parc_arb_others__h_poda'),
+                            area_basal = 10000 * (Sum((3.14 * (F('invrel_parc_arb_others__dap') * F('invrel_parc_arb_others__dap'))) / 4) / 10000) 
+                            / F('size_parcela'),
+                             porc_remo = ((F('h_poda_') - relevamiento.h_last_poda) / 
+                                          (F('h_total_') - relevamiento.h_last_poda)) * 100, 
+                                          tam_parc =  Avg('size_parcela')
+                            ) \
+                .values()
+
+                context.update({'data_resumen' : data_resumen})
+
+                 #calculo lo mismo de arriba pero sin resumir
+                res = ResumenRelevamientos.objects.get(relevamientos = relevamiento)
+  
+               
+                context.update({'resumen_general' : res})
+
+                damages = InventariosDamages.objects.all().order_by('pk')
+                context.update({'damages' : damages})
+
+                
+                
+                #data de los damages
+                data_damages = ArbolesRelevamientoOthers.objects.filter(relevamientos_id = idrelevamiento) \
+                 .values('parcela__number_parcela', 'damages_id') \
+                 .annotate(res_damage = (Count('pk')  * 10000 / F('parcela__size_parcela')))\
+                 .values('parcela__number_parcela', 'damages_id', 'damages__name', 'parcela__size_parcela', 'res_damage')\
+                 .order_by('parcela__number_parcela')
+                
+                               
+                
+                
+                #traigo las parcelas
+                parcelas = InventariosParcelasgis.objects.filter(relevamiento_id = idrelevamiento)
+
+                #rearmo los damages
+                data_damages_new = []
+                
+                for parc in parcelas:
+                   
+                    data_damages_present = []
+                    #cargo los da;os presentes
+                    #recorro los damages completos
+
+                    for damag_ in damages:
+                        present = False
+                        #este tiene el dato agreado traido de la tabla
+                        for dam_data in data_damages:
+
+                            #primero consulto si estoy en la parcela
+
+                            if parc.number_parcela == dam_data['parcela__number_parcela']:
+
+                                  if dam_data['damages_id'] == damag_.pk:
+
+                                    present = True
+                                    data_damages_present.append({dam_data['damages_id'] : dam_data['res_damage']})
+                        
+                        #no encontro ese damages, entonces lo cargo vacio
+                        if present == False:
+                            data_damages_present.append({damag_.pk : ''})
+                    
+                    #cargo la parcela tmb
+                    data_damages_new.append({
+                        'parcela' : parc.number_parcela,
+                        'damages' : data_damages_present
+                    })
+
+              
+                context.update({'data_damages' : data_damages_new})
+                
+               
+
+                observaciones = InventariosObservaciones.objects.all().order_by('pk')
+                context.update({'observaciones' : observaciones})
+                 #data de los damages
+
+                data_calidad = ArbolesRelevamientoOthers.objects.filter(relevamientos_id = idrelevamiento) \
+                 .values('parcela__number_parcela', 'observaciones_id') \
+                 .annotate(res_calidad = (Count('pk')  * 10000 / F('parcela__size_parcela')))\
+                 .values('parcela__number_parcela', 'observaciones_id', 'observaciones__name', 'parcela__size_parcela', 'res_calidad')\
+                 .order_by('parcela__number_parcela')
+                
+             
+                data_calidad_new = []
+
+               
 
 
                 for parc in parcelas:
@@ -827,47 +1040,6 @@ def viewStatsRelevamiento(request, idrelevamiento):
 
                 
 
-                context.update({'data_resumen' : data_resumen})
-
-                return render(request, 'configuration/inventarios/relevamientos/view_statistics.html', context)
-
-
-            else:
-                #aca traigo los datos para others arboles
-                arboles = relevamiento.invrel_arb_others.all()
-                context.update({'arboles' : arboles})
-                context.update({'cant_arboles' : len(arboles)})
-
-                 #cargo los datos de damages
-                damages = InventariosDamages.objects.all()
-                context.update({'damages' : damages})
-
-                observaciones = InventariosObservaciones.objects.all()
-                context.update({'observaciones' : observaciones})
-
-                #CUANDO VIENEN VALORES VACIOS NO CONSIDERAR EN LOS CALCULOS DE LOS ARBOELS
-
-              
-                data_resumen = InventariosParcelasgis.objects.filter(relevamiento_id = idrelevamiento) \
-                .values('pk') \
-                .annotate(
-                            n_arb_ha = Count('invrel_parc_arb_others'),
-                            arb_h_deseada = Count('invrel_parc_arb_others', 
-                                                  filter=Q(invrel_parc_arb_others__h_total__gte = relevamiento.h_deseada, 
-                                                                 invrel_parc_arb_others__h_total__lt = (relevamiento.h_deseada + 3))), 
-                            dap_ = Avg('invrel_parc_arb_others__dap'),
-                            h_total_ = Avg('invrel_parc_arb_others__h_total'),
-                            h_poda_ = Avg('invrel_parc_arb_others__h_poda'),
-                            area_basal = 10000 * (Sum((3.14 * (F('invrel_parc_arb_others__dap') * F('invrel_parc_arb_others__dap'))) / 4) / 10000) 
-                            / F('size_parcela'),
-                             porc_remo = ((F('h_poda_') - relevamiento.h_last_poda) / 
-                                          (F('h_total_') - relevamiento.h_last_poda)) * 100
-                            ) \
-                .values()
-
-                context.update({'data_resumen' : data_resumen})
-                
-
 
 
                 return render(request, 'configuration/inventarios/relevamientos/view_statistics.html', context)
@@ -884,7 +1056,7 @@ def deleteRelevamiento(request, idrelevamiento):
         obj = InventariosRelevamientos.objects.get(pk=idrelevamiento)
         obj.delete()
        
-        messages.success(request, "El Inventario ha sido eliminado.")
+        messages.success(request, "El Relevamiento ha sido eliminado.")
         return redirect('inventarios-relevamientos-index')
 
     except Rodales.DoesNotExist:
@@ -892,6 +1064,21 @@ def deleteRelevamiento(request, idrelevamiento):
     except Exception as e:
         raise Http404(str(e))
     
+
+@login_required
+def deleteRelevamientoPre(request, idrelevamiento):
+    try:
+        obj = InventariosRelevamientos.objects.get(pk=idrelevamiento)
+        obj.delete()
+       
+        messages.success(request, "El Relevamiento ha sido eliminado.")
+        return redirect('inventarios-relevamientos-index-rel-prexistentes')
+
+    except Rodales.DoesNotExist:
+        raise Http404("error")
+    except Exception as e:
+        raise Http404(str(e))
+ 
 
 @login_required
 def editArbolesRelevamientoPoda(request, idrelevamiento, idarbol):
@@ -941,7 +1128,18 @@ def editArbolesRelevamientoPoda(request, idrelevamiento, idarbol):
             arbolpoda.observaciones_id = observacion
 
             try:
-                arbolpoda.save()
+
+                with transaction.atomic():
+            
+                    arbolpoda.save()
+
+                    #agregue los arboes, entonces cargo las datas de resumen
+
+                    result = calculate_resumen_poda(idrelevamiento)
+
+                    if result == False:
+                        raise
+               
                 messages.success(request, "El Arbol se ha editado con éxito")
 
                 return HttpResponseRedirect(reverse("inventarios-view-arboles", args=[idrelevamiento]))
@@ -1011,7 +1209,18 @@ def editArbolesRelevamientoOthers(request, idrelevamiento, idarbol):
             arbolpoda.observaciones_id = observacion
 
             try:
-                arbolpoda.save()
+                with transaction.atomic():
+            
+                    arbolpoda.save()
+
+                    #agregue los arboes, entonces cargo las datas de resumen
+
+                    result = calculate_resumen_others(idrelevamiento)
+                  
+
+                    if result == False:
+                        raise
+               
                 messages.success(request, "El Arbol se ha editado con éxito")
 
                 return HttpResponseRedirect(reverse("inventarios-view-arboles", args=[idrelevamiento]))
@@ -1040,8 +1249,20 @@ def editArbolesRelevamientoOthers(request, idrelevamiento, idarbol):
 def deleteArbolPoda(request, idarbol):
 
     try:
-        obj = ArbolesRelevamientoPoda.objects.get(pk=idarbol)
-        res = obj.delete()
+
+        with transaction.atomic():
+                
+            obj = ArbolesRelevamientoPoda.objects.get(pk=idarbol)
+            res = obj.delete()
+            
+
+            #agregue los arboes, entonces cargo las datas de resumen
+
+            result = calculate_resumen_poda(obj.relevamientos_id)
+
+            if result == False:
+                raise
+      
 
         if res[0] == 1:
             #resto a la parcela una unidad de arbol
@@ -1167,11 +1388,15 @@ def addArbolesByParcelaPoda(request, idrelevamiento, idparcela):
             observacion = request.POST.getlist('select-observacion')
 
 
+            
+
+
           
 
 
             lista_objetos = []
             for n in range(num_trees):
+
 
                   #convierto
                 dap_ = dap[n] if dap[n] != '' else None
@@ -1180,17 +1405,32 @@ def addArbolesByParcelaPoda(request, idrelevamiento, idparcela):
                 h_total_ = h_total[n] if h_total[n] != '' else None
                 is_poda_ = is_poda[n] if is_poda[n] != '' else False
 
-                num_t = int(numbers[n]) + int(max_number)
+              
+
+                num_t = int(numbers[n]) + int(max_number if max_number != None else 0)
+
                 
                 lista_objetos.append(ArbolesRelevamientoPoda(number_tree = num_t , dap = dap_, 
                                                              dmsm = dmsm_, h_poda = h_poda_, 
                                                              h_total = h_total_, 
-                                                is_poda = is_poda_, damages_id = damages[n], parcela_id = parcela_number[n], 
+                                                is_poda = is_poda_, damages_id = damages[n], 
+                                                parcela_id = parcela_number[n], 
                                                 observaciones_id = observacion[n],
                                                 relevamientos_id = idrelevamiento ))
 
 
-            ArbolesRelevamientoPoda.objects.bulk_create(lista_objetos)
+           
+
+            with transaction.atomic():
+            
+                ArbolesRelevamientoPoda.objects.bulk_create(lista_objetos)
+
+                #agregue los arboes, entonces cargo las datas de resumen
+
+                result = calculate_resumen_poda(idrelevamiento)
+
+                if result == False:
+                    raise
 
             return HttpResponseRedirect(reverse("inventarios-view-arboles", args=[idrelevamiento]))
        
@@ -1350,11 +1590,11 @@ def printStatistics(request, idrelevamiento):
         relevamiento = InventariosRelevamientos.objects.get(pk = idrelevamiento)
         context.update({'relevamiento' : relevamiento})
 
-        plantacion = Plantaciones.objects.get(rodales_id = relevamiento.rodales_id)
+        plantacion = Plantaciones.objects.filter(rodales_id = relevamiento.rodales_id)
 
         context.update({'plantacion' : plantacion})
 
-        rodales_gis = Rodalesgis.objects.get(rodales_id = relevamiento.rodales_id)
+        rodales_gis = Rodalesgis.objects.filter(rodales_id = relevamiento.rodales_id)
         
         context.update({'rodales_gis' : rodales_gis})
 
@@ -1400,7 +1640,8 @@ def printStatistics(request, idrelevamiento):
                                 area_basal = 10000 * (Sum((3.14 * (F('invrel_parc_arb__dap') * F('invrel_parc_arb__dap'))) / 4) / 10000) 
                                 / F('size_parcela'),
                                 porc_remo = ((F('h_poda_') - relevamiento.h_last_poda) / 
-                                            (F('h_total_') - relevamiento.h_last_poda)) * 100
+                                            (F('h_total_') - relevamiento.h_last_poda)) * 100, 
+                                            tam_parc =  Avg('size_parcela')
                                 ) \
                     .values()
                     
@@ -1549,11 +1790,14 @@ def printStatistics(request, idrelevamiento):
                                 area_basal = 10000 * (Sum((3.14 * (F('invrel_parc_arb_others__dap') * F('invrel_parc_arb_others__dap'))) / 4) / 10000) 
                                 / F('size_parcela'),
                                 porc_remo = ((F('h_poda_') - relevamiento.h_last_poda) / 
-                                            (F('h_total_') - relevamiento.h_last_poda)) * 100
+                                            (F('h_total_') - relevamiento.h_last_poda)) * 100, 
+                                            tam_parc =  Avg('size_parcela')
                                 ) \
                     .values()
 
-                    context.update({'data_resumen' : data_resumen}) 
+                    context.update({'data_resumen' : data_resumen})
+
+                    return render(request, 'configuration/inventarios/relevamientos/view_statistics_print.html', context) 
                 
 
 
@@ -1686,23 +1930,30 @@ def viewResumenRelevamientoPreexistente(request, idrelevamiento):
     try:
         relevamiento = InventariosRelevamientos.objects.get(pk = idrelevamiento)
         context.update({'relevamiento' : relevamiento})
+       
 
-        plantacion = Plantaciones.objects.get(rodales_id = relevamiento.rodales_id)
+        relevamiento_data = InventariosRelevamientos.objects.filter(pk = idrelevamiento).values('invrel_resumen__tam_parcela')
+        context.update({'relevamiento_data' : relevamiento_data[0]})
+
+        plantacion = Plantaciones.objects.filter(rodales_id = relevamiento.rodales_id)
 
         context.update({'plantacion' : plantacion})
 
-        rodales_gis = Rodalesgis.objects.get(rodales_id = relevamiento.rodales_id)
+        rodales_gis = Rodalesgis.objects.filter(rodales_id = relevamiento.rodales_id)
         
         context.update({'rodales_gis' : rodales_gis})
 
         resumen_general = ResumenRelevamientos.objects.get(relevamientos = relevamiento)
+
+        print(relevamiento)
+        print(resumen_general)
        
         context.update({'resumen_general' : resumen_general})
       
 
 
     except Exception as e:
-        pass
+        messages.error(request, str(e))
 
     return render(request, 'configuration/inventarios/relevamientos/view_statistics.html', context)
 
@@ -1792,20 +2043,33 @@ def loadRelevamientosFiles(request, mode):
 
     if request.method == 'POST':
 
-     
+        if mode == 0:
+            #proceso el inventario de PODA
+            excel_file = request.FILES["excel_file"]
+            data_poda = process_excel_poda(excel_file=excel_file)
 
-        excel_file = request.FILES["excel_file"]
+            context.update({'data_poda' : data_poda})
+            request.session["data_poda"] = data_poda
 
-            #controlo con un try catch algun error que pueda surgir y retorno false si algo sucede
 
-        data_tradicional = process_excel_tradicional(excel_file=excel_file)
+            return render(request, 'configuration/inventarios/inventarios_load/view_data_poda.html', context=context)
 
-            #hago un redireccionamiento mostrando en una tabla los datos
 
-        context.update({'data_tradicional' : data_tradicional})
-        request.session["data_tradicional"] = data_tradicional
 
-        return render(request, 'configuration/inventarios/inventarios_load/view_data_tradicional.html', context=context)
+        elif mode == 1:
+
+            excel_file = request.FILES["excel_file"]
+
+                #controlo con un try catch algun error que pueda surgir y retorno false si algo sucede
+
+            data_tradicional = process_excel_tradicional(excel_file=excel_file)
+
+                #hago un redireccionamiento mostrando en una tabla los datos
+
+            context.update({'data_tradicional' : data_tradicional})
+            request.session["data_tradicional"] = data_tradicional
+
+            return render(request, 'configuration/inventarios/inventarios_load/view_data_tradicional.html', context=context)
 
      
         
@@ -1925,6 +2189,8 @@ def resumeSaveFileTradicional(request):
 
     return render(request, 'configuration/inventarios/inventarios_load/view_data_tradicional_erroneos.html', context=context)
 
+
+
 @login_required
 def downloadExcelWithErrores(request):
     
@@ -1970,10 +2236,325 @@ def downloadExcelWithErrores(request):
       
     except Exception as e:
         messages.error(request, str(e))
-        return redirect('sagpyas-index')
+        return redirect('inventarios-relevamientos-index')
 
 
 
+@login_required
+def saveRelevamientosFilesPoda(request):
+
+    try:
+        #traigo el dato de la sesion
+        data_tradicional = request.session.get("data_poda")
+        #traigo la categoria
+        categoria = InventariosCategories.objects.get(name = 'Poda')
+
+        if categoria == None:
+            raise
+
+         #so esta variable para descargar los datos errados
+        data_erroneos = []
+
+        with transaction.atomic():
+            #operaciones en la base de datos a completarse
+            #primero creo el relevamiento y luego cargo el resumen
+            #es crear un rele y a su vez el resumen
+            resumen_rel_objects = []
+
+            for data in data_tradicional:
+
+                if data['is_present'] == True:
+
+                    fecha = (str(data['fecha']) + str('-01-01')) if data['fecha'] != None else '0000-00-00'
+                    rodal = data['rodal_pk'] if data['rodal_pk'] != None else None
+
+                    
+
+                    h_poda_ant = data['h_poda_ant'] if data['h_poda_ant'] != None else None
+                    h_poda_ant = data['h_poda_ant'] if data['h_poda_ant'] != None else None
+                    num_poda = data['num_poda'] if data['num_poda'] != None else None
+
+                    arb_ha = data['arb_ha'] if data['arb_ha'] != None else None
+                    arb_podados = data['arb_podados'] if data['arb_podados'] != None else None
+
+                    arb_h_deseada = data['arb_h_deseada'] if data['arb_h_deseada'] != None else None
+                    arb_no_podados = data['arb_no_podados'] if data['arb_no_podados'] != None else None
+                    dap = data['dap'] if data['dap'] != None else None
+
+                    h_total = data['h_total'] if data['h_total'] != None else None
+                    h_poda = data['h_poda'] if data['h_poda'] != None else None
+
+                    dmsm = data['dmsm'] if data['dmsm'] != None else None
+                    area_basal = data['area_basal'] if data['area_basal'] != None else None
+                    copa_rem = data['copa_rem'] if data['copa_rem'] != None else None
+                    tam_parc = data['tam_parc'] if data['tam_parc'] != None else None
+
+                     #creo el relevamiento
+                    relevamiento = InventariosRelevamientos.objects.create(
+                        number = num_poda, 
+                        type = 'Preexistente',
+                        h_last_poda = h_poda_ant,
+                        fecha = fecha,
+                        rodales_id = rodal,
+                        user = request.user,
+                        user_relevador = request.user, 
+                        categorias = categoria, 
+                        emsefor = None)
+                    
+                    #cargo el resumen inventario
+                    #h_poda_ant	arb_ha	arb_podados	arb_h_deseada	arb_no_podados	dap	h_total	h_poda	dmsm	area_basal	copa_rem
+       
+                 
+
+                    resumen_rel_objects.append(ResumenRelevamientos(
+                        arb_ha = arb_ha,
+                        arb_podados = arb_podados,
+                        arb_h_deseada = arb_h_deseada,
+                        arb_no_podados = arb_no_podados,
+                        dap = dap,
+                        h_total = h_total,
+                        h_poda = h_poda,
+                        dmsm = dmsm,
+                        area_basal = area_basal,
+                        copa_rem = copa_rem,
+                        tam_parcela = tam_parc,
+                        
+                        relevamientos = relevamiento,
+                        user = request.user, 
+                    ))
+            
+                else:
+
+                    #agrego a una lista
+                    data_erroneos.append(data)
+
+            
+             #almaceno con bulk
+            
+            ResumenRelevamientos.objects.bulk_create(resumen_rel_objects)
+
+            #cargo en la session
+            request.session["data_poda"] = None
+            request.session["cant_rel_ok"] = len(resumen_rel_objects)
+            request.session["data_erroneos"] = data_erroneos
+
+            messages.success(request, "Los Relevamientos han sido cargado con éxito!.")
+            #puedo direccionar a ver el resumen
+            return redirect('inventarios-relevamientos-resumen-save-files-poda')
+    
+
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('inventarios-relevamientos-index')
+    
+
+
+@login_required
+def resumeSaveFilePoda(request):
+    context = {
+            'category' : 'Inventarios',
+            'action' : 'Cargar datos de Inventarios a partir de una Hoja de Calculo'}
+    
+
+    #traigo los datos de la session
+    data_erroneos = request.session.get("data_erroneos")
+    cant_rel_ok = request.session.get("cant_rel_ok")
+
+    context.update({
+        'data_erroneos' : data_erroneos
+    })
+
+    return render(request, 'configuration/inventarios/inventarios_load/view_data_poda_erroneos.html', context=context)
+
+
+@login_required
+def downloadExcelWithErroresPoda(request):
+    
+    try:
+        data_erroneos = request.session.get("data_erroneos")
+       
+
+        wb = openpyxl.Workbook()
+        ws = wb.create_sheet(index=1, title="inventario_base")
+        wb.active = wb['inventario_base']
+
+        wb.remove_sheet(wb['Sheet'])
+
+        #rodal	fecha	num_poda	h_poda_ant	arb_ha	arb_podados	arb_h_deseada	arb_no_podados	dap	h_total	h_poda	dmsm	area_basal	copa_rem
+
+
+        headers = [
+            'rodal', 'fecha', 'num_poda', 'h_poda_ant',	'arb_ha', 'arb_podados',	
+            'arb_h_deseada', 'arb_no_podados', 'dap', 'h_total', 
+            'h_poda', 'dmsm', 'area_basal', 'copa_rem'
+        ]
+
+        data = [headers]
+
+        '''
+        'rodal' : row[0].value,
+                    'fecha' : row[1].value,
+                    'num_poda' : row[2].value,
+                    'h_poda_ant' : row[3].value,
+                    'arb_ha' : row[4].value,
+                    'arb_podados' : row[5].value,
+                    'arb_h_deseada' : row[6].value,
+                    'arb_no_podados' : row[7].value,
+                    'dap' : row[8].value,
+                    'h_total' : row[9].value,
+                    'h_poda' : row[10].value,
+                    'dmsm' : row[11].value,
+                    'area_basal' : row[12].value,
+                    'copa_rem' : row[13].value,'''
+
+        for da in data_erroneos:
+            data.append([
+                da['rodal'], da['fecha'], da['num_poda'], 
+                da['h_poda_ant'],	da['arb_ha'], da['arb_podados'],	
+                da['arb_h_deseada'], da['arb_no_podados'], da['dap'], da['h_total'], 
+            da['h_poda'], da['dmsm'], da['area_basal'], da['copa_rem']
+            ])
+
+        for line in data:
+            ws.append(line)
+        #creo el libro
+
+
+
+     
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=data_with_errores.xlsx'
+
+        wb.save(response)
+       
+        return response
+
+      
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('inventarios-relevamientos-index')
+
+
+@login_required
+def indexRelevamientosPreexistentes(request):
+
+    context = {
+            'category' : 'Inventarios',
+            'action' : 'Ver Relevamientos Preexistentes'}
+    
+
+    relevamientos = InventariosRelevamientos.objects.all() \
+        .values(
+        'pk', 'number', 'type', 'h_deseada', 'h_last_poda', 'fecha', 'created', 
+        'is_finish', 'user__first_name', 'user__last_name', 'user_relevador', 'user_relevador__first_name', 'user_relevador__last_name',
+        'rodales_id', 'rodales__cod_sap', 'categorias_id', 'categorias__name', 'emsefor__name',  'emsefor__pk',
+            'invrel_resumen__is_load_to_intervencion', 'invrel_resumen__intervenciones__type', 
+            'invrel_resumen__intervenciones__intervenciones_id', 'invrel_resumen__tam_parcela'
+        ).annotate(cant_parcelas = Count('parc_invrel')) \
+        .annotate(cant_arboles = Sum('parc_invrel__number_trees'), 
+                  cant_res = Count('invrel_resumen', filter=Q(type = 'Preexistente'))).order_by('number')
+    
+  
+    
+    for rel in relevamientos:
+            
+            if rel['emsefor__name'] is not None:
+                print(rel['pk'])
+       
+
+    context.update({'relevamientos' : relevamientos})
+
+    return render(request, 'configuration/inventarios/relevamientos/view_relevamientos_preexistentes.html', context)
+
+@login_required
+def sendRelevamientoToIntervencion(request, idrelevamiento):
+
+    context = {
+            'category' : 'Inventarios',
+            'action' : 'Ver Relevamientos Preexistentes'}
+    
+    try:
+        
+        relevamiento = InventariosRelevamientos.objects.get(pk = idrelevamiento)
+
+        rel_resumen = ResumenRelevamientos.objects.filter(relevamientos = relevamiento)[0]
+       
+
+        context.update({
+            'relevamiento' : relevamiento,
+            'rel_resumen' : rel_resumen
+        })
+
+        type_intervencion = INTERVENCIONES_DICT['Poda']
+
+        emsefors = Emsefor.objects.values_list("emsefor_id", "name").order_by('name')
+        context.update({'emsefors' : emsefors})
+
+        type_intervecion = IntervencionesTypes.objects.values_list("intervencionestypes_id", "name").order_by('name')
+        context.update({'type_intervecion' : type_intervecion})
+
+
+        if request.method == 'POST':
+
+            #recupero la informacion, pero utilizo rollback para almacenar
+            name = request.POST.get("name")
+            fecha = request.POST.get("fecha")
+            superficie = request.POST.get("superficie")
+            emsefor = request.POST.get("select-emsefor")
+            inter_type_id = request.POST.get("select-inter-type")
+
+
+            
+            with transaction.atomic():
+                
+                intervencion = Intervenciones.objects.create(
+                    rodales = relevamiento.rodales,
+                    name = name,
+                    fecha = fecha,
+                    type = type_intervencion,
+                    superficie = superficie,
+                    users = request.user,
+                    emsefors_id = emsefor,
+                    intervenciones_types_id=inter_type_id
+                )
+
+                poda_intervencion = PodaIntervencion.objects.create(intervenciones=intervencion, 
+                                                                    arb_podados=rel_resumen.arb_podados, 
+                                                                    arb_no_podados=rel_resumen.arb_no_podados, 
+                                                                        alt_deseada=rel_resumen.arb_h_deseada, 
+                                                                        alt_poda=rel_resumen.h_poda, 
+                                                                        dap=rel_resumen.dap, 
+                                                                        altura=rel_resumen.h_total, 
+                                                                        dmsm=rel_resumen.dmsm, 
+                                                                        area_basal=rel_resumen.area_basal, 
+                                                                        porc_removido=rel_resumen.copa_rem)
+                
+                #almaceno el id de la intervencion
+
+                rel_resumen.is_load_to_intervencion = True
+                rel_resumen.intervenciones = intervencion
+                
+                rel_resumen.save()
+
+                relevamiento.emsefor_id = emsefor
+                relevamiento.save()
+                
+                messages.success(request, "El Relevamiento de Poda ha sido enviado correctamente!.")
+                return redirect('inventarios-relevamientos-index-rel-prexistentes')
+
+
+
+        return render(request, 'configuration/inventarios/relevamientos_send/add.html', context)
+
+
+    
+    except InventariosRelevamientos.DoesNotExist as e:
+        messages.error(request, str(e))
+        return redirect('inventarios-relevamientos-index-rel-prexistentes')
+
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('inventarios-relevamientos-index-rel-prexistentes')
 
 
 

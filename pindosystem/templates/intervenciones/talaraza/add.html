@@ -52,7 +52,18 @@
                       <form action="{% url 'intervenciones-talaraza-add' idrodal=idrodal %}" method="POST">
                         {% csrf_token %}
                         <div class="row justify-content-around">
-                          <div class="col-md-5 col-lg-5 col-sm-5">                
+                          <div class="col-md-5 col-lg-5 col-sm-5">
+                            
+                            <div class="mb-5">
+                              <label class="form-label required">Tipo de Intervención:</label>
+                              <select type="text" class="form-select" name="select-inter_types" id="select-inter_types" required value="">
+                                <option value="">{{ 'Seleccione una Opción' }}</option>
+                                {% for index, value in inter_types %}
+                                  <option value="{{ index }}">{{ value }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            
                             <div class="mb-4">
                               <label class="form-label required">Rodal:</label>
                               <select type="text" class="form-select" name="select-rodal" id="select-rodal" required value="" >
@@ -264,6 +275,30 @@
           var el
           window.TomSelect &&
             new TomSelect((el = document.getElementById('select-emsefor')), {
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+
+        document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-inter_types')), {
               copyClassesToDropdown: false,
               dropdownParent: 'body',
               controlInput: '<input>',

@@ -52,7 +52,22 @@
                       <form action="{% url 'intervenciones-talaraza-edit' idtalaraza=talaraza.pk %}" method="POST">
                         {% csrf_token %}
                         <div class="row justify-content-around">
-                          <div class="col-md-5 col-lg-5 col-sm-5">                
+                          <div class="col-md-5 col-lg-5 col-sm-5">
+                            
+                            <div class="mb-5">
+                              <label class="form-label required">Tipo de Intervención:</label>
+                              <select type="text" class="form-select" name="select-type-inter" id="select-type-inter" required value="">
+                                <option value="">{{ 'Seleccione una Opcion' }}</option>
+                                {% for index, value in inter_types %}
+                                {% if talaraza.intervenciones_types.pk == index %}
+                                <option selected value="{{ index }}">{{ value }}</option>
+                              {% else %}
+                                <option value="{{ index }}">{{ value }}</option>
+                              {% endif %}
+                                {% endfor %}
+                              </select>
+                            </div>
+
                             <div class="mb-4">
                               <label class="form-label required">Rodal:</label>
                               <select type="text" class="form-select" name="select-rodal" id="select-rodal" required value="" >
@@ -293,6 +308,31 @@
               }
             })
         })
+
+        document.addEventListener('DOMContentLoaded', function () {
+          var el
+          window.TomSelect &&
+            new TomSelect((el = document.getElementById('select-type-inter')), {
+              copyClassesToDropdown: false,
+              dropdownParent: 'body',
+              controlInput: '<input>',
+              render: {
+                item: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                },
+                option: function (data, escape) {
+                  if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>'
+                  }
+                  return '<div>' + escape(data.text) + '</div>'
+                }
+              }
+            })
+        })
+
 
          // @formatter:off
       </script>

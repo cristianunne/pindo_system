@@ -43,7 +43,7 @@
               <h3 class="card-title">Relevamientos con Datos errores</h3>
               </div>
               <div class="d-flex justify-content-end mb-3">
-                <a href="{% url 'inventarios-relevamientos-resumen-download-errors-tradicional' %}" class="btn btn-success" aria-label="Button">
+                <a href="{% url 'inventarios-relevamientos-resumen-download-errors-poda' %}" class="btn btn-success" aria-label="Button">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                   <path d="M12 5l0 14"></path>
@@ -60,18 +60,26 @@
                 <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text" >
                   <thead>
                     <tr>
-                      <th class="dt-center align-middle">empresa</th>
+                     
+
+                  
+
+       
                       <th class="dt-center align-middle">rodal</th>
                       <th class="dt-center align-middle">fecha</th>
-                      <th class="dt-center align-middle">num_arb</th>
+                      <th class="dt-center align-middle">num_poda</th>
+                      <th class="dt-center align-middle">h_poda_ant</th>
+                      <th class="dt-center align-middle">arb_ha</th>
+                      <th class="dt-center align-middle">arb_podados</th>
+                      <th class="dt-center align-middle">arb_h_deseada</th>
+                      <th class="dt-center align-middle">arb_no_podados</th>
                       <th class="dt-center align-middle">dap</th>
-                      <th class="dt-center align-middle">h</th>
+                      <th class="dt-center align-middle">h_total</th>
+                      <th class="dt-center align-middle">h_poda</th>
+                      <th class="dt-center align-middle">dmsm</th>
                       <th class="dt-center align-middle">area_basal</th>
-                      <th class="dt-center align-middle">vmi_t</th>
-                      <th class="dt-center align-middle">vmi_c</th>
-                      <th class="dt-center align-middle">vol_comercial</th>
-                      <th class="dt-center align-middle">total</th>
-                      <th class="dt-center align-middle">ima</th>
+                      <th class="dt-center align-middle">copa_rem</th>
+                      <th class="dt-center align-middle">Tam. de Parc.</th>
                       
                     
                     </tr>
@@ -81,20 +89,24 @@
 
                  
                         <tr>
-                            <td class="dt-center align-middle"> {{ emsefor.empresa }}</td>
-                            <td class="dt-center align-middle">{{ emsefor.rodal }}</td>
+                          
+                            <td class="dt-center align-middle"> {{ emsefor.rodal }}</td>
                             <td class="dt-center align-middle">{{ emsefor.fecha }}</td>
-                            <td class="dt-center align-middle">{{ emsefor.num_arb }}</td>
-                            <td class="dt-center align-middle">{{ emsefor.dap }}</td>
-                            <td class="dt-center align-middle">{{ emsefor.h }}</td>
-                            <td class="dt-center align-middle">{{ emsefor.area_basal }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.num_poda }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.h_poda_ant }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.arb_ha }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.arb_podados }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.arb_h_deseada }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.arb_no_podados }}</td>
 
-                            <td class="dt-center align-middle">{{ emsefor.vmi_t }}</td>
-                            <td class="dt-center align-middle">{{ emsefor.vmi_c }}</td>
-                            <td class="dt-center align-middle">{{ emsefor.vol_comercial }}</td>
-                            <td class="dt-center align-middle">{{ emsefor.total }}</td>
-                            <td class="dt-center align-middle">{{ emsefor.ima }}</td>
-                           
+                            <td class="dt-center align-middle">{{ emsefor.dap }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.h_total }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.h_poda }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.dmsm }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.area_basal }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.copa_rem }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.tam_parc}}</td>
+                        
                         
                         </tr>
              

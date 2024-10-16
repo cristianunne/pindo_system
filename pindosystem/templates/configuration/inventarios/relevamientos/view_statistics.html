@@ -107,18 +107,44 @@
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Tamaño de Parcela:</div>
-                                    <div class="datagrid-content">{{ relevamiento.h_deseada }}</div>
+
+
+
+                                   
+
+                                    {% if  relevamiento_data.invrel_resumen__tam_parcela %}
+                                    <div class="datagrid-content">{{ relevamiento_data.invrel_resumen__tam_parcela }}</div>
+                                    {% else %}
+
+                                        {% if  resumen_general.tam_parc %}
+                                        <div class="datagrid-content">{{ resumen_general.tam_parc }}</div>
+                                        {% else %}
+                                            <div class="datagrid-content"><p>----</p></div>
+                                        {% endif %}
+                                    
+                                {% endif %}
+
+                                    
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Año de Plantación</div>
+                                    {% if  plantacion.fecha %}
                                     <div class="datagrid-content">{{ plantacion.fecha }}</div>
+                                {% else %}
+                                <div class="datagrid-content"><p>----</p></div>
+                                    
+                                {% endif %}
+                                  
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Sup. del Rodal</div>
-                                    <div class="datagrid-content">
-                                        {{ rodales_gis.superficie|floatformat:2 }}
-                    
-                                    </div>
+                                    {% if  plantacion.fecha %}
+                                    <div class="datagrid-content">  {{ rodales_gis.superficie|floatformat:2 }}</div>
+                                {% else %}
+                                <div class="datagrid-content"><p>----</p></div>
+                                    
+                                {% endif %}
+                                    
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Intensidad de Muestreo:</div>
@@ -129,8 +155,14 @@
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Emsefor:</div>
                                     <div class="datagrid-content">
+
+                                        {% if  relevamiento.emsefor.name %}
+                                            {{ relevamiento.emsefor.name }}
+                                        {% else %}
+                                            <p>----</p>
+                                        {% endif %}
                                       
-                                        {{ relevamiento.emsefor.name }}
+                                       
                                         
                                     </div>
                                 </div>
@@ -142,7 +174,13 @@
 
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Distancia Plantación:</div>
+                                    {% if  plantacion.dist_lineas %}
                                     <div class="datagrid-content">{{ plantacion.dist_lineas}} {{'x'}} {{plantacion.dist_plantas}}</div>
+                                    {% else %}
+                                    <p>----</p>
+
+                                    {% endif %}
+                                   
                                 </div>
 
                                 <div class="datagrid-item">
@@ -204,11 +242,19 @@
                                     <div class="datagrid-title">Especie</div>
                                     
                                     <div class="datagrid-content">
+                                        {% if plantacion.procedencias_id %}
                                         {% if relevamiento.rodales %}
                                         <a href="{% url 'procedencias-view'  idprocedencia=plantacion.procedencias_id %}">
                                         {{ plantacion.procedencias.name }}
                                         </a>
                                         {% endif%}
+                                           
+                                        {% else %}
+
+                                           
+                                        <p>----</p>
+                                        {% endif %}
+                                      
                                     
                                     </div>
                                 </div>
@@ -239,6 +285,7 @@
                                             <th class="dt-center align-middle">Parcela</th>
                                         {% endif %}
                                         <th class="dt-center align-middle">N° Arb./ha</th>
+
                                         {% if relevamiento.categorias.name == 'Poda' %}
                                         <th class="dt-center align-middle">Arboles Podados</th>
                                       
@@ -311,7 +358,9 @@
                                             <td class="dt-center align-middle"> {{ resumen_general.dmsm | floatformat:2}}</td>
                                             {% endif %}
                                             <td class="dt-center align-middle"> {{ resumen_general.area_basal | floatformat:2 }}</td>
-                                            <td class="dt-center align-middle"> {{ resumen_general.porc_remo | floatformat:2 }}</td>
+                                            {% if relevamiento.categorias.name == 'Poda' %}
+                                            <td class="dt-center align-middle"> {{ resumen_general.copa_rem | floatformat:2 }}</td>
+                                            {% endif %}
                                         </tr>
 
                                         {% for data in data_resumen %}
@@ -334,7 +383,9 @@
                                             <td class="dt-center align-middle"> {{ data.dmsm_ | floatformat:2}}</td>
                                             {% endif %}
                                             <td class="dt-center align-middle"> {{ data.area_basal | floatformat:2 }}</td>
+                                            {% if relevamiento.categorias.name == 'Poda' %}
                                             <td class="dt-center align-middle"> {{ data.porc_remo | floatformat:2 }}</td>
+                                            {% endif %}
                                         </tr>
                                         {% endfor %}
                     

@@ -50,7 +50,8 @@
                           <a href="{% url 'inventarios-relevamientos-load-files' mode=0 %}" class="hover-pindo">
                           <div class="card d-flex p-2" style="flex: 1; align-items: center; height: 100%;">
                             <div class="card-body p-2 pt-3 text-center" style="flex: 0.4;">
-                              <span class="avatar avatar-lg mb-1 rounded" style="background-image: url({% static 'img/icons/mapa_config.png' %})"></span>
+                              <span class="avatar avatar-lg mb-1 rounded" style="background-image: 
+                              url({% static 'img/icons/poda.png' %})"></span>
                             </div>
                             <h4 class="text-center" style="flex: 0.2;">Inventarios de Poda</h4>
                             <p class="text-description text-justify">Configuraciones Generales del Mapa principal. Configure el centro de inicio, el zoom, el SRC, etc.</p>
@@ -63,7 +64,15 @@
                           <a href="{% url 'inventarios-relevamientos-load-files' mode=1%}" class="hover-pindo">
                           <div class="card p-2" style="flex: 1; align-items: center; height: 100%">
                             <div class="card-body p-2 pt-3 text-center" style="flex: 0.4;">
-                              <span class="avatar avatar-lg mb-1 rounded" style="background-image: url({% static 'img/icons/baselayer.png' %})"></span>
+                              <span class="avatar avatar-lg mb-1 rounded" 
+                             >
+                             <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  
+                      fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                      stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
+                        <path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>
+                    
+                            </span>
                             </div>
                             <h4 class="text-center" style="flex: 0.2;">Inventarios Tradicionales</h4>
                             <p class="text-description text-justify">

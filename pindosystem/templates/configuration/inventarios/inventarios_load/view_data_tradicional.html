@@ -60,8 +60,8 @@
                     
                             </div>
                             <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
-                                <h3 class="card-title h3 text-center">Sección de Administración de Emsefor</h3>
-                                <p class="text-muted">En esta sección puede realizar las ediciones de la información de las Emsefor </p>
+                                <h3 class="card-title h3 text-center">Sección de Administración de Relevamientos</h3>
+                                <p class="text-muted">En esta sección puede visualizar los datos del Relevamiento </p>
                              
                             </div>
                         </div>
@@ -92,6 +92,7 @@
                       <th class="dt-center align-middle">vol_comercial</th>
                       <th class="dt-center align-middle">total</th>
                       <th class="dt-center align-middle">ima</th>
+                      <th class="dt-center align-middle">tam_parc</th>
                       
                     
                     </tr>
@@ -116,6 +117,7 @@
                             <td class="dt-center align-middle">{{ emsefor.vol_comercial }}</td>
                             <td class="dt-center align-middle">{{ emsefor.total }}</td>
                             <td class="dt-center align-middle">{{ emsefor.ima }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.tam_parc}}</td>
                            
                         
                         </tr>
@@ -137,6 +139,7 @@
                         <td class="dt-center align-middle">{{ emsefor.vol_comercial }}</td>
                         <td class="dt-center align-middle">{{ emsefor.total }}</td>
                         <td class="dt-center align-middle">{{ emsefor.ima }}</td>
+                        <td class="dt-center align-middle">{{ emsefor.tam_parc}}</td>
                      
                     
                     </tr>
@@ -154,7 +157,7 @@
             </div>
 
             <div class="card-footer d-flex justify-content-end">
-              <a href="{% url 'inventarios-relevamientos-save-files' %}" class="btn btn-dark" aria-label="Button">
+              <a href="{% url 'inventarios-relevamientos-resumen-save-files-tradicional' %}" class="btn btn-dark" aria-label="Button">
                  Guardar</a>
 
             </div>

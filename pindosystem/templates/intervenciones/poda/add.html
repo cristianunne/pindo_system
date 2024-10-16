@@ -52,7 +52,18 @@
                       <form action="{% url 'intervenciones-poda-add' idrodal=idrodal %}" method="POST">
                         {% csrf_token %}
                         <div class="row justify-content-around">
-                          <div class="col-md-5 col-lg-5 col-sm-5">                
+                          <div class="col-md-5 col-lg-5 col-sm-5">
+                            
+                            <div class="mb-5">
+                              <label class="form-label required">Tipo de Intervención:</label>
+                              <select type="text" class="form-select" name="select-inter_types" id="select-inter_types" required value="">
+                                <option value="">{{ 'Seleccione una Opción' }}</option>
+                                {% for index, value in inter_types %}
+                                  <option value="{{ index }}">{{ value }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+
                             <div class="mb-5">
                               <label class="form-label required">Rodal:</label>
                               <select type="text" class="form-select" name="select-rodal" id="select-rodal" required value="" >
@@ -150,7 +161,7 @@
                             <div class="mb-5">
                               <label class="form-label required">Emsefor:</label>
                               <select type="text" class="form-select" name="select-emsefor" id="select-emsefor" required value="">
-                                <option value="">{{ 'Seleccione una Opcion' }}</option>
+                                <option value="">{{ 'Seleccione una Opción' }}</option>
                                 {% for index, value in emsefors %}
                                   <option value="{{ index }}">{{ value }}</option>
                                 {% endfor %}

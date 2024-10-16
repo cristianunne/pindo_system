@@ -27,6 +27,11 @@ urlpatterns = [
          #me falta el edit
 
      path('inventarios/inventarios-relevamientos/relevamientos-delete/<int:idrelevamiento>/', views.deleteRelevamiento, name='relevamientos-delete'),
+     
+     path('inventarios/inventarios-relevamientos/relevamientos-delete-pre/<int:idrelevamiento>/', 
+          views.deleteRelevamientoPre, name='relevamientos-delete-pre'),
+   
+
        path('inventarios/inventarios-relevamientos/edit-treespoda/<int:idrelevamiento>/<int:idarbol>/', 
          views.editArbolesRelevamientoPoda, name='inventarios-relevamientos-edit-trees-poda'),
 
@@ -74,13 +79,29 @@ urlpatterns = [
      path('inventarios/inventarios-relevamientos/load-files/<int:mode>/', 
           views.loadRelevamientosFiles, name='inventarios-relevamientos-load-files'),
 
-     path('inventarios/inventarios-relevamientos/save-files/', 
-          views.saveRelevamientoFiles, name='inventarios-relevamientos-save-files'),
+     path('inventarios/inventarios-relevamientos/save-files-poda/', 
+          views.saveRelevamientosFilesPoda, name='inventarios-relevamientos-save-files-poda'),
      
      path('inventarios/inventarios-relevamientos/resumen-save-files-tradicional/', 
           views.resumeSaveFileTradicional, name='inventarios-relevamientos-resumen-save-files-tradicional'),
      
      path('inventarios/inventarios-relevamientos/resumen-download-errors-tradicional/', 
           views.downloadExcelWithErrores, name='inventarios-relevamientos-resumen-download-errors-tradicional'),
+     
+
+     path('inventarios/inventarios-relevamientos/resumen-download-errors-poda/', 
+          views.downloadExcelWithErroresPoda, name='inventarios-relevamientos-resumen-download-errors-poda'),
+     
+      path('inventarios/inventarios-relevamientos/resumen-save-files-poda/', 
+          views.resumeSaveFilePoda, name='inventarios-relevamientos-resumen-save-files-poda'),
+     
+
+     path('inventarios/inventarios-relevamientos/index-rel-prexistentes/', 
+          views.indexRelevamientosPreexistentes, name='inventarios-relevamientos-index-rel-prexistentes'),
+
+     
+     path('inventarios/inventarios-relevamientos/send-relevamiento/<int:idrelevamiento>', 
+          views.sendRelevamientoToIntervencion, name='inventarios-relevamientos-send-relevamiento'),
+
    
 ]

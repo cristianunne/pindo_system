@@ -15,6 +15,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 
 
 from django.db import transaction
@@ -69,12 +70,19 @@ def addIntervencionPoda(request, idrodal):
         emsefors = Emsefor.objects.values_list("emsefor_id", "name")
         context.update({'emsefors' : emsefors})
 
-        inter_types = IntervencionesTypes.objects.values_list("intervencionestypes_id", "name")
-        context.update({'inter_types' : inter_types})
 
         #cargo las planificaciones segun los planificados en el rodal
         planific_inter = PlanificacionIntervenciones.objects.filter(rodales = idrodal)
-        print(planific_inter)
+
+        lista_text = ['Poda', 'PODA']
+        q = Q( name__icontains=lista_text[0] )
+        for val in lista_text[1:]:
+            q = q | Q( name__icontains=val )
+
+        
+        inter_types = IntervencionesTypes.objects.filter(q).values_list("intervencionestypes_id", "name")
+        context.update({'inter_types' : inter_types})
+
         
       
 
@@ -100,12 +108,14 @@ def addIntervencionPoda(request, idrodal):
             user_entity = Users.objects.get(pk=request.user.pk)
 
             #traigo la entidad poda
-            poda_ent = IntervencionesTypes.objects.get(name = 'Poda')
+            inter_type = request.POST.get('select-inter_types')
+
 
             try:
                 with transaction.atomic():
                     intervencion = Intervenciones.objects.create(rodales=rodal_ent, fecha=fecha, type=type_intervencion, superficie=superficie,
-                                                                 users=user_entity, emsefors=emsefor_ent, name=name, intervenciones_types=poda_ent)
+                                                                 users=user_entity, emsefors=emsefor_ent, name=name, 
+                                                                 intervenciones_types_id=inter_type)
                     
                     poda_intervencion = PodaIntervencion.objects.create(intervenciones=intervencion, arb_podados=arb_podados, arb_no_podados=arb_no_podados, 
                                                                         alt_deseada=alt_deseada, alt_poda=alt_poda, dap=dap, altura=altura, dmsm=dmsm, 
@@ -157,8 +167,16 @@ def editIntervencionPoda(request, idpoda):
         emsefors = Emsefor.objects.values_list("emsefor_id", "name")
         context.update({'emsefors' : emsefors})
 
-        inter_types = IntervencionesTypes.objects.values_list("intervencionestypes_id", "name")
+
+        lista_text = ['Poda', 'PODA']
+        q = Q( name__icontains=lista_text[0] )
+        for val in lista_text[1:]:
+            q = q | Q( name__icontains=val )
+
+        
+        inter_types = IntervencionesTypes.objects.filter(q).values_list("intervencionestypes_id", "name")
         context.update({'inter_types' : inter_types})
+
 
         if request.method == 'POST':
             fecha = request.POST.get('fecha')
@@ -322,8 +340,19 @@ def addIntervencionSobrevivencia(request, idrodal):
         planific_inter = PlanificacionIntervenciones.objects.filter(rodales = idrodal).values_list('planificacionintervencion_id', 'title')
         context.update({'planificacion_inter' : planific_inter})
 
+        lista_text = ['Sobrevivencia', 'SOBREVIVENCIA']
+        q = Q( name__icontains=lista_text[0] )
+        for val in lista_text[1:]:
+            q = q | Q( name__icontains=val )
+
+        
+        inter_types = IntervencionesTypes.objects.filter(q).values_list("intervencionestypes_id", "name")
+        context.update({'inter_types' : inter_types})
+
+
         if request.method == 'POST':
-            type_intervencion = INTERVENCIONES_DICT['Sobrevivencia']
+            type = INTERVENCIONES_DICT['Sobrevivencia']
+            
             fecha = request.POST.get('fecha')
             superficie = request.POST.get('superficie')
             parcela_size = request.POST.get('parcela_size')
@@ -336,23 +365,31 @@ def addIntervencionSobrevivencia(request, idrodal):
             responsable = request.POST.get('responsable')
             name = request.POST.get('name')
 
+            inter_type = request.POST.get('select-inter_types')
+
             emsefor = request.POST.get('select-emsefor')
             planif = request.POST.get('select-planificacion')
             #traigo las entidades
             rodal_ent = Rodales.objects.get(pk = idrodal)
             user_entity = Users.objects.get(pk=request.user.pk)
             emsefor_ent = Emsefor.objects.get(pk = emsefor)
-            planif_ent = PlanificacionIntervenciones.objects.get(pk=planif)
+            planif_ent = None
+            if planif != '':
+                planif_ent = PlanificacionIntervenciones.objects.get(pk=planif)
+
 
             try:
                 with transaction.atomic():
-                    intervencion = Intervenciones.objects.create(rodales=rodal_ent, fecha=fecha, type=type_intervencion, superficie=superficie,
-                                                                 users=user_entity, emsefors=emsefor_ent,name=name, planificacion_inter=planif_ent)
+                    intervencion = Intervenciones.objects.create(rodales=rodal_ent, fecha=fecha, type=type, superficie=superficie,
+                                                                 users=user_entity, emsefors=emsefor_ent,name=name, 
+                                                                 planificacion_inter=planif_ent,
+                                                                 intervenciones_types_id = inter_type)
                     
                     sobrevivencia_res = SobrevivenciaIntervencion.objects.create(intervenciones=intervencion, parcela_size = parcela_size, parcela_relevadas = parcela_relevadas,
                                                                                  plantas_vivas = plantas_vivas, plantas_muertas = plantas_muertas, 
                                                                                  damage_herbicida = damage_herbicida, damage_mecanico = damage_mecanico, 
-                                                                                 sobrevivencia = sobrevivencia, responsable=responsable)
+                                                                                 sobrevivencia = sobrevivencia, 
+                                                                                 responsable=responsable)
                     
                     messages.success(request, "La Sobrevivencia se ha creado con éxito!.")
                     return HttpResponseRedirect(reverse("intervenciones-index", args=[idrodal]))
@@ -398,7 +435,13 @@ def editIntervencionSobrevivencia(request, idsobrevivencia):
         context.update({'emsefors' : emsefors})
         context.update({'sobrevivencia' : sobre})
 
-        inter_types = IntervencionesTypes.objects.values_list("intervencionestypes_id", "name")
+        lista_text = ['Sobrevivencia', 'SOBREVIVENCIA']
+        q = Q( name__icontains=lista_text[0] )
+        for val in lista_text[1:]:
+            q = q | Q( name__icontains=val )
+
+        
+        inter_types = IntervencionesTypes.objects.filter(q).values_list("intervencionestypes_id", "name")
         context.update({'inter_types' : inter_types})
 
 
@@ -419,6 +462,8 @@ def editIntervencionSobrevivencia(request, idsobrevivencia):
 
             emsefor = request.POST.get('select-emsefor')
 
+            inter_type = request.POST.get('select-inter_types')
+
             #traigo las entidades
             emsefor_ent = Emsefor.objects.get(pk = emsefor)
             user_entity = Users.objects.get(pk=request.user.pk)
@@ -428,6 +473,7 @@ def editIntervencionSobrevivencia(request, idsobrevivencia):
             sobre.emsefors = emsefor_ent
             sobre.users = user_entity
             sobre.name = name
+            sobre.intervenciones_types_id = inter_type
 
             sobre.sobrevivencia_intervencion.parcela_size = parcela_size
             sobre.sobrevivencia_intervencion.parcela_relevadas = parcela_relevadas
@@ -542,6 +588,15 @@ def addIntervencionRaleo(request, idrodal):
         emsefors = Emsefor.objects.values_list("emsefor_id", "name")
         context.update({'emsefors' : emsefors})
 
+        lista_text = ['Raleo', 'RALEO']
+        q = Q( name__icontains=lista_text[0] )
+        for val in lista_text[1:]:
+            q = q | Q( name__icontains=val )
+
+        
+        inter_types = IntervencionesTypes.objects.filter(q).values_list("intervencionestypes_id", "name")
+        context.update({'inter_types' : inter_types})
+
         if request.method == 'POST':
 
             #traigo todos los elementos
@@ -567,11 +622,14 @@ def addIntervencionRaleo(request, idrodal):
             user_entity = Users.objects.get(pk=request.user.pk)
             emsefor_ent = Emsefor.objects.get(pk = emsefor)
 
+            inter_type = request.POST.get('select-inter_types')
+
 
             try:
                 with transaction.atomic():
                     intervencion = Intervenciones.objects.create(rodales=rodal_ent, fecha=fecha, type=type_intervencion, superficie=superficie,
-                                                                 users=user_entity, emsefors=emsefor_ent,name=name)
+                                                                 users=user_entity, emsefors=emsefor_ent,name=name, 
+                                                                 intervenciones_types_id = inter_type)
                     
                     raleo = RaleoIntervencion.objects.create(intervenciones=intervencion, criterio = criterio, arboles_extraidos = arboles_extraidos,
                                                                                  arboles_podados = arboles_podados, dap = dap, 
@@ -626,6 +684,15 @@ def editIntervencionRaleo(request, idraleo):
         context.update({'emsefors' : emsefors})
         context.update({'raleo' : raleo})
 
+        lista_text = ['Raleo', 'RALEO']
+        q = Q( name__icontains=lista_text[0] )
+        for val in lista_text[1:]:
+            q = q | Q( name__icontains=val )
+
+        
+        inter_types = IntervencionesTypes.objects.filter(q).values_list("intervencionestypes_id", "name")
+        context.update({'inter_types' : inter_types})
+
         if request.method == 'POST':
 
 
@@ -646,6 +713,8 @@ def editIntervencionRaleo(request, idraleo):
             levante = request.POST.get('levante')
             emsefor = request.POST.get('select-emsefor')
 
+            inter_type = request.POST.get('select-type-inter')
+
             #traigo las entidades
         
             user_entity = Users.objects.get(pk=request.user.pk)
@@ -657,6 +726,7 @@ def editIntervencionRaleo(request, idraleo):
             raleo.emsefors = emsefor_ent
             raleo.users = user_entity
             raleo.name = name
+            raleo.intervenciones_types_id = inter_type
 
             raleo.raleo_intervencion.criterio = criterio
             raleo.raleo_intervencion.arboles_extraidos = arboles_extraidos
@@ -771,6 +841,15 @@ def addIntervencionTalaraza(request, idrodal):
         emsefors = Emsefor.objects.values_list("emsefor_id", "name")
         context.update({'emsefors' : emsefors})
 
+        lista_text = ['Tala Rasa', 'TALAZARA', 'Tala rasa']
+        q = Q( name__icontains=lista_text[0] )
+        for val in lista_text[1:]:
+            q = q | Q( name__icontains=val )
+
+        
+        inter_types = IntervencionesTypes.objects.filter(q).values_list("intervencionestypes_id", "name")
+        context.update({'inter_types' : inter_types})
+
         if request.method == 'POST':
 
             #traigo todos los elementos
@@ -791,6 +870,8 @@ def addIntervencionTalaraza(request, idrodal):
             levante = request.POST.get('levante')
             emsefor = request.POST.get('select-emsefor')
 
+            inter_type = request.POST.get('select-inter_types')
+
             #traigo las entidades
             rodal_ent = Rodales.objects.get(pk = idrodal)
             user_entity = Users.objects.get(pk=request.user.pk)
@@ -799,13 +880,16 @@ def addIntervencionTalaraza(request, idrodal):
 
             try:
                 with transaction.atomic():
-                    intervencion = Intervenciones.objects.create(rodales=rodal_ent, fecha=fecha, type=type_intervencion, superficie=superficie,
-                                                                 users=user_entity, emsefors=emsefor_ent,name=name)
+                    intervencion = Intervenciones.objects.create(rodales=rodal_ent, fecha=fecha, type=type_intervencion, 
+                                                                 superficie=superficie,
+                                                                 users=user_entity, emsefors=emsefor_ent,name=name, 
+                                                                 intervenciones_types_id = inter_type)
                     
                     talaraza = TalarazaIntervencion.objects.create(intervenciones=intervencion, criterio = criterio, arboles_extraidos = arboles_extraidos,
                                                                                  arboles_podados = arboles_podados, dap = dap, 
                                                                                  altura = altura, dmsm = dmsm, 
-                                                                                 porc_removido=porc_removido, intensidad = intensidad, 
+                                                                                 porc_removido=porc_removido, 
+                                                                                 intensidad = intensidad, 
                                                                                  levante=levante)
                     
                     messages.success(request, "La Talaraza se ha creado con éxito!.")
@@ -853,6 +937,15 @@ def editIntervencionTalaraza(request, idtalaraza):
         context.update({'emsefors' : emsefors})
         context.update({'talaraza' : talaraza})
 
+        lista_text = ['Tala Rasa', 'TALAZARA', 'Tala rasa']
+        q = Q( name__icontains=lista_text[0] )
+        for val in lista_text[1:]:
+            q = q | Q( name__icontains=val )
+
+        
+        inter_types = IntervencionesTypes.objects.filter(q).values_list("intervencionestypes_id", "name")
+        context.update({'inter_types' : inter_types})
+
         if request.method == 'POST':
 
 
@@ -873,6 +966,8 @@ def editIntervencionTalaraza(request, idtalaraza):
             levante = request.POST.get('levante')
             emsefor = request.POST.get('select-emsefor')
 
+            inter_type = request.POST.get('select-type-inter')
+
             #traigo las entidades
         
             user_entity = Users.objects.get(pk=request.user.pk)
@@ -884,6 +979,7 @@ def editIntervencionTalaraza(request, idtalaraza):
             talaraza.emsefors = emsefor_ent
             talaraza.users = user_entity
             talaraza.name = name
+            talaraza.intervenciones_types_id = inter_type
 
             talaraza.talaraza_intervencion.criterio = criterio
             talaraza.talaraza_intervencion.arboles_extraidos = arboles_extraidos

@@ -3,6 +3,8 @@ from login.models import Users
 from rodales.models import Rodales
 from emsefor.models import Emsefor
 
+from intervenciones.models import Intervenciones
+
 # Create your models here.
 
 TYPES_RELEVAMIENTO = (
@@ -98,6 +100,7 @@ class ArbolesRelevamientoOthers(models.Model):
 
 
 class ResumenRelevamientos(models.Model):
+    tam_parcela = models.FloatField(blank=True, null = True)
     arb_ha = models.IntegerField(blank=True, null = True)
     arb_podados = models.IntegerField(blank=True, null = True)
     arb_h_deseada = models.IntegerField(blank=True, null = True)
@@ -113,9 +116,14 @@ class ResumenRelevamientos(models.Model):
     v_com = models.FloatField(blank=True, null = True)
     total = models.FloatField(blank=True, null = True)
     ima = models.FloatField(blank=True, null = True)
-    relevamientos = models.ForeignKey(InventariosRelevamientos, related_name='invrel_resumen', blank=False, null=True, on_delete=models.SET_NULL)
+    relevamientos = models.OneToOneField(InventariosRelevamientos, related_name='invrel_resumen', blank=False, null=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(Users, related_name='inventariosrelres_users', blank=True, null=True, on_delete=models.SET_NULL)
+
+    is_load_to_intervencion = models.BooleanField("Load to Intervenciones?", unique=False, 
+                                                  blank=False, default=False, null = False)
+    
+    intervenciones = models.OneToOneField(Intervenciones, related_name='invrel_interv', blank=False, null=True, on_delete=models.SET_NULL)
  
 

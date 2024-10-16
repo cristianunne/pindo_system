@@ -236,6 +236,15 @@ function deleteInformation(element){
     dialogDeleteConfirm(element, title, message, URLS_DELETE.ARBOL_OTHERS_DELETE, 'Eliminar');
   }
 
+  else if(controller === 'relevamiento_pre_delete') {
+
+    let title = '¿Desea Eliminar el Relevamiento?';
+    let message = 'Si acepta se borrará toda la información del mismo';
+    
+    dialogDeleteConfirm(element, title, message, URLS_DELETE.RELEVAMIENTO_PREX_DELETE, 'Eliminar');
+  }
+
+
 
 
 

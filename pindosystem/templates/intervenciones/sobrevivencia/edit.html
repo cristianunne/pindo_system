@@ -20,11 +20,11 @@
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-cards mb-5">
-            <div class="col-xxl-4 col-md-7 col-lg-7 col-sm-12">
+            <div class="col-xxl-3 col-xl-9 col-md-7 col-lg-7 col-sm-12">
               <div class="card bg-primary-lt">
                 <div class="card-body">
                   <div class="row align-items-center">
-                    <div class="col-xxl-4 col-lg-4 col-md-4 col-sm-4">
+                    <div class="col-xxl-3 col-lg-3 col-md-12 col-sm-12">
 
                       <div class="text-center align-items-center">
                   
@@ -41,7 +41,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xxl-9 col-md-11 col-lg-11 col-sm-12 m-auto mt-3">
+            <div class="col-xxl-9 col-xl-9 col-md-11 col-lg-11 col-sm-12 m-auto mt-3">
               <div class="card">
                 <div class="card-status-top bg-blue"></div>
                 <div class="card-header">
@@ -52,7 +52,24 @@
                       <form action="{% url 'intervenciones-sobrevivencia-edit' idsobrevivencia=sobrevivencia.pk %}" method="POST">
                         {% csrf_token %}
                         <div class="row justify-content-around">
-                          <div class="col-md-5 col-lg-5 col-sm-12">                
+                          <div class="col-md-5 col-lg-5 col-sm-12">
+                           
+
+                            <div class="mb-5">
+                              <label class="form-label required">Tipo de Intervención:</label>
+                              <select type="text" class="form-select" name="select-type-inter" id="select-type-inter" value="">
+                                <option value="">{{ 'Seleccione una Opcion' }}</option>
+                                {% for index, value in inter_types %}
+                                  {% if sobrevivencia.intervenciones_types.pk == index %}
+                                      <option selected value="{{ index }}">{{ value }}</option>
+                                    {% else %}
+                                      <option value="{{ index }}">{{ value }}</option>
+                                    {% endif %}
+                                  {% endfor %}
+                              </select>
+                            </div>
+                            
+                            
                             <div class="mb-5">
                               <label class="form-label required">Rodal:</label>
                               <select type="text" class="form-select" name="select-rodal" id="select-rodal" required value="" >
@@ -154,15 +171,7 @@
                               </select>
                             </div>
 
-                            <div class="mb-5">
-                              <label class="form-label required">Tipo de Intervención:</label>
-                              <select type="text" class="form-select" name="select-type-inter" id="select-type-inter" required value="">
-                                <option value="">{{ 'Seleccione una Opcion' }}</option>
-                                {% for index, value in inter_types %}
-                                  <option value="{{ index }}">{{ value }}</option>
-                                {% endfor %}
-                              </select>
-                            </div>
+                  
 
 
                             <div class="form-footer">

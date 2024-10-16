@@ -56,7 +56,18 @@
                       <form action="{% url 'intervenciones-sobrevivencia-add' idrodal=idrodal %}" method="POST">
                         {% csrf_token %}
                         <div class="row justify-content-around">
-                          <div class="col-xxl-5 col-md-5 col-lg-5 col-sm-12">                
+                          <div class="col-xxl-5 col-md-5 col-lg-5 col-sm-12">
+                            
+                            <div class="mb-5">
+                              <label class="form-label required">Intervención:</label>
+                              <select type="text" class="form-select" name="select-inter_types" id="select-inter_types" required value="">
+                                <option value="">{{ 'Seleccione una Opción' }}</option>
+                                {% for index, value in inter_types %}
+                                  <option value="{{ index }}">{{ value }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            
                             <div class="mb-5">
                               <label class="form-label required">Rodal:</label>
                               <select type="text" class="form-select" name="select-rodal" id="select-rodal" required value="" >
@@ -153,7 +164,7 @@
 
                             <div class="mb-5">
                               <label class="form-label required">Intervenciones Planificadas:</label>
-                              <select type="text" class="form-select" name="select-planificacion" id="select-planificacion" required value="">
+                              <select type="text" class="form-select" name="select-planificacion" id="select-planificacion" value="">
                                 <option value="">{{ 'Seleccione una Opcion' }}</option>
                                 {% for index, value in planificacion_inter %}
                                   <option value="{{ index }}">{{ value }}</option>

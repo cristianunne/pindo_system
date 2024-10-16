@@ -52,7 +52,24 @@
                       <form action="{% url 'intervenciones-poda-edit' idpoda=idpoda %}" method="POST">
                         {% csrf_token %}
                         <div class="row justify-content-around">
-                          <div class="col-md-5 col-lg-5 col-sm-5">                
+                          <div class="col-md-5 col-lg-5 col-sm-5">
+                    
+
+                            <div class="mb-5">
+                              <label class="form-label required">Tipo de Intervención:</label>
+                              <select type="text" class="form-select" name="select-type-inter" id="select-type-inter" required value="">
+                                <option value="">{{ 'Seleccione una Opcion' }}</option>
+                                {% for index, value in inter_types %}
+                                {% if poda.intervenciones_types.pk == index %}
+                                <option selected value="{{ index }}">{{ value }}</option>
+                              {% else %}
+                                <option value="{{ index }}">{{ value }}</option>
+                              {% endif %}
+                                {% endfor %}
+                              </select>
+                            </div>
+
+
                             <div class="mb-5">
                               <label class="form-label required">Rodal:</label>
                               <select type="text" class="form-select" name="select-rodal" id="select-rodal" required value="" >
@@ -64,7 +81,8 @@
 
                             <div class="mb-4">
                               <label class="form-label" for="username">Nombre:</label>
-                              <input type="text" class="form-control" id="name"  name="name" aria-describedby="name" placeholder="Nombre">
+                              <input type="text" class="form-control" id="name"  name="name" aria-describedby="name" 
+                              placeholder="Nombre" value="{{poda.name}}">
                             </div>
 
 
@@ -163,16 +181,6 @@
                                   {% endif %}
                                 {% endfor %}
                               
-                              </select>
-                            </div>
-
-                            <div class="mb-5">
-                              <label class="form-label required">Tipo de Intervención:</label>
-                              <select type="text" class="form-select" name="select-type-inter" id="select-type-inter" required value="">
-                                <option value="">{{ 'Seleccione una Opcion' }}</option>
-                                {% for index, value in inter_types %}
-                                  <option value="{{ index }}">{{ value }}</option>
-                                {% endfor %}
                               </select>
                             </div>
 
@@ -333,6 +341,9 @@
               }
             })
         })
+
+
+        
 
          // @formatter:off
 

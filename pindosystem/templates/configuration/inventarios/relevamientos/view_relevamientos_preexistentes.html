@@ -54,7 +54,7 @@
                             <div class="col-md-8">
                                 <h3 class="card-title">Sección de Administración de los Relevamientos de Inventarios</h3>
                                 <p class="text-muted">En esta sección puede realizar las ediciones de la información de los 
-                                  Relevamientos de Inventarios</p>
+                                  Relevamientos de Inventarios Preeixtentes</p>
                              
                             </div>
                         </div>
@@ -87,12 +87,12 @@
                               <th class="dt-center align-middle">h Deseada</th>
                               <th class="dt-center align-middle">h Última Poda</th>
                               <th class="dt-center align-middle">Rodal</th>
-                              <th class="dt-center align-middle">N° de Parcelas</th>
-                              <th class="dt-center align-middle">N° de Árboles</th>
+                            
                               <th class="dt-center align-middle">Fecha</th>
                               <th class="dt-center align-middle">Emsefor</th>
                               <th class="dt-center align-middle">Tam. Parc.</th>
-                              <th class="dt-center align-middle">Finalizado?</th>
+                              <th class="dt-center align-middle">Intervencion?</th>
+                              <th class="dt-center align-middle">Cargar Int.</th>
                               <th class="dt-center align-middle">Acciones</th>
                             </tr>
                           </thead>
@@ -115,23 +115,12 @@
                                     <td class="dt-center align-middle"> {{ rel.type }}</td>
                                     <td class="dt-center align-middle">
                                       {% if rel.categorias__name %}
-                                      {{ rel.categorias__name }}
-                                      
-                                      {% endif%}
+                                        {{ rel.categorias__name }}
+                                      {% endif %}
+                              
                                     </td>
-                                    {% if  rel.h_deseada %}
-                                      <td class="dt-center align-middle"> {{ rel.h_deseada }}</td>
-                                    {% else %}
-                                    <td class="dt-center align-middle"></td>
-                                    {% endif %}
-
-                                    {% if  rel.h_deseada %}
+                                    <td class="dt-center align-middle"> {{ rel.h_deseada }}</td>
                                     <td class="dt-center align-middle"> {{ rel.h_last_poda }}</td>
-                                  {% else %}
-                                  <td class="dt-center align-middle"></td>
-                                  {% endif %}
-                                   
-                                   
 
                                     <td class="dt-center align-middle">
                                       {% if rel.rodales_id %}
@@ -140,36 +129,94 @@
           
                                       </a>
 
-                      
-
                                       {% endif %}
                                       
                                     </td>
-                                    <td class="dt-center align-middle">{{ rel.cant_parcelas }}</td>
-                                    <td class="dt-center align-middle">
-                                      {% if rel.cant_arboles %}
-                                        {{ rel.cant_arboles }}
-                                      {% else %}
-                                      {{ 0 }}
-                                      {% endif %}
-                                    </td>
+                              
 
                                     <td class="dt-center align-middle">{{ rel.fecha }}</td>
                                     <td class="dt-center align-middle">
                                       {% if rel.emsefor__name %}
+
+                                      <a href="{% url 'emsefor-view'  id=rel.emsefor__pk %}">
                                         {{ rel.emsefor__name }}
-                                 
+          
+                                      </a>
+                                      
                                       {% endif %}
                                      
                                     </td>
-                                    {% if  rel.invrel_resumen__tam_parcela %}
-                                      <td class="dt-center align-middle">{{ rel.invrel_resumen__tam_parcela }}</td>
-                         
-                                    {% else %}
-                                      <td class="dt-center align-middle"></td>
-                                    {% endif %}
+
+
+                                    <td class="dt-center align-middle">
+                                      {% if rel.invrel_resumen__tam_parcela %}
+
+                                   
+                                        {{ rel.invrel_resumen__tam_parcela }}
+          
+                  
+                                      
+                                      {% endif %}
+                                     
+                                    </td>
                                     
-                                    <td class="dt-center align-middle"> {{ rel.is_finish|yesno:"Si,No" }}</td>
+                                    <td class="dt-center align-middle"> {{ rel.invrel_resumen__is_load_to_intervencion|yesno:"Si,No" }}</td>
+                                    
+                                    {% if rel.invrel_resumen__intervenciones__type %}
+                                        <td class="dt-center align-middle">
+                                         
+                                          {% if rel.invrel_resumen__intervenciones__type == 'Sobrevivencia' %}
+
+                                          <a href="{% url 'intervenciones-index' idrodal=rel.rodales_id %}"  class="btn btn-twitter btn-icon" aria-label="Button" attr="{{inter.pk}}">
+                                   
+                                        {% elif rel.invrel_resumen__intervenciones__type == 'Poda' %}
+                                       
+                                          <a href="{% url 'intervenciones-index' idrodal=rel.rodales_id %}"  class="btn btn-twitter btn-icon" aria-label="Button" attr="{{inter.pk}}">
+                                        
+                                        {% elif rel.invrel_resumen__intervenciones__type == 'Raleo' %}
+                                            <a href="{% url 'intervenciones-index' idrodal=rel.rodales_id %}"  class="btn btn-twitter btn-icon" aria-label="Button" attr="{{inter.pk}}">
+                                       
+                                        {% elif rel.invrel_resumen__intervenciones__type == 'Talaraza' %}
+                                              <a href="{% url 'intervenciones-index' idrodal=rel.rodales_id %}"  class="btn btn-twitter btn-icon" aria-label="Button" attr="{{inter.pk}}">
+
+                                        {% endif %}
+                                       
+                                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                              <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                              <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                           </svg>
+                                        </a>
+                                        </td>
+                                    {% else %}
+
+
+                                      {% if rel.categorias__name == 'Poda' %}
+                                          <td class="dt-center align-middle">
+                                            <a href="{% url 'inventarios-relevamientos-send-relevamiento' idrelevamiento=rel.pk %}" 
+                                            class="btn btn-green btn-icon" aria-label="Button" attr="{{rel.pk}}">
+
+                                              <svg xmlns="http://www.w3.org/2000/svg" 
+                                              class="icon icon-tabler icon-tabler-send" width="24" height="24" 
+                                              viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                <path d="M10 14l11 -11" />
+                                                <path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
+                                              </svg>
+                                            
+                                              </a>
+                                        </td>
+
+                                        {% else %}
+                                        <td></td>
+  
+                                      {% endif %}
+
+                                      
+                                    {% endif %}
+
+                                   
+                         
                                     <td>
                                       <div class="d-flex justify-content-center">
 
@@ -203,7 +250,7 @@
                                           <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
                                             <path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>
                                     
-                                          
+    
                                             </a>
                                       </div>
 
@@ -244,8 +291,10 @@
                                             
                                             {% if user.role == 'AG' %}
                                             <div>
-                                                <a href="#" onclick="deleteInformation(this)" attr="{{rel.pk}}" class="btn btn-youtube btn-icon"
-                                                controller="relevamiento_delete">
+                                             
+                                                <a href="#" onclick="deleteInformation(this)" attr="{{rel.pk}}" 
+                                                class="btn btn-youtube btn-icon"
+                                                controller="relevamiento_pre_delete">
                                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                     <path d="M4 7l16 0"></path>

@@ -1,0 +1,189 @@
+<!doctype html>
+
+{% extends "../../../layout/base.html" %}
+
+{% load static %}
+
+
+{% block sidebar %}
+
+{% include "../../../element/sidebar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% block header %}
+
+  {% include "../../../element/header.html" %}
+
+  {% endblock %}
+
+  <div class="page-wrapper">
+    {% block pageheader %}
+        {% include "../../../element/pageheader.html" %}
+    {% endblock pageheader %}
+
+    {% block main_content %}
+
+    <div class="page-body">
+                
+        <div class="container-xl">
+          
+            {% if messages %}
+
+            {% include "../../../element/alert-sucess.html" %}
+            {% endif %}
+
+            <div class="row row-cards mb-5">
+
+                <div class="col-xxl-3 col-lg-6 col-md-7 col-sm-12">
+                    <div class="card bg-primary-lt">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="d-flex justify-content-center col-xxl-4 col-lg-4 col-md-4 col-sm-12">
+                              <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  
+                              fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                              stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
+                                <path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>
+                            
+                            
+                    
+                            </div>
+                            <div class="col-xxl-8 col-lg-8 col-md-8 col-sm-12">
+                              <h3 class="card-title">Sección de Administración de Relevamientos Preexistentes</h3>
+                              <p class="text-muted">En esta sección puede subir un documento con Relevamientos</p> 
+                            </div>
+                        </div>
+
+                        
+                        </div>
+                    </div>
+                  </div>
+            </div>
+
+          <div class="card">
+            <div class="card-body">
+              
+              <div id="" class="table-responsive">
+                <table id="tabladata" class="table table-bordered table-hover dataTable sm-table-text" >
+                  <thead>
+                    <tr>
+                      <th class="dt-center align-middle">Valido</th>
+                      <th class="dt-center align-middle">rodal</th>
+                      <th class="dt-center align-middle">fecha</th>
+                      <th class="dt-center align-middle">N° Poda</th>
+                      <th class="dt-center align-middle">h Poda ant.</th>
+                      <th class="dt-center align-middle">Arb./ha</th>
+                      <th class="dt-center align-middle">Arb. Podados</th>
+                      <th class="dt-center align-middle">Arb. h des.</th>
+                      <th class="dt-center align-middle">Arb. no pod.</th>
+                      <th class="dt-center align-middle">DAP</th>
+                      <th class="dt-center align-middle">h Total</th>
+                      <th class="dt-center align-middle">h Poda</th>
+                      <th class="dt-center align-middle">DMSM</th>
+                      <th class="dt-center align-middle">Área Basal</th>
+                      <th class="dt-center align-middle">% Copa Rem.</th>
+                      <th class="dt-center align-middle">Tam. de Parc.</th>
+
+                    
+                    </tr>
+                  </thead>
+                  <tbody class="table-tbody">
+                    {% for emsefor in data_poda %}
+
+                    {% if emsefor.is_present%}
+
+                        <tr>
+                            <td class="dt-center align-middle">{{ emsefor.is_present|yesno:"Si,No" }}</td>
+                            <td class="dt-center align-middle"> {{ emsefor.rodal }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.fecha }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.num_poda }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.h_poda_ant }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.arb_ha }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.arb_podados }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.arb_h_deseada }}</td>
+
+                            <td class="dt-center align-middle">{{ emsefor.arb_no_podados }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.dap }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.h_total }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.h_poda }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.dmsm }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.area_basal }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.copa_rem }}</td>
+                            <td class="dt-center align-middle">{{ emsefor.tam_parc}}</td>
+                        
+                        </tr>
+                    
+                    {% else %}
+
+                    <tr style="background-color: red;">
+                      <td class="dt-center align-middle">{{ emsefor.is_present|yesno:"Si,No" }}</td>
+                      <td class="dt-center align-middle"> {{ emsefor.rodal }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.fecha }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.num_poda }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.h_poda_ant }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.arb_ha }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.arb_podados }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.arb_h_deseada }}</td>
+
+                      <td class="dt-center align-middle">{{ emsefor.arb_no_podados }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.dap }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.h_total }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.h_poda }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.dmsm }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.area_basal }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.copa_rem }}</td>
+                      <td class="dt-center align-middle">{{ emsefor.tam_parc}}</td>
+                     
+                    
+                    </tr>
+
+                    {% endif %}
+                    
+                       
+                    
+                    {% endfor %}
+
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card-footer d-flex justify-content-end">
+              <a href="{% url 'inventarios-relevamientos-save-files-poda' %}" class="btn btn-dark" aria-label="Button">
+                 Guardar</a>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    {% endblock main_content %}
+
+    <script>
+        $(function () {
+            $('#tabladata').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "pageLength": 50,
+                order: [[0, 'asc']],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                }
+            });
+    
+        })
+    </script>
+    
+  </div>
+
+{% endblock  %}
